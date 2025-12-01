@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Achariya Brand Colors (Inferred/Standardized) */
+  --color-primary: #0056b3; /* Deep Blue */
+  --color-primary-light: #e6f0fa; /* Light Blue Background */
+  --color-secondary: #f8f9fa; /* Light Gray */
+  --color-accent: #ffc107; /* Gold/Yellow Accent */
+  --color-text-main: #333333;
+  --color-text-muted: #666666;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-secondary);
+  color: var(--color-text-main);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Utility Classes */
+.card {
+  @apply bg-white rounded-lg shadow-sm border border-gray-100 p-6;
+}
+
+.btn-primary {
+  @apply bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition-colors font-medium;
+}
+
+.btn-secondary {
+  @apply bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors font-medium;
+}
+
+.input-field {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow;
+}
