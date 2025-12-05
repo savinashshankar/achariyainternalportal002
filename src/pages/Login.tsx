@@ -1,41 +1,54 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, ChevronDown } from 'lucide-react';
-
-type UserRole = 'Principal' | 'Teacher' | 'Student';
+import { User, Lock } from 'lucide-react';
 
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [selectedRole, setSelectedRole] = useState<UserRole>('Principal');
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
 
-        const userData = {
-            role: selectedRole,
+        // Auto-detect role from email
+        let role = 'Student';
+        const emailLower = email.toLowerCase();
+
+        if (emailLower.includes('admin')) {
+            role = 'Admin';
+        } else if (emailLower.includes('principal')) {
+            role = 'Principal';
+        } else if (emailLower.includes('teacher') || emailLower === 'hari@achariya.org' || emailLower === 'meena@achariya.org' || emailLower === 'kumar@achariya.org' || emailLower === 'lakshmi@achariya.org') {
+            role = 'Teacher';
+        }
+
+        // Store user with auto-detected role
+        localStorage.setItem('user', JSON.stringify({
             email,
-            teacherName: selectedRole === 'Teacher' ? 'Hari' : null,
-            studentId: selectedRole === 'Student' ? 'STU-1001' : null,
-            studentName: selectedRole === 'Student' ? 'Pranav R' : null,
+            name: email.split('@')[0],
+            selectedRole: role
+        }));
+
+        // Navigate directly to appropriate dashboard
+        const dashboardMap: Record<string, string> = {
+            'Student': '/student/dashboard',
+            'Teacher': '/teacher/dashboard',
+            'Principal': '/principal/dashboard',
+            'Admin': '/admin/dashboard'
         };
 
-        localStorage.setItem('user', JSON.stringify(userData));
-        navigate('/dashboard');
+        navigate(dashboardMap[role]);
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col items-center justify-center p-4">
             {/* Large Centered Logo */}
             <div className="mb-8 text-center">
-                <img
-                    src="/logo.jpg"
-                    alt="Achariya Logo"
-                    className="w-40 h-40 mx-auto mb-4 object-contain"
-                />
-                <h1 className="text-3xl font-bold text-gray-800">Achariya Learning Completion Portal</h1>
-                <p className="text-gray-600 mt-2">Track teacher and student progress</p>
+                <div className="w-40 h-40 mx-auto mb-4 flex items-center justify-center">
+                    <img src="/achariya-logo.jpg" alt="Achariya Logo" className="w-full h-full object-contain" />
+                </div>
+                <h1 className="text-3xl font-bold text-gray-800">Achariya Learning Portal</h1>
+                <p className="text-gray-600 mt-2">Unified Learning Management System</p>
             </div>
 
             {/* Login Card */}
@@ -43,30 +56,6 @@ const Login = () => {
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Sign In</h2>
 
                 <form onSubmit={handleLogin} className="space-y-6">
-                    {/* Role Selector */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Select Role
-                        </label>
-                        <div className="relative">
-                            <select
-                                value={selectedRole}
-                                onChange={(e) => setSelectedRole(e.target.value as UserRole)}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-                            >
-                                <option value="Principal">Principal</option>
-                                <option value="Teacher">Teacher</option>
-                                <option value="Student">Student</option>
-                            </select>
-                            <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
-                        </div>
-                        <p className="mt-1 text-xs text-gray-500">
-                            {selectedRole === 'Principal' && 'View all teachers and students across campuses'}
-                            {selectedRole === 'Teacher' && 'View your classes and student progress'}
-                            {selectedRole === 'Student' && 'View your course completion and scores'}
-                        </p>
-                    </div>
-
                     {/* Email */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -79,7 +68,7 @@ const Login = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                placeholder={`${selectedRole.toLowerCase()}@achariya.in`}
+                                placeholder="your.email@achariya.org"
                                 required
                             />
                         </div>
@@ -108,15 +97,21 @@ const Login = () => {
                         type="submit"
                         className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
                     >
-                        Sign In as {selectedRole}
+                        Sign In
                     </button>
                 </form>
 
                 {/* Demo Hint */}
                 <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                    <p className="text-xs text-blue-800 text-center">
-                        <strong>Demo Mode:</strong> Use any email/password combination to login
+                    <p className="text-xs text-blue-800 mb-2">
+                        <strong>Demo Mode - Any email/password works!</strong>
                     </p>
+                    <ul className="text-xs text-blue-700 space-y-1">
+                        <li>• Try: student@achariya.org</li>
+                        <li>• Try: teacher@achariya.org</li>
+                        <li>• Try: principal@achariya.org</li>
+                        <li>• Try: admin@achariya.org</li>
+                    </ul>
                 </div>
             </div>
 

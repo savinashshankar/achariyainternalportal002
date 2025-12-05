@@ -1,136 +1,111 @@
-import { useState, useEffect } from 'react';
-import { Outlet, useNavigate, NavLink } from 'react-router-dom';
-import {
-    LayoutDashboard,
-    GraduationCap,
-    Users,
-    BookOpen,
-    FileText,
-    Settings,
-    Menu,
-    X,
-    LogOut
-} from 'lucide-react';
-
-interface UserData {
-    role: 'Principal' | 'Teacher' | 'Student';
-    email: string;
-    teacherName: string | null;
-    studentId: string | null;
-    studentName: string | null;
-}
+import { Outlet, useNavigate, Link } from 'react-router-dom';
+import { LogOut, Home, BookOpen, Wallet, Award, Users, FileText, Settings, HelpCircle } from 'lucide-react';
 
 const Layout = () => {
     const navigate = useNavigate();
-    const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [userData, setUserData] = useState<UserData | null>(null);
-
-    useEffect(() => {
-        const stored = localStorage.getItem('user');
-        if (stored) {
-            setUserData(JSON.parse(stored));
-        } else {
-            navigate('/');
-        }
-    }, [navigate]);
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const role = user.selectedRole || user.role;
 
     const handleLogout = () => {
-        localStorage.removeItem('user');
+        localStorage.clear();
         navigate('/');
     };
 
-    const menuItems = [
-        { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-        { path: '/teacher-completion', icon: GraduationCap, label: 'Teacher Completion' },
-        { path: '/student-completion', icon: Users, label: 'Student Completion' },
-        { path: '/courses', icon: BookOpen, label: 'Courses and Lessons' },
-        { path: '/reports', icon: FileText, label: 'Reports' },
-        { path: '/settings', icon: Settings, label: 'Settings' },
-    ];
+    const getNavItems = () => {
+        switch (role) {
+            case 'Student':
+                return [
+                    { to: '/student/dashboard', icon: Home, label: 'Dashboard' },
+                    { to: '/student/courses', icon: BookOpen, label: 'Courses' },
+                    { to: '/student/wallet', icon: Wallet, label: 'Wallet' },
+                    { to: '/student/badges', icon: Award, label: 'Badges' },
+                    { to: '/student/faq', icon: HelpCircle, label: 'FAQ' }
+                ];
+            case 'Teacher':
+                return [
+                    { to: '/teacher/dashboard', icon: Home, label: 'Dashboard' },
+                    { to: '/teacher/courses', icon: BookOpen, label: 'Courses' },
+                    { to: '/teacher/evidence', icon: FileText, label: 'Evidence' },
+                    { to: '/teacher/faq', icon: HelpCircle, label: 'FAQ' }
+                ];
+            case 'Principal':
+                return [
+                    { to: '/principal/dashboard', icon: Home, label: 'Dashboard' },
+                    { to: '/principal/courses', icon: BookOpen, label: 'Courses' },
+                    { to: '/principal/faq', icon: HelpCircle, label: 'FAQ' }
+                ];
+            case 'Admin':
+                return [
+                    { to: '/admin/dashboard', icon: Home, label: 'Dashboard' },
+                    { to: '/admin/courses', icon: BookOpen, label: 'Courses' },
+                    { to: '/admin/users', icon: Users, label: 'Users' },
+                    { to: '/admin/config', icon: Settings, label: 'Config' },
+                    { to: '/admin/faq', icon: HelpCircle, label: 'FAQ' }
+                ];
+            default:
+                return [];
+        }
+    };
 
-    if (!userData) return null;
+    const navItems = getNavItems();
 
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Top Navigation */}
-            <nav className="bg-white border-b border-gray-200 fixed w-full z-30 top-0">
-                <div className="px-4 py-3 flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                        <button
-                            onClick={() => setSidebarOpen(!sidebarOpen)}
-                            className="p-2 rounded-lg hover:bg-gray-100"
-                        >
-                            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
-                        </button>
-
-                        {/* Logo */}
-                        <div className="flex items-center space-x-3">
-                            <img
-                                src="/logo.jpg"
-                                alt="Achariya Logo"
-                                className="w-12 h-12 object-contain"
-                            />
-                            <div className="hidden md:block">
-                                <h1 className="text-lg font-bold text-gray-800">Achariya Learning Portal</h1>
-                                <p className="text-xs text-gray-500">Completion Tracking</p>
+            <nav className="bg-white shadow-sm border-b">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between h-16">
+                        <div className="flex items-center">
+                            <div className="w-10 h-10 mr-3 flex items-center justify-center">
+                                <img src="/achariya-logo.jpg" alt="Achariya" className="w-full h-full object-contain" />
+                            </div>
+                            <div>
+                                <h1 className="text-xl font-bold text-gray-800">Achariya Portal</h1>
+                                <p className="text-xs text-gray-500">{role}</p>
                             </div>
                         </div>
-                    </div>
 
-                    {/* User Info */}
-                    <div className="flex items-center space-x-4">
-                        <div className="text-right hidden md:block">
-                            <p className="text-sm font-medium text-gray-800">
-                                {userData.role === 'Teacher' && userData.teacherName}
-                                {userData.role === 'Student' && userData.studentName}
-                                {userData.role === 'Principal' && 'Principal'}
-                            </p>
-                            <p className="text-xs text-gray-500">{userData.role}</p>
+                        <div className="flex items-center space-x-4">
+                            <div className="flex items-center">
+                                <div className="w-8 h-8 mr-2 rounded-full overflow-hidden border-2 border-gray-200">
+                                    <img src="/achariya-logo.jpg" alt={user.name} className="w-full h-full object-cover" />
+                                </div>
+                                <span className="text-sm text-gray-700">{user.name || user.email}</span>
+                            </div>
+                            <button
+                                onClick={handleLogout}
+                                className="flex items-center px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition"
+                            >
+                                <LogOut className="w-4 h-4 mr-1" />
+                                Logout
+                            </button>
                         </div>
-                        <button
-                            onClick={handleLogout}
-                            className="p-2 rounded-lg hover:bg-gray-100 text-gray-600"
-                            title="Logout"
-                        >
-                            <LogOut size={20} />
-                        </button>
                     </div>
                 </div>
             </nav>
 
-            {/* Sidebar */}
-            <aside
-                className={`fixed left-0 top-0 h-full bg-white border-r border-gray-200 transition-all duration-300 z-20 pt-16 ${sidebarOpen ? 'w-64' : 'w-0'
-                    } overflow-hidden`}
-            >
-                <nav className="p-4 space-y-2">
-                    {menuItems.map((item) => (
-                        <NavLink
-                            key={item.path}
-                            to={item.path}
-                            className={({ isActive }) =>
-                                `flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                                    ? 'bg-blue-50 text-blue-600'
-                                    : 'text-gray-700 hover:bg-gray-50'
-                                }`
-                            }
-                        >
-                            <item.icon size={20} />
-                            <span className="font-medium">{item.label}</span>
-                        </NavLink>
-                    ))}
-                </nav>
-            </aside>
+            <div className="flex">
+                {/* Sidebar */}
+                <aside className="w-64 bg-white shadow-sm min-h-[calc(100vh-4rem)] border-r">
+                    <nav className="py-4">
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.to}
+                                to={item.to}
+                                className="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
+                            >
+                                <item.icon className="w-5 h-5 mr-3" />
+                                {item.label}
+                            </Link>
+                        ))}
+                    </nav>
+                </aside>
 
-            {/* Main Content */}
-            <main
-                className={`transition-all duration-300 pt-16 ${sidebarOpen ? 'ml-64' : 'ml-0'
-                    }`}
-            >
-                <div className="p-6">
+                {/* Main Content */}
+                <main className="flex-1 p-8">
                     <Outlet />
-                </div>
-            </main>
+                </main>
+            </div>
         </div>
     );
 };
