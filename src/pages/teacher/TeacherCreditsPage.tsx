@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Coins, TrendingUp, Award, Calendar } from 'lucide-react';
+import { ArrowLeft, Coins, TrendingUp, Award } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
 
 const TeacherCreditsPage = () => {

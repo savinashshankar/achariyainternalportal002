@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, Save, BookOpen } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
 
 const AdminEditCourseForm = () => {
@@ -102,7 +102,7 @@ const AdminEditCourseForm = () => {
                         >
                             {sampleData.teachers.map(teacher => (
                                 <option key={teacher.id} value={teacher.id}>
-                                    {teacher.name} - {teacher.subject}
+                                    {teacher.name} - {teacher.department}
                                 </option>
                             ))}
                         </select>

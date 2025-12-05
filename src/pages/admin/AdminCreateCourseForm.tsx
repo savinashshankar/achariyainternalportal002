@@ -111,7 +111,7 @@ const AdminCreateCourseForm = () => {
                         >
                             {sampleData.teachers.map(teacher => (
                                 <option key={teacher.id} value={teacher.id}>
-                                    {teacher.name} - {teacher.subject}
+                                    {teacher.name} - {teacher.department}
                                 </option>
                             ))}
                         </select>
