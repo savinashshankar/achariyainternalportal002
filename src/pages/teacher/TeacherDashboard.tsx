@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Users, TrendingUp, BookOpen, Wallet, AlertTriangle, Award } from 'lucide-react';
+import { Users, TrendingUp, BookOpen, Wallet, AlertTriangle } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
 
 const TeacherDashboard = () => {

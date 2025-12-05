@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Mail, Award, Wallet, BookOpen, TrendingUp } from 'lucide-react';
-import { getStudentDetails, sampleData } from '../../data/sampleData';
+import { getStudentDetails } from '../../data/sampleData';
 
 const PrincipalStudentDetail = () => {
     const { studentId } = useParams();

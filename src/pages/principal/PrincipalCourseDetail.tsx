@@ -1,5 +1,5 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Users, TrendingUp, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ChevronRight } from 'lucide-react';
 import { sampleData, getStudentsByCourse } from '../../data/sampleData';
 
 const PrincipalCourseDetail = () => {
@@ -50,7 +50,7 @@ const PrincipalCourseDetail = () => {
                 <div className="bg-white rounded-xl shadow-sm p-6 border">
                     <p className="text-sm text-gray-600">Traffic Level</p>
                     <p className={`text-2xl font-bold mt-2 ${course.traffic === 'High' ? 'text-orange-600' :
-                            course.traffic === 'Medium' ? 'text-blue-600' : 'text-gray-600'
+                        course.traffic === 'Medium' ? 'text-blue-600' : 'text-gray-600'
                         }`}>{course.traffic}</p>
                 </div>
             </div>

@@ -80,7 +80,7 @@ const StudentCourseDetail = () => {
                     <p className="text-gray-500 text-center py-8">No modules available for this course yet.</p>
                 ) : (
                     <div className="space-y-3">
-                        {modules.map((module, index) => {
+                        {modules.map((module) => {
                             const isCompleted = enrollment && enrollment.modules_completed >= module.order;
                             const isUnlocked = enrollment && (module.order === 1 || enrollment.modules_completed >= module.order - 1);
 
