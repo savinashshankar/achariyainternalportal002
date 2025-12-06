@@ -17,14 +17,14 @@ const PrincipalCourseDetail = () => {
 
     return (
         <div>
-            <Link to="/principal/dashboard" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
+            <Link to="/principal/dashboard" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-3 sm:mb-4">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Dashboard
             </Link>
 
-            <div className="bg-white rounded-xl shadow-sm p-6 border mb-6">
-                <h1 className="text-3xl font-bold text-gray-800 mb-2">{course.title}</h1>
-                <div className="flex items-center space-x-6 text-sm text-gray-600">
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border mb-4 sm:mb-6">
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-2">{course.title}</h1>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-6 text-xs sm:text-sm text-gray-600">
                     <span className="font-semibold">{course.subject}</span>
                     <span>•</span>
                     <span>{course.level}</span>
@@ -34,10 +34,10 @@ const PrincipalCourseDetail = () => {
             </div>
 
             {/* Course Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div className="bg-white rounded-xl shadow-sm p-6 border">
-                    <p className="text-sm text-gray-600">Total Enrollments</p>
-                    <p className="text-3xl font-bold text-gray-800 mt-2">{course.enrollments}</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
+                    <p className="text-xs sm:text-sm text-gray-600">Total Enrollments</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{course.enrollments}</p>
                 </div>
                 <div className="bg-white rounded-xl shadow-sm p-6 border">
                     <p className="text-sm text-gray-600">Active Students</p>
@@ -56,8 +56,8 @@ const PrincipalCourseDetail = () => {
             </div>
 
             {/* Modules */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border mb-8">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">Course Modules</h2>
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border mb-6 sm:mb-8">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Course Modules</h2>
                 <div className="space-y-3">
                     {modules.map((module) => (
                         <div key={module.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
@@ -82,9 +82,10 @@ const PrincipalCourseDetail = () => {
             </div>
 
             {/* Enrolled Students */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">Enrolled Students</h2>
-                <div className="overflow-x-auto">
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Enrolled Students</h2>
+                {/* Desktop Table */}
+                <div className="hidden sm:block overflow-x-auto">
                     <table className="w-full">
                         <thead>
                             <tr className="border-b">
@@ -134,6 +135,36 @@ const PrincipalCourseDetail = () => {
                             ))}
                         </tbody>
                     </table>
+                </div>
+
+                {/* Mobile Card Layout */}
+                <div className="sm:hidden space-y-3">
+                    {students.map((student: any) => (
+                        <div
+                            key={student.id}
+                            onClick={() => navigate(`/principal/student/${student.id}`)}
+                            className="bg-gray-50 p-4 rounded-lg border hover:bg-gray-100 active:bg-gray-200 transition"
+                        >
+                            <div className="flex justify-between items-start mb-2">
+                                <div>
+                                    <p className="font-semibold text-gray-800">{student.name}</p>
+                                    <p className="text-xs text-gray-500">{student.email}</p>
+                                </div>
+                                <span className="text-sm font-semibold text-green-600">{student.progress}%</span>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-1">{student.class}</p>
+                            <p className="text-sm text-gray-600 mb-2">
+                                Modules: {student.modules_completed}/{student.total_modules}
+                            </p>
+                            <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
+                                <div
+                                    className="bg-green-600 h-2 rounded-full"
+                                    style={{ width: `${student.progress}%` }}
+                                />
+                            </div>
+                            <p className="text-xs text-gray-500">Last active: {student.last_active}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

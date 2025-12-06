@@ -22,18 +22,18 @@ const TeacherDashboard = () => {
 
     return (
         <div>
-            <div className="mb-6">
-                <h1 className="text-3xl font-bold text-gray-800">Teacher Dashboard</h1>
-                <p className="text-gray-600">Welcome back, {teacher.name}</p>
+            <div className="mb-4 sm:mb-6">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Teacher Dashboard</h1>
+                <p className="text-sm sm:text-base text-gray-600">Welcome back, {teacher.name}</p>
             </div>
 
             {/* Key Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <Link to="/teacher/courses" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                <Link to="/teacher/courses" className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">My Courses</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{teacher.courses}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">My Courses</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{teacher.courses}</p>
                         </div>
                         <div className="bg-blue-500 p-3 rounded-lg">
                             <BookOpen className="w-6 h-6 text-white" />
@@ -83,11 +83,11 @@ const TeacherDashboard = () => {
 
             {/* At-Risk Students Alert */}
             {atRiskStudents.length > 0 && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-8">
+                <div className="bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
                     <div className="flex items-start">
                         <AlertTriangle className="w-6 h-6 text-red-600 mr-3 mt-1" />
                         <div className="flex-1">
-                            <h3 className="text-lg font-bold text-red-800 mb-2">
+                            <h3 className="text-base sm:text-lg font-bold text-red-800 mb-2">
                                 {atRiskStudents.length} At-Risk Student{atRiskStudents.length > 1 ? 's' : ''}
                             </h3>
                             <p className="text-sm text-red-700 mb-3">These students have completion rates below 70% and may need additional support.</p>
@@ -108,9 +108,9 @@ const TeacherDashboard = () => {
             )}
 
             {/* My Courses */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border mb-8">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">My Courses</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border mb-6 sm:mb-8">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">My Courses</h2>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                     {teacherCourses.map((course) => {
                         const courseEnrollments = sampleData.enrollments.filter(e => e.course_id === course.id);
                         return (
@@ -138,9 +138,10 @@ const TeacherDashboard = () => {
             </div>
 
             {/* Student Progress Overview */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">Student Progress Overview</h2>
-                <div className="overflow-x-auto">
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Student Progress Overview</h2>
+                {/* Desktop Table */}
+                <div className="hidden sm:block overflow-x-auto">
                     <table className="w-full">
                         <thead>
                             <tr className="border-b">
@@ -178,6 +179,35 @@ const TeacherDashboard = () => {
                             ))}
                         </tbody>
                     </table>
+                </div>
+
+                {/* Mobile Card Layout */}
+                <div className="sm:hidden space-y-3">
+                    {allStudents.slice(0, 10).map((student: any) => (
+                        <div
+                            key={`${student.id}-${student.course_id}`}
+                            onClick={() => navigate(`/teacher/student/${student.id}`)}
+                            className="bg-gray-50 p-4 rounded-lg border hover:bg-gray-100 active:bg-gray-200 transition"
+                        >
+                            <div className="flex justify-between items-start mb-2">
+                                <div>
+                                    <p className="font-semibold text-gray-800">{student.name}</p>
+                                    <p className="text-xs text-gray-500">{student.class}</p>
+                                </div>
+                                <span className={`text-sm font-semibold ${student.progress >= 70 ? 'text-green-600' : 'text-red-600'}`}>
+                                    {student.progress}%
+                                </span>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-2">{student.courseName}</p>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                                <div
+                                    className={`h-2 rounded-full ${student.progress >= 70 ? 'bg-green-600' : 'bg-red-600'}`}
+                                    style={{ width: `${student.progress}%` }}
+                                />
+                            </div>
+                            <p className="text-xs text-gray-500 mt-2">Last active: {student.last_active}</p>
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>

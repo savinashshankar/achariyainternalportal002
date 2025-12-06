@@ -37,22 +37,22 @@ const PrincipalDashboard = () => {
             {/* School Header - Clickable */}
             <div
                 onClick={() => navigate(`/principal/school/${schoolId}`)}
-                className="mb-6 cursor-pointer hover:bg-gray-50 p-4 rounded-lg transition -m-4"
+                className="mb-4 sm:mb-6 cursor-pointer hover:bg-gray-50 p-3 sm:p-4 rounded-lg transition -m-3 sm:-m-4"
             >
-                <h1 className="text-3xl font-bold text-gray-800">{school?.name}</h1>
-                <p className="text-gray-600">Principal Dashboard - {school?.location} • Click for details →</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">{school?.name}</h1>
+                <p className="text-sm sm:text-base text-gray-600">Principal Dashboard - {school?.location} • Click for details →</p>
             </div>
 
             {/* Key Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 <div
                     onClick={() => navigate('/principal/students')}
-                    className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md cursor-pointer transition"
+                    className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md cursor-pointer transition"
                 >
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Total Students</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{totalStudents}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Total Students</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{totalStudents}</p>
                         </div>
                         <div className="bg-blue-500 p-3 rounded-lg">
                             <Users className="w-6 h-6 text-white" />

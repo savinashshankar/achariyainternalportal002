@@ -17,16 +17,16 @@ const StudentDashboard = () => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Student Dashboard</h1>
-            <p className="text-gray-600 mb-6">Welcome back, {student.name}!</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">Student Dashboard</h1>
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Welcome back, {student.name}!</p>
 
             {/* Summary Cards - ALL CLICKABLE */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <Link to="/student/courses" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                <Link to="/student/courses" className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Active Courses</p>
-                            <p className="text-2xl font-bold text-gray-800 mt-2">{studentEnrollments.length}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Active Courses</p>
+                            <p className="text-xl sm:text-2xl font-bold text-gray-800 mt-1 sm:mt-2">{studentEnrollments.length}</p>
                         </div>
                         <div className="bg-blue-500 p-3 rounded-lg">
                             <BookOpen className="w-6 h-6 text-white" />
@@ -72,9 +72,9 @@ const StudentDashboard = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Quick Actions</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                     <Link
                         to="/student/courses"
                         className="flex items-center justify-center py-4 px-6 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition"

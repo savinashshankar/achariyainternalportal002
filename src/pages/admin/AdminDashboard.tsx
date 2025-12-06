@@ -10,15 +10,15 @@ const AdminDashboard = () => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">Admin Dashboard</h1>
 
             {/* System Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <Link to="/admin/users" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                <Link to="/admin/users" className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Total Users</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{totalUsers}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Total Users</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{totalUsers}</p>
                         </div>
                         <div className="bg-blue-500 p-3 rounded-lg">
                             <Users className="w-6 h-6 text-white" />
