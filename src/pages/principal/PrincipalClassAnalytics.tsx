@@ -35,7 +35,17 @@ const PrincipalClassAnalytics = () => {
                 Back to Dashboard
             </Link>
 
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">Class Analytics - Completion by Grade</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">Class Analytics - Completion by Grade</h1>
+
+            {/* Overall School Performance - Moved to Top (FIX FOR ISSUE #12) */}
+            <div className="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-6">
+                <h3 className="font-bold text-gray-800 mb-2">Overall School Performance</h3>
+                <p className="text-gray-600 text-sm">
+                    Average completion across all grades: <span className="font-bold text-blue-600 text-lg">
+                        {overallAvg}%
+                    </span>
+                </p>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {classByGrade.map(grade => (
@@ -89,15 +99,6 @@ const PrincipalClassAnalytics = () => {
                         <p className="text-xs text-gray-500 text-center">{grade.completion || 0}% Complete</p>
                     </div>
                 ))}
-            </div>
-
-            <div className="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
-                <h3 className="font-bold text-gray-800 mb-2">Overall School Performance</h3>
-                <p className="text-gray-600 text-sm">
-                    Average completion across all grades: <span className="font-bold text-blue-600 text-lg">
-                        {overallAvg}%
-                    </span>
-                </p>
             </div>
         </div>
     );

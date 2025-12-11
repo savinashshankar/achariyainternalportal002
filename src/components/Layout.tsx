@@ -34,6 +34,7 @@ const Layout = () => {
                 return [
                     { to: '/principal/dashboard', icon: Home, label: 'Dashboard' },
                     { to: '/principal/courses', icon: BookOpen, label: 'Courses' },
+                    { to: '/principal/evidence', icon: FileText, label: 'Evidence Approval' },
                     { to: '/principal/faq', icon: HelpCircle, label: 'FAQ' }
                 ];
             case 'Admin':

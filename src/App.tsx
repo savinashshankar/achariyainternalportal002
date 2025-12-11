@@ -35,6 +35,7 @@ import PrincipalClassAnalytics from './pages/principal/PrincipalClassAnalytics';
 import PrincipalStudentActivity from './pages/principal/PrincipalStudentActivity';
 import PrincipalSchoolDetail from './pages/principal/PrincipalSchoolDetail';
 import PrincipalSystemStats from './pages/principal/PrincipalSystemStats';
+import PrincipalEvidenceApproval from './pages/principal/PrincipalEvidenceApproval';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -46,6 +47,8 @@ import AdminQuestionBank from './pages/admin/AdminQuestionBank';
 import AdminAddUserForm from './pages/admin/AdminAddUserForm';
 import AdminEditCourseForm from './pages/admin/AdminEditCourseForm';
 import AdminCreateCourseForm from './pages/admin/AdminCreateCourseForm';
+import AdminSystemMonitoring from './pages/admin/AdminSystemMonitoring';
+import AdminModuleEdit from './pages/admin/AdminModuleEdit';
 
 // Placeholder
 import { StudentQuiz } from './pages/PlaceholderPages';
@@ -89,6 +92,7 @@ function App() {
                 <Route path="/principal/student-activity" element={<PrincipalStudentActivity />} />
                 <Route path="/principal/school/:schoolId" element={<PrincipalSchoolDetail />} />
                 <Route path="/principal/system-stats" element={<PrincipalSystemStats />} />
+                <Route path="/principal/evidence" element={<PrincipalEvidenceApproval />} />
                 <Route path="/principal/faq" element={<PrincipalFAQPage />} />
 
                 {/* Admin Routes */}
@@ -98,8 +102,10 @@ function App() {
                 <Route path="/admin/users/add" element={<AdminAddUserForm />} />
                 <Route path="/admin/courses/create" element={<AdminCreateCourseForm />} />
                 <Route path="/admin/courses/edit/:courseId" element={<AdminEditCourseForm />} />
+                <Route path="/admin/modules/edit/:moduleId" element={<AdminModuleEdit />} />
                 <Route path="/admin/question-bank" element={<AdminQuestionBank />} />
                 <Route path="/admin/config" element={<AdminConfigPage />} />
+                <Route path="/admin/monitoring" element={<AdminSystemMonitoring />} />
                 <Route path="/admin/faq" element={<AdminFAQPage />} />
             </Route>
 

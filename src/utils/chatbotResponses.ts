@@ -29,6 +29,8 @@ const courseDocuments: Record<number, Record<string, string>> = {
     2: { // Physics - Extensive Coverage
         'newton': "**Newton's Laws of Motion** (Physics Module 1)\n\n**First Law (Inertia):**\nAn object at rest stays at rest, and an object in motion continues in motion at constant velocity, unless acted upon by a net external force.\n\n**Second Law (F=ma):**\nF = ma\nForce = mass × acceleration\nUnit: Newton (N) = kg·m/s²\n\n**Third Law (Action-Reaction):**\nFor every action, there's an equal and opposite reaction.\nF₁₂ = -F₂₁\n\n**Example:** 5kg object, 10N force\na = F/m = 10/5 = 2 m/s²",
 
+        'thermodynamics': "**Thermodynamics** (Physics Module 2)\n\nThe study of heat, energy, and work.\n\n**Four Laws of Thermodynamics:**\n\n**Zeroth Law:** If A=B and B=C in temperature, then A=C\n\n**First Law (Energy Conservation):**\nΔU = Q - W\n• ΔU = Change in internal energy\n• Q = Heat added to system\n• W = Work done by system\nEnergy cannot be created or destroyed, only transformed.\n\n**Second Law (Entropy):**\nEntropy of an isolated system always increases.\nS = k log W\nHeat flows from hot to cold spontaneously.\n\n**Third Law:**\nAs temperature approaches absolute zero, entropy approaches a constant minimum.\n\n**Applications:** Engines, refrigerators, heat pumps",
+
         'energy': "**Energy Conservation** (Physics Module 2)\n\n**Law:** Energy cannot be created or destroyed, only transformed.\n\n**Types:**\n• **Kinetic Energy:** KE = ½mv²\n  (energy of motion)\n• **Potential Energy:** PE = mgh\n  (stored energy, gravity)\n  \n**Total Mechanical Energy:**\nE = KE + PE = constant (no friction)\n\n**Example:** Ball dropped from 10m (m=1kg)\nPE initial = 1×10×10 = 100J\nAt ground: KE = 100J\nVelocity: v = √(2KE/m) = √200 = 14.1 m/s",
 
         'motion': "**Kinematics Equations** (Physics Module 1)\n\nFor uniform acceleration:\n\n**Equations:**\n1. v = u + at\n2. s = ut + ½at²\n3. v² = u² + 2as\n4. s = (u+v)t/2\n\nWhere:\n• u = initial velocity\n• v = final velocity\n• a = acceleration\n• t = time\n• s = displacement\n\n**Example:** Car accelerates from 0 to 20m/s in 10s\na = (v-u)/t = 20/10 = 2 m/s²",
@@ -70,6 +72,8 @@ const generalResponses: Record<string, string> = {
     'badge': "🏆 **Badges:**\nSpeed Master, High Performer, Consistent Learner, etc.\n\nEach shows the specific activity you completed to earn it. Check Badges page!",
 
     'unlock': "🔓 **Module Unlocking:**\nModules unlock sequentially.\n1. Complete 100% of current module\n2. Pass the quiz\n3. Next module unlocks automatically\n\nNo skipping - ensures mastery!",
+
+    'progress': "📊 **Track Your Progress:**\n\n**Dashboard View:**\n• Overall completion percentage\n• Quiz average score\n• Credits earned\n• Badges collected\n\n**Course Details:**\n• Modules completed per course\n• Current module status\n• Class average comparison\n\n**Wallet Page:**\n• Transaction history\n• Credits by activity\n• Timeline view\n\nYour progress updates in real-time!",
 
     'help': "🤖 **I'm Your Study Assistant!**\n\nAsk me:\n• Course topics (\"explain derivatives\", \"Newton's laws\")\n• Portal features (credits, badges, progress)\n• Study tips\n• Quiz guidelines\n\nI'll pull from your course materials!"
 };
@@ -133,5 +137,6 @@ export const conversationStarters = [
     "What are Newton's laws?",
     "How to analyze poetry?",
     "Quiz tips for my courses",
-    "How do I earn credits?"
+    "How do I earn credits?",
+    "What is thermodynamics?"  // NEW TOPIC QUESTION
 ];

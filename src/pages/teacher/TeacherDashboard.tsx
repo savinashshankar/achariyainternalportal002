@@ -45,8 +45,8 @@ const TeacherDashboard = () => {
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm text-gray-600">Total Students</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{allStudents.length}</p>
-                            <p className="text-xs text-gray-500 mt-1">Click to view all →</p>
+                            <p className="text-3xl font-bold text-gray-800 mt-2">{[...new Set(allStudents.map((s: any) => s.id))].length}</p>
+                            <p className="text-xs text-gray-500 mt-1">{allStudents.length} total enrollments</p>
                         </div>
                         <div className="bg-green-500 p-3 rounded-lg">
                             <Users className="w-6 h-6 text-white" />

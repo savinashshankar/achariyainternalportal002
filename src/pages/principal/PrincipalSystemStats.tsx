@@ -18,7 +18,15 @@ const PrincipalSystemStats = () => {
                 Back to Dashboard
             </Link>
 
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">System Statistics</h1>
+            <h1 className="text-3xl font-bold text-gray-800 mb-4">System Statistics</h1>
+
+            {/* System Status Note - Moved to Top (FIX FOR ISSUE #14) */}
+            <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 flex items-center">
+                <Activity className="w-5 h-5 text-green-600 mr-3" />
+                <p className="text-sm text-green-700">
+                    <strong>All systems operational.</strong> No issues detected in the past 24 hours.
+                </p>
+            </div>
 
             {/* Server Health */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -143,13 +151,6 @@ const PrincipalSystemStats = () => {
                         <p className="font-semibold text-gray-800">AWS EC2</p>
                     </div>
                 </div>
-            </div>
-
-            <div className="mt-6 bg-green-50 border border-green-200 rounded-xl p-4 flex items-center">
-                <Activity className="w-5 h-5 text-green-600 mr-3" />
-                <p className="text-sm text-green-700">
-                    <strong>All systems operational.</strong> No issues detected in the past 24 hours.
-                </p>
             </div>
         </div>
     );

@@ -32,8 +32,9 @@ export const sampleData = {
     // Courses with engagement metrics
     courses: [
         { id: 1, title: 'Advanced Mathematics', subject: 'Mathematics', level: 'Advanced', school_id: 1, teacher_id: 1, enrollments: 15, completion_avg: 85, active_users: 14, traffic: 'High' },
-        { id: 2, title: 'Physics Fundamentals', subject: 'Physics', level: 'Intermediate', school_id: 1, teacher_id: 2, enrollments: 12, completion_avg: 80, active_users: 11, traffic: 'Medium' },
-        { id: 3, title: 'English Literature', subject: 'English', level: 'Intermediate', school_id: 1, teacher_id: 1, enrollments: 10, completion_avg: 90, active_users: 10, traffic: 'Low' },
+        { id: 2, title: 'Physics Fundamentals', subject: 'Physics', level: 'Intermediate', school_id: 1, teacher_id: 1, enrollments: 12, completion_avg: 80, active_users: 11, traffic: 'Medium' },
+        { id: 3, title: 'English Literature', subject: 'English', level: 'Intermediate', school_id: 1, teacher_id: 2, enrollments: 10, completion_avg: 90, active_users: 10, traffic: 'Low' },
+        { id: 7, title: 'Chemistry Basics', subject: 'Chemistry', level: 'Intermediate', school_id: 1, teacher_id: 2, enrollments: 14, completion_avg: 82, active_users: 13, traffic: 'Medium' },
         { id: 4, title: 'Data Structures and Algorithms', subject: 'Computer Science', level: 'Advanced', school_id: 2, teacher_id: 3, enrollments: 18, completion_avg: 88, active_users: 17, traffic: 'High' },
         { id: 5, title: 'Database Management Systems', subject: 'Computer Science', level: 'Intermediate', school_id: 2, teacher_id: 3, enrollments: 15, completion_avg: 86, active_users: 14, traffic: 'High' },
         { id: 6, title: 'Web Development', subject: 'Computer Science', level: 'Beginner', school_id: 2, teacher_id: 4, enrollments: 20, completion_avg: 82, active_users: 19, traffic: 'High' }

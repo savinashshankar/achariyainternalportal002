@@ -1,10 +1,12 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { ArrowLeft, Building, Users, TrendingUp, Award } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
 
 const PrincipalSchoolDetail = () => {
-    const { schoolId } = useParams();
-    const school = sampleData.schools.find(s => s.id === Number(schoolId)) || sampleData.schools[0];
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const role = user.selectedRole?.toLowerCase() || 'principal'; // FIX FOR ISSUE #5
+    const schoolId = user.email?.includes('college') ? 2 : 1;
+    const school = sampleData.schools.find(s => s.id === schoolId) || sampleData.schools[0];
 
     const schoolStudents = sampleData.students.filter(s => s.school_id === school.id);
     const avgCompletion = Math.round(
@@ -13,7 +15,11 @@ const PrincipalSchoolDetail = () => {
 
     return (
         <div>
-            <Link to="/principal/dashboard" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4">
+            {/* Use role-aware navigation (FIX FOR ISSUE #5) */}
+            <Link
+                to={`/${role}/dashboard`}
+                className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-4"
+            >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Dashboard
             </Link>

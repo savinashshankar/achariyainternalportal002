@@ -57,14 +57,16 @@ const StudentCourseDetail = () => {
 
             {/* Progress Bar */}
             <div className="bg-white rounded-xl shadow-sm p-6 border mb-6">
-                <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-lg font-bold text-gray-800">Overall Progress</h2>
-                    <span className="text-sm font-semibold text-gray-600">{enrollment?.progress || 0}%</span>
+                <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold text-gray-800">Course Progress</h2>
+                    <span className="text-2xl font-bold text-blue-600">
+                        {enrollment?.modules_completed === modules.length ? 100 : (enrollment?.progress || 0)}%
+                    </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-4">
                     <div
-                        className="bg-gradient-to-r from-green-500 to-blue-500 h-4 rounded-full transition-all"
-                        style={{ width: `${enrollment?.progress || 0}%` }}
+                        className="bg-blue-600 h-4 rounded-full transition-all duration-300"
+                        style={{ width: `${enrollment?.modules_completed === modules.length ? 100 : (enrollment?.progress || 0)}%` }}
                     />
                 </div>
             </div>
@@ -138,12 +140,9 @@ const StudentCourseDetail = () => {
                                                 </button>
                                             )}
                                             {isCompleted && (
-                                                <button
-                                                    onClick={() => navigate(`/student/module/${module.id}`)}
-                                                    className="mt-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700 transition"
-                                                >
-                                                    Review
-                                                </button>
+                                                <span className="mt-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-semibold border border-green-300 inline-block">
+                                                    ✓ Completed
+                                                </span>
                                             )}
                                         </div>
                                     </div>

@@ -50,7 +50,7 @@ const AdminDashboard = () => {
                     </div>
                 </Link>
 
-                <Link to="/admin/config" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition">
+                <Link to="/admin/question-bank" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm text-gray-600">Quiz Questions</p>
@@ -127,9 +127,9 @@ const AdminDashboard = () => {
                 </div>
             </div>
 
-            {/* Recent Activity */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">System Statistics</h2>
+            {/* Platform Metrics */}
+            <div className="mb-6 sm:mb-8">
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Platform Metrics</h2>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="text-center p-4 bg-gray-50 rounded-lg">
                         <p className="text-3xl font-bold text-gray-800">{sampleData.students.length}</p>
@@ -144,10 +144,8 @@ const AdminDashboard = () => {
                         <p className="text-sm text-gray-600">Enrollments</p>
                     </div>
                     <div className="text-center p-4 bg-gray-50 rounded-lg">
-                        <p className="text-3xl font-bold text-gray-800">
-                            {sampleData.students.reduce((sum, s) => sum + s.badges, 0)}
-                        </p>
-                        <p className="text-sm text-gray-600">Badges Awarded</p>
+                        <p className="text-3xl font-bold text-gray-800">{sampleData.courses.length}</p>
+                        <p className="text-sm text-gray-600">Active Courses</p>
                     </div>
                 </div>
             </div>

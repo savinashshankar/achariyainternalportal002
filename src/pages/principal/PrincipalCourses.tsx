@@ -1,11 +1,17 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
+import { useEffect } from 'react';
 
 const PrincipalAllCourses = () => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const schoolId = user.email?.includes('college') ? 2 : 1;
     const courses = sampleData.courses.filter(c => c.school_id === schoolId);
+
+    // Scroll to top when page loads
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <div>
@@ -26,8 +32,8 @@ const PrincipalAllCourses = () => {
                         <div className="flex justify-between items-start mb-3">
                             <h3 className="text-lg font-bold text-gray-800">{course.title}</h3>
                             <span className={`px-2 py-1 rounded-full text-xs font-semibold ${course.traffic === 'High' ? 'bg-orange-100 text-orange-700' :
-                                    course.traffic === 'Medium' ? 'bg-blue-100 text-blue-700' :
-                                        'bg-gray-100 text-gray-700'
+                                course.traffic === 'Medium' ? 'bg-blue-100 text-blue-700' :
+                                    'bg-gray-100 text-gray-700'
                                 }`}>
                                 {course.traffic}
                             </span>

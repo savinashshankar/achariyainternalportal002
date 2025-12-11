@@ -46,7 +46,7 @@ const PrincipalDashboard = () => {
             {/* Key Metrics */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 <div
-                    onClick={() => navigate('/principal/students')}
+                    onClick={() => { navigate('/principal/students'); window.scrollTo(0, 0); }}
                     className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md cursor-pointer transition"
                 >
                     <div className="flex items-center justify-between">
@@ -61,7 +61,7 @@ const PrincipalDashboard = () => {
                 </div>
 
                 <div
-                    onClick={() => navigate('/principal/teachers')}
+                    onClick={() => { navigate('/principal/teachers'); window.scrollTo(0, 0); }}
                     className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md cursor-pointer transition"
                 >
                     <div className="flex items-center justify-between">
@@ -76,7 +76,7 @@ const PrincipalDashboard = () => {
                 </div>
 
                 <div
-                    onClick={() => navigate('/principal/courses')}
+                    onClick={() => { navigate('/principal/courses'); window.scrollTo(0, 0); }}
                     className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md cursor-pointer transition"
                 >
                     <div className="flex items-center justify-between">
@@ -91,7 +91,7 @@ const PrincipalDashboard = () => {
                 </div>
 
                 <div
-                    onClick={() => navigate('/principal/system-stats')}
+                    onClick={() => { navigate('/principal/system-stats'); window.scrollTo(0, 0); }}
                     className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md cursor-pointer transition"
                 >
                     <div className="flex items-center justify-between">
@@ -110,7 +110,7 @@ const PrincipalDashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 {/* Completion by Class - CLICKABLE */}
                 <div
-                    onClick={() => navigate('/principal/class-analytics')}
+                    onClick={() => { navigate('/principal/class-analytics'); window.scrollTo(0, 0); }}
                     className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md cursor-pointer transition"
                 >
                     <div className="flex items-center justify-between mb-4">
@@ -138,8 +138,8 @@ const PrincipalDashboard = () => {
 
                 {/* Weekly Active Students - CLICKABLE */}
                 <div
-                    onClick={() => navigate('/principal/student-activity')}
-                    className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md cursor-pointer transition"
+                    onClick={() => { navigate('/principal/courses'); window.scrollTo(0, 0); }}
+                    className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md cursor-pointer transition"
                 >
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-xl font-bold text-gray-800">Weekly Active Students</h2>
@@ -174,7 +174,7 @@ const PrincipalDashboard = () => {
                         {topPerformers.map((student, idx) => (
                             <div
                                 key={student.id}
-                                onClick={() => navigate(`/principal/student/${student.id}`)}
+                                onClick={() => { navigate(`/principal/student/${student.id}`); window.scrollTo(0, 0); }}
                                 className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition"
                             >
                                 <div className="flex items-center">
@@ -227,7 +227,7 @@ const PrincipalDashboard = () => {
                     {highTrafficCourses.map((course) => (
                         <div
                             key={course.id}
-                            onClick={() => navigate(`/principal/course/${course.id}`)}
+                            onClick={() => { navigate(`/principal/course/${course.id}`); window.scrollTo(0, 0); }}
                             className="p-4 border border-orange-200 bg-orange-50 rounded-lg hover:shadow-md cursor-pointer transition"
                         >
                             <div className="flex items-start justify-between mb-2">

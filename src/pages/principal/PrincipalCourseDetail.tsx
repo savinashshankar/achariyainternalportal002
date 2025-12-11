@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, ChevronRight } from 'lucide-react';
 import { sampleData, getStudentsByCourse } from '../../data/sampleData';
@@ -10,6 +11,11 @@ const PrincipalCourseDetail = () => {
     const students = getStudentsByCourse(parseInt(courseId || '0'));
     const teacher = sampleData.teachers.find(t => t.id === course?.teacher_id);
     const modules = sampleData.modules.filter(m => m.course_id === parseInt(courseId || '0'));
+
+    // Scroll to top when page loads
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     if (!course) {
         return <div>Course not found</div>;

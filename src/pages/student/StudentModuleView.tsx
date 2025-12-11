@@ -11,35 +11,35 @@ const moduleContent: Record<number, {
     images: string[];
     slides: { title: string; content: string; image?: string }[];
 }> = {
-    1: { // Advanced Math Module 1
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", // Sample video
+    1: { // Advanced Math Module 1 - Calculus Fundamentals
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
         audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
         images: [
-            "/math_quadratic_visual_1764926787773.png",
-            "/math_derivatives_chart_1764926831395.png"
+            "/math_derivatives_chart_1764926831395.png",
+            "/math_quadratic_visual_1764926787773.png"
         ],
         slides: [
             {
-                title: "Quadratic Equations - Introduction",
-                content: "Standard Form: ax² + bx + c = 0\n\nWhere:\n• a, b, c are constants\n• a ≠ 0 (otherwise it's linear)\n• x is the variable we solve for"
+                title: "Introduction to Calculus",
+                content: "Calculus is the mathematical study of continuous change.\n\nTwo main branches:\n• Differential Calculus (rates of change)\n• Integral Calculus (accumulation)"
             },
             {
-                title: "The Quadratic Formula",
-                content: "x = (-b ± √(b²-4ac)) / 2a\n\nThis formula gives us the solutions (roots) of any quadratic equation.\n\nThe ± symbol means we get two solutions.",
-                image: "/math_quadratic_visual_1764926787773.png"
+                title: "Limits - The Foundation",
+                content: "lim (x→a) f(x) = L\n\nMeaning: As x approaches a, f(x) approaches L.\n\nLimits are essential for defining derivatives and integrals.",
+                image: "/math_derivatives_chart_1764926831395.png"
             },
             {
-                title: "The Discriminant",
-                content: "Δ = b² - 4ac\n\nTells us about the roots:\n• Δ > 0: Two real roots\n• Δ = 0: One real root (repeated)\n• Δ < 0: Two complex roots"
+                title: "Derivatives - Rate of Change",
+                content: "f'(x) = dy/dx = lim(h→0) [f(x+h) - f(x)]/h\n\nDerivative represents:\n• Slope of tangent line\n• Instantaneous rate of change\n• Velocity in physics"
             },
             {
-                title: "Example Problem",
-                content: "Solve: x² - 5x + 6 = 0\n\na = 1, b = -5, c = 6\n\nΔ = (-5)² - 4(1)(6) = 25 - 24 = 1\n\nx = (5 ± √1) / 2 = (5 ± 1) / 2\n\nSolutions: x = 3 or x = 2"
+                title: "Basic Derivative Rules",
+                content: "Power Rule: d/dx(x^n) = nx^(n-1)\n\nExamples:\n• d/dx(x²) = 2x\n• d/dx(x³) = 3x²\n• d/dx(x) = 1"
             }
         ]
     },
-    4: { // Physics Module 1
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", // Sample video
+    4: { // Physics Module 1 - Mechanics
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
         audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
         images: [
             "/physics_newtons_laws_1764926812539.png",
@@ -63,6 +63,143 @@ const moduleContent: Record<number, {
                 title: "Third Law - Action-Reaction",
                 content: "For every action, there is an equal and opposite reaction.\n\nF₁₂ = -F₂₁\n\nExample: When you push a wall, the wall pushes back with equal force."
             }
+        ]
+    },
+    2: { // Advanced Math Module 2 - Linear Algebra
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+        images: ["/math_derivatives_chart_1764926831395.png"],
+        slides: [
+            { title: "Linear Algebra Introduction", content: "Study of vectors, matrices, and linear transformations.\n\nKey concepts:\n• Vector spaces\n• Matrix operations\n• Linear transformations" },
+            { title: "Matrices", content: "Matrix: Rectangular array of numbers\n\n[a b]\n[c d]\n\nOperations: Addition, Multiplication, Determinant" },
+            { title: "Vectors", content: "Vector: Quantity with magnitude and direction\n\nv = [x, y, z]\n\nOperations: Addition, Scalar multiplication, Dot product" }
+        ]
+    },
+    3: { // Advanced Math Module 3 - Probability & Statistics
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+        images: ["/math_quadratic_visual_1764926787773.png"],
+        slides: [
+            { title: "Probability Basics", content: "Probability: Measure of likelihood\n\nP(event) = favorable outcomes / total outcomes\n\nRange: 0 to 1" },
+            { title: "Statistics", content: "Mean: Average value\nMedian: Middle value\nMode: Most frequent value\n\nStandard deviation: Measure of spread" },
+            { title: "Distributions", content: "Normal Distribution (Bell Curve)\nBinomial Distribution\nPoisson Distribution\n\nUsed for probability modeling" }
+        ]
+    },
+    5: { // Physics Module 2 - Thermodynamics
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+        images: ["/physics_energy_diagram_1764926850307.png"],
+        slides: [
+            { title: "Thermodynamics", content: "Study of heat, energy, and work.\n\nFour Laws of Thermodynamics\nApplied in engines, refrigerators, etc." },
+            { title: "First Law", content: "Energy cannot be created or destroyed\n\nΔU = Q - W\n\nΔU: Change in internal energy\nQ: Heat added\nW: Work done" },
+            { title: "Entropy", content: "Measure of disorder in a system\n\nS = k log W\n\nEntropy always increases (Second Law)" }
+        ]
+    },
+    6: { // Physics Module 3 - Electromagnetism (FIX FOR ISSUE #1)
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+        images: [
+            "/physics_newtons_laws_1764926812539.png",
+            "/physics_energy_diagram_1764926850307.png"
+        ],
+        slides: [
+            {
+                title: "Electromagnetism - Introduction",
+                content: "Electromagnetism is the study of electric and magnetic fields and their interactions.\n\nDiscovered by James Clerk Maxwell in the 19th century.\n\nOne of the four fundamental forces of nature."
+            },
+            {
+                title: "Electric Fields",
+                content: "Electric field (E) is a region around a charged particle where forces act on other charges.\n\nE = F/q\n\nUnits: Newtons per Coulomb (N/C)\n\nDirection: Away from positive, toward negative charges.",
+                image: "/physics_energy_diagram_1764926850307.png"
+            },
+            {
+                title: "Magnetic Fields",
+                content: "Magnetic field (B) created by moving charges (electric currents).\n\nF = qvB sin(θ)\n\nWhere:\n• q = charge\n• v = velocity\n• B = magnetic field strength\n• θ = angle between v and B"
+            },
+            {
+                title: "Maxwell's Equations",
+                content: "Four fundamental equations unifying electricity and magnetism:\n\n1. Gauss's Law (Electric)\n2. Gauss's Law (Magnetic)\n3. Faraday's Law\n4. Ampère-Maxwell Law\n\nThese equations predict electromagnetic waves (light!)."
+            }
+        ]
+    },
+    7: { // Data Structures Module 1 - Arrays & Linked Lists
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+        images: ["/math_derivatives_chart_1764926831395.png"],
+        slides: [
+            { title: "Arrays", content: "Contiguous memory locations\n\narray[0], array[1], array[2]...\n\nO(1) access time\nFixed size" },
+            { title: "Linked Lists", content: "Node-based structure\n\nNode: [data | next]\n\nTypes:\n• Singly linked\n• Doubly linked\n• Circular" },
+            { title: "Operations", content: "Insert: O(1) or O(n)\nDelete: O(1) or O(n)\nSearch: O(n)\n\nArrays vs Lists tradeoffs" }
+        ]
+    },
+    8: { // Data Structures Module 2 - Trees & Graphs
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3",
+        images: ["/physics_newtons_laws_1764926812539.png"],
+        slides: [
+            { title: "Binary Trees", content: "Hierarchical structure\n\nNode: [left | data | right]\n\nTypes:\n• Binary Search Tree\n• AVL Tree\n• Red-Black Tree" },
+            { title: "Tree Traversal", content: "Inorder: Left-Root-Right\nPreorder: Root-Left-Right\nPostorder: Left-Right-Root\n\nLevel-order (BFS)" },
+            { title: "Graphs", content: "Vertices + Edges\n\nTypes:\n• Directed/Undirected\n• Weighted/Unweighted\n\nTraversal: DFS, BFS" }
+        ]
+    },
+    9: { // Data Structures Module 3 - Dynamic Programming
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3",
+        images: ["/math_quadratic_visual_1764926787773.png"],
+        slides: [
+            { title: "Dynamic Programming", content: "Optimization technique\n\nBreak problem into subproblems\nStore results (memoization)\nAvoid recomputation" },
+            { title: "Fibonacci DP", content: "Naive: O(2^n)\n\nDP approach:\nfib[0] = 0\nfib[1] = 1\nfib[n] = fib[n-1] + fib[n-2]\n\nTime: O(n)" },
+            { title: "Common Problems", content: "• Knapsack\n• Longest Common Subsequence\n• Edit Distance\n• Coin Change\n• Matrix Chain Multiplication" }
+        ]
+    },
+    10: { // DBMS Module 1 - Relational Databases
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3",
+        images: ["/physics_energy_diagram_1764926850307.png"],
+        slides: [
+            { title: "Relational Databases", content: "Data stored in tables (relations)\n\nRows: Records\nColumns: Attributes\n\nRelated via keys" },
+            { title: "Normalization", content: "1NF: Atomic values\n2NF: No partial dependency\n3NF: No transitive dependency\n\nBCNF: Stricter form of 3NF" },
+            { title: "Keys", content: "Primary Key: Unique identifier\nForeign Key: Reference to another table\nCandidate Key: Potential primary key\nComposite Key: Multiple columns" }
+        ]
+    },
+    11: { // DBMS Module 2 - SQL Queries
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3",
+        images: ["/math_derivatives_chart_1764926831395.png"],
+        slides: [
+            { title: "SQL Basics", content: "SELECT: Retrieve data\nINSERT: Add data\nUPDATE: Modify data\nDELETE: Remove data\n\nDDL, DML, DCL commands" },
+            { title: "SELECT Statement", content: "SELECT column1, column2\nFROM table\nWHERE condition\nORDER BY column;\n\nJOINs: INNER, LEFT, RIGHT, FULL" },
+            { title: "Advanced SQL", content: "GROUP BY: Aggregate data\nHAVING: Filter groups\nSubqueries: Nested queries\n\nIndexes for performance" }
+        ]
+    },
+    12: { // Web Dev Module 1 - HTML & CSS
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3",
+        images: ["/physics_newtons_laws_1764926812539.png"],
+        slides: [
+            { title: "HTML Structure", content: "<!DOCTYPE html>\n<html>\n  <head><title>Page</title></head>\n  <body>Content</body>\n</html>\n\nSemantic tags: header, nav, main, footer" },
+            { title: "CSS Styling", content: "Selectors: tag, .class, #id\n\nProperties:\ncolor, background, margin, padding\n\nBox model: content, padding, border, margin" },
+            { title: "Responsive Design", content: "Media queries:\n@media (max-width: 768px) { }\n\nFlexbox & Grid layouts\nMobile-first approach" }
+        ]
+    },
+    13: { // English Module 1 - Shakespeare
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3",
+        images: ["/math_quadratic_visual_1764926787773.png"],
+        slides: [
+            { title: "Shakespeare Introduction", content: "William Shakespeare (1564-1616)\n\nEnglish playwright & poet\n\nWorks:\n• 37 plays\n• 154 sonnets\n• Poems" },
+            { title: "Tragedies", content: "Major tragedies:\n• Hamlet\n• Macbeth\n• Othello\n• King Lear\n• Romeo and Juliet\n\nThemes: fate, ambition, revenge" },
+            { title: "Literary Devices", content: "Soliloquy: Character speaks thoughts aloud\nMetaphor & Simile\nIambic Pentameter\n\n'To be or not to be' - Hamlet" }
+        ]
+    },
+    14: { // English Module 2 - Modern Poetry
+        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3",
+        images: ["/physics_energy_diagram_1764926850307.png"],
+        slides: [
+            { title: "Modern Poetry", content: "20th & 21st century poetry\n\nFree verse: No fixed meter\nExperimental forms\nDiverse voices & themes" },
+            { title: "Key Poets", content: "T.S. Eliot - 'The Waste Land'\nRobert Frost - 'The Road Not Taken'\nMaya Angelou - 'Still I Rise'\nLangston Hughes - Harlem Renaissance" },
+            { title: "Analysis Techniques", content: "Imagery: Visual descriptions\nTone: Author's attitude\nTheme: Central message\n\nContext: Historical & cultural background" }
         ]
     }
 };

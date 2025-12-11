@@ -25,7 +25,21 @@ const PrincipalStudentActivity = () => {
             </Link>
 
             <h1 className="text-3xl font-bold text-gray-800 mb-2">Weekly Active Students</h1>
-            <p className="text-gray-600 mb-6">Student engagement and activity breakdown</p>
+            <p className="text-gray-600 mb-4">Student engagement and activity breakdown</p>
+
+            {/* Key Insights - Moved to Top (FIX FOR ISSUE #13) */}
+            <div className="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-6">
+                <h3 className="font-bold text-gray-800 mb-3 flex items-center">
+                    <TrendingUp className="w-5 h-5 mr-2 text-blue-600" />
+                    Key Insights
+                </h3>
+                <ul className="space-y-2 text-sm text-gray-700">
+                    <li>• Weekday engagement is consistently high (78-95%)</li>
+                    <li>• Friday shows peak student activity at 95%</li>
+                    <li>• Weekend activity drops significantly, suggesting need for better weekend content</li>
+                    <li>• Wednesday shows a strong mid-week spike at 92%</li>
+                </ul>
+            </div>
 
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -78,20 +92,6 @@ const PrincipalStudentActivity = () => {
                         </div>
                     ))}
                 </div>
-            </div>
-
-            {/* Insights */}
-            <div className="mt-6 bg-blue-50 border border-blue-200 rounded-xl p-6">
-                <h3 className="font-bold text-gray-800 mb-3 flex items-center">
-                    <TrendingUp className="w-5 h-5 mr-2 text-blue-600" />
-                    Key Insights
-                </h3>
-                <ul className="space-y-2 text-sm text-gray-700">
-                    <li>• Weekday engagement is consistently high (78-95%)</li>
-                    <li>• Friday shows peak student activity at 95%</li>
-                    <li>• Weekend activity drops significantly, suggesting need for better weekend content</li>
-                    <li>• Wednesday shows a strong mid-week spike at 92%</li>
-                </ul>
             </div>
         </div>
     );
