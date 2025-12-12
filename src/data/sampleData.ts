@@ -7,18 +7,18 @@ export const sampleData = {
         { id: 2, name: 'Achariya College of Engineering', location: 'Bangalore', type: 'College' }
     ],
 
-    // Students with detailed progress
+    // Students with detailed progress + GAMIFICATION FIELDS
     students: [
-        { id: 1, name: 'Pranav R', email: 'pranav.r@achariya.org', school_id: 1, class: '10-A', completion: 85, quiz_avg: 92, badges: 3, credits: 45, status: 'Active' },
-        { id: 2, name: 'Aisha Khan', email: 'aisha.k@achariya.org', school_id: 1, class: '10-A', completion: 92, quiz_avg: 95, badges: 4, credits: 55, status: 'Active' },
-        { id: 3, name: 'Arjun Srinivasan', email: 'arjun.s@achariya.org', school_id: 1, class: '10-B', completion: 78, quiz_avg: 88, badges: 2, credits: 35, status: 'Active' },
-        { id: 4, name: 'Divya Menon', email: 'divya.m@achariya.org', school_id: 1, class: '10-B', completion: 88, quiz_avg: 90, badges: 3, credits: 42, status: 'Active' },
-        { id: 5, name: 'Rahul Patel', email: 'rahul.p@achariya.org', school_id: 1, class: '12 Science', completion: 95, quiz_avg: 98, badges: 5, credits: 65, status: 'Active' },
-        { id: 6, name: 'Sneha Gupta', email: 'sneha.g@achariya.org', school_id: 2, class: 'CS Year 1', completion: 82, quiz_avg: 87, badges: 2, credits: 38, status: 'Active' },
-        { id: 7, name: 'Vikram Joshi', email: 'vikram.j@achariya.org', school_id: 2, class: 'CS Year 2', completion: 90, quiz_avg: 93, badges: 4, credits: 50, status: 'Active' },
-        { id: 8, name: 'Priya Nair', email: 'priya.n@achariya.org', school_id: 2, class: 'CS Year 2', completion: 87, quiz_avg: 91, badges: 3, credits: 44, status: 'Active' },
-        { id: 9, name: 'Karthik Balan', email: 'karthik.b@achariya.org', school_id: 2, class: 'CS Year 3', completion: 93, quiz_avg: 96, badges: 5, credits: 58, status: 'Active' },
-        { id: 10, name: 'Ananya Varma', email: 'ananya.v@achariya.org', school_id: 2, class: 'CS Year 3', completion: 75, quiz_avg: 85, badges: 1, credits: 28, status: 'Active' }
+        { id: 1, name: 'Pranav R', email: 'pranav.r@achariya.org', school_id: 1, class: '10-A', completion: 85, quiz_avg: 92, badges: 3, credits: 45, status: 'Active', currentStreak: 5, longestStreak: 12, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
+        { id: 2, name: 'Aisha Khan', email: 'aisha.k@achariya.org', school_id: 1, class: '10-A', completion: 92, quiz_avg: 95, badges: 4, credits: 55, status: 'Active', currentStreak: 8, longestStreak: 15, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
+        { id: 3, name: 'Arjun Srinivasan', email: 'arjun.s@achariya.org', school_id: 1, class: '10-B', completion: 78, quiz_avg: 88, badges: 2, credits: 35, status: 'Active', currentStreak: 2, longestStreak: 7, lastLoginDate: '2025-12-09', streakFreezeUsed: false },
+        { id: 4, name: 'Divya Menon', email: 'divya.m@achariya.org', school_id: 1, class: '10-B', completion: 88, quiz_avg: 90, badges: 3, credits: 42, status: 'Active', currentStreak: 15, longestStreak: 15, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
+        { id: 5, name: 'Rahul Patel', email: 'rahul.p@achariya.org', school_id: 1, class: '12 Science', completion: 95, quiz_avg: 98, badges: 5, credits: 65, status: 'Active', currentStreak: 23, longestStreak: 30, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
+        { id: 6, name: 'Sneha Gupta', email: 'sneha.g@achariya.org', school_id: 2, class: 'CS Year 1', completion: 82, quiz_avg: 87, badges: 2, credits: 38, status: 'Active', currentStreak: 0, longestStreak: 5, lastLoginDate: '2025-12-05', streakFreezeUsed: false },
+        { id: 7, name: 'Vikram Joshi', email: 'vikram.j@achariya.org', school_id: 2, class: 'CS Year 2', completion: 90, quiz_avg: 93, badges: 4, credits: 50, status: 'Active', currentStreak: 10, longestStreak: 18, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
+        { id: 8, name: 'Priya Nair', email: 'priya.n@achariya.org', school_id: 2, class: 'CS Year 2', completion: 87, quiz_avg: 91, badges: 3, credits: 44, status: 'Active', currentStreak: 3, longestStreak: 9, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
+        { id: 9, name: 'Karthik Balan', email: 'karthik.b@achariya.org', school_id: 2, class: 'CS Year 3', completion: 93, quiz_avg: 96, badges: 5, credits: 58, status: 'Active', currentStreak: 7, longestStreak: 14, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
+        { id: 10, name: 'Ananya Varma', email: 'ananya.v@achariya.org', school_id: 2, class: 'CS Year 3', completion: 75, quiz_avg: 85, badges: 1, credits: 28, status: 'Active', currentStreak: 1, longestStreak: 4, lastLoginDate: '2025-12-10', streakFreezeUsed: false }
     ],
 
     // Teachers with performance metrics
@@ -67,6 +67,40 @@ export const sampleData = {
 
         // Web Dev modules
         { id: 12, course_id: 6, title: 'HTML & CSS', order: 1, completion_rate: 90 }
+    ],
+
+    // Quizzes for modules
+    quizzes: [
+        {
+            id: 1,
+            moduleId: 1,
+            courseId: 1,
+            title: 'Calculus Fundamentals Quiz',
+            timeLimit: 120,
+            maxAttempts: 3,
+            questions: [
+                { id: 1, question: 'What is the derivative of x²?', options: ['x', '2x', '2', 'x²'], correctAnswer: 1, explanation: 'Using the power rule: d/dx(xⁿ) = n·xⁿ⁻¹, so d/dx(x²) = 2x' },
+                { id: 2, question: 'What is the integral of 2x?', options: ['x²', 'x² + C', '2', '2x²'], correctAnswer: 1, explanation: 'The integral of 2x is x² + C, where C is the constant of integration' },
+                { id: 3, question: 'What is the limit of (x² - 1)/(x - 1) as x approaches 1?', options: ['0', '1', '2', 'undefined'], correctAnswer: 2, explanation: 'Factor: (x-1)(x+1)/(x-1) = x+1. As x→1, limit = 2' },
+                { id: 4, question: 'What is d/dx[sin(x)]?', options: ['cos(x)', '-cos(x)', 'sin(x)', '-sin(x)'], correctAnswer: 0, explanation: 'The derivative of sin(x) is cos(x)' },
+                { id: 5, question: 'What is the derivative of a constant?', options: ['1', '0', 'The constant', 'undefined'], correctAnswer: 1, explanation: 'The derivative of any constant is 0' }
+            ]
+        },
+        {
+            id: 2,
+            moduleId: 6,
+            courseId: 2,
+            title: 'Electromagnetism Quiz',
+            timeLimit: 120,
+            maxAttempts: 3,
+            questions: [
+                { id: 1, question: 'What is the unit of electric charge?', options: ['Ampere', 'Coulomb', 'Volt', 'Ohm'], correctAnswer: 1, explanation: 'The unit is Coulomb (C)' },
+                { id: 2, question: "What does Faraday's law state?", options: ['V=IR', 'Changing magnetic field induces EMF', 'Like charges repel', 'E=mc²'], correctAnswer: 1, explanation: "Faraday's law: changing magnetic flux induces EMF" },
+                { id: 3, question: 'Speed of light in vacuum?', options: ['3×10⁶ m/s', '3×10⁸ m/s', '3×10¹⁰ m/s', '3×10¹² m/s'], correctAnswer: 1, explanation: 'c = 3×10⁸ m/s' },
+                { id: 4, question: 'What carries current in metals?', options: ['Protons', 'Neutrons', 'Electrons', 'Photons'], correctAnswer: 2, explanation: 'Electrons carry current in metals' },
+                { id: 5, question: "What is Ohm's law?", options: ['V=IR', 'F=ma', 'E=mc²', 'P=VI'], correctAnswer: 0, explanation: "Ohm's law: V = IR" }
+            ]
+        }
     ],
 
     // Student enrollments with detailed progress (FIXED TO MATCH COURSE COUNTS)

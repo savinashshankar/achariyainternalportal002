@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, Link } from 'react-router-dom';
-import { LogOut, Home, BookOpen, Wallet, Award, Users, FileText, Settings, HelpCircle, Menu, X } from 'lucide-react';
+import { LogOut, Home, BookOpen, Wallet, Award, Users, FileText, Settings, HelpCircle, Menu, X, ShoppingCart, Target, TrendingUp, Swords, Zap, Heart } from 'lucide-react';
 import { useState } from 'react';
 
 const Layout = () => {
@@ -19,8 +19,15 @@ const Layout = () => {
                 return [
                     { to: '/student/dashboard', icon: Home, label: 'Dashboard' },
                     { to: '/student/courses', icon: BookOpen, label: 'Courses' },
-                    { to: '/student/wallet', icon: Wallet, label: 'Wallet' },
+                    { to: '/student/leaderboard', icon: Award, label: 'Leaderboard' },
+                    { to: '/student/challenges', icon: Target, label: 'Challenges' },
+                    { to: '/student/rivals', icon: Swords, label: 'Rivals' },
+                    { to: '/student/social', icon: Heart, label: 'Social' },
+                    { to: '/student/powerups', icon: Zap, label: 'Power-Ups' },
+                    { to: '/student/progress', icon: TrendingUp, label: 'Progress' },
+                    { to: '/student/marketplace', icon: ShoppingCart, label: 'Marketplace' },
                     { to: '/student/badges', icon: Award, label: 'Badges' },
+                    { to: '/student/wallet', icon: Wallet, label: 'Wallet' },
                     { to: '/student/faq', icon: HelpCircle, label: 'FAQ' }
                 ];
             case 'Teacher':
@@ -96,51 +103,52 @@ const Layout = () => {
                 </div>
             </nav>
 
-            <div className="flex relative">
-                {/* Mobile sidebar backdrop */}
-                {sidebarOpen && (
-                    <div
-                        className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-                        onClick={() => setSidebarOpen(false)}
-                    />
-                )}
-
-                {/* Sidebar */}
-                <aside className={`
-                    fixed lg:static inset-y-0 left-0 z-50
-                    w-64 bg-white shadow-lg lg:shadow-sm 
-                    transform transition-transform duration-300 ease-in-out
-                    ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-                    min-h-[calc(100vh-3.5rem)] lg:min-h-[calc(100vh-4rem)] 
-                    border-r mt-14 sm:mt-16 lg:mt-0
-                `}>
-                    {/* Mobile close button */}
-                    <div className="lg:hidden flex justify-end p-4">
-                        <button
-                            onClick={() => setSidebarOpen(false)}
-                            className="p-2 rounded-md text-gray-500 hover:bg-gray-100"
-                        >
-                            <X className="w-6 h-6" />
-                        </button>
-                    </div>
-
-                    <nav className="py-2 lg:py-4">
+            <div className="flex">
+                {/* Desktop Sidebar - MADE STICKY/FIXED */}
+                <aside className="hidden lg:block w-64 bg-white border-r fixed left-0 top-16 bottom-0 overflow-y-auto z-20">
+                    <nav className="p-4 space-y-1">
                         {navItems.map((item) => (
                             <Link
                                 key={item.to}
                                 to={item.to}
-                                onClick={() => setSidebarOpen(false)}
-                                className="flex items-center px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition"
+                                className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition"
                             >
                                 <item.icon className="w-5 h-5 mr-3" />
-                                {item.label}
+                                <span>{item.label}</span>
                             </Link>
                         ))}
                     </nav>
                 </aside>
 
-                {/* Main Content */}
-                <main className="flex-1 p-4 sm:p-6 lg:p-8 w-full lg:w-auto">
+                {/* Mobile Sidebar stays as overlay */}
+                {sidebarOpen && (
+                    <div className="fixed inset-0 z-40 lg:hidden">
+                        <div className="absolute inset-0 bg-gray-800 opacity-75" onClick={() => setSidebarOpen(false)} />
+                        <aside className="absolute left-0 top-0 bottom-0 w-64 bg-white overflow-y-auto">
+                            <div className="p-4 flex justify-end">
+                                <button onClick={() => setSidebarOpen(false)} className="p-2">
+                                    <X className="w-6 h-6" />
+                                </button>
+                            </div>
+                            <nav className="px-4 space-y-1">
+                                {navItems.map((item) => (
+                                    <Link
+                                        key={item.to}
+                                        to={item.to}
+                                        onClick={() => setSidebarOpen(false)}
+                                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition"
+                                    >
+                                        <item.icon className="w-5 h-5 mr-3" />
+                                        <span>{item.label}</span>
+                                    </Link>
+                                ))}
+                            </nav>
+                        </aside>
+                    </div>
+                )}
+
+                {/* Main Content - ADD LEFT MARGIN FOR SIDEBAR */}
+                <main className="flex-1 lg:ml-64 p-4 sm:p-6 lg:p-8">
                     <Outlet />
                 </main>
             </div>

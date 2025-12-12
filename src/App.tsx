@@ -11,6 +11,14 @@ import StudentModuleView from './pages/student/StudentModuleView';
 import StudentWalletPage from './pages/student/StudentWalletPage';
 import StudentBadgesPage from './pages/student/StudentBadgesPage';
 import StudentFAQPage from './pages/student/StudentFAQPage';
+import StudentMarketplace from './pages/student/StudentMarketplace';
+import StudentLeaderboard from './pages/student/StudentLeaderboard';
+import StudentChallenges from './pages/student/StudentChallenges';
+import StudentProgress from './pages/student/StudentProgress';
+import StudentRivals from './pages/student/StudentRivals';
+import StudentPowerUps from './pages/student/StudentPowerUps';
+import StudentSocialFeed from './pages/student/StudentSocialFeed';
+import StudentQuizPage from './pages/student/StudentQuizPage';
 
 // Teacher Pages
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
@@ -50,8 +58,7 @@ import AdminCreateCourseForm from './pages/admin/AdminCreateCourseForm';
 import AdminSystemMonitoring from './pages/admin/AdminSystemMonitoring';
 import AdminModuleEdit from './pages/admin/AdminModuleEdit';
 
-// Placeholder
-import { StudentQuiz } from './pages/PlaceholderPages';
+
 
 function App() {
     return (
@@ -65,9 +72,16 @@ function App() {
                 <Route path="/student/courses" element={<StudentCourses />} />
                 <Route path="/student/course/:courseId" element={<StudentCourseDetail />} />
                 <Route path="/student/module/:moduleId" element={<StudentModuleView />} />
-                <Route path="/student/quiz/:moduleId" element={<StudentQuiz />} />
+                <Route path="/student/quiz/:moduleId" element={<StudentQuizPage />} />
                 <Route path="/student/wallet" element={<StudentWalletPage />} />
                 <Route path="/student/badges" element={<StudentBadgesPage />} />
+                <Route path="/student/marketplace" element={<StudentMarketplace />} />
+                <Route path="/student/leaderboard" element={<StudentLeaderboard />} />
+                <Route path="/student/challenges" element={<StudentChallenges />} />
+                <Route path="/student/progress" element={<StudentProgress />} />
+                <Route path="/student/rivals" element={<StudentRivals />} />
+                <Route path="/student/powerups" element={<StudentPowerUps />} />
+                <Route path="/student/social" element={<StudentSocialFeed />} />
                 <Route path="/student/faq" element={<StudentFAQPage />} />
 
                 {/* Teacher Routes */}

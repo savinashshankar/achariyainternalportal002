@@ -1,24 +1,73 @@
 import { Link } from 'react-router-dom';
 import { BookOpen, TrendingUp, Wallet, Award } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
+import { useState, useEffect } from 'react';
 import StudentChatbot from '../../components/StudentChatbot';
+import CreditPopup from '../../components/CreditPopup';
+import StreakWidget from '../../components/StreakWidget';
+import SuggestedActions from '../../components/SuggestedActions';
 
 const StudentDashboard = () => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    let student = sampleData.students.find(s => s.email === user.email) || sampleData.students[0];
 
-    // Find student by email
-    const student = sampleData.students.find(s => s.email === user.email) || sampleData.students[0];
+    const [showCreditPopup, setShowCreditPopup] = useState(false);
+    const [creditReward, setCreditReward] = useState(0);
+    const [currentStreak, setCurrentStreak] = useState(student.currentStreak || 0);
+
+    // Daily login credit system
+    useEffect(() => {
+        const today = new Date().toISOString().split('T')[0];
+        const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+        const lastLogin = studentData[student.id]?.lastLoginDate || student.lastLoginDate || '';
+
+        if (lastLogin !== today) {
+            // New day! Award credit
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayStr = yesterday.toISOString().split('T')[0];
+            const wasYesterday = lastLogin === yesterdayStr;
+            const newStreak = wasYesterday ? (student.currentStreak || 0) + 1 : 1;
+
+            // Update student data
+            student.credits = (student.credits || 0) + 1;
+            student.currentStreak = newStreak;
+            student.longestStreak = Math.max(newStreak, student.longestStreak || 0);
+
+            // Save to localStorage
+            studentData[student.id] = {
+                lastLoginDate: today,
+                credits: student.credits,
+                currentStreak: newStreak,
+                longestStreak: student.longestStreak
+            };
+            localStorage.setItem('studentData', JSON.stringify(studentData));
+
+            // Show popup
+            setCreditReward(1);
+            setCurrentStreak(newStreak);
+            setShowCreditPopup(true);
+        }
+    }, []);
+
+    // Load student data from localStorage
+    const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+    if (studentData[student.id]) {
+        student = { ...student, ...studentData[student.id] };
+    }
+
     const studentEnrollments = sampleData.enrollments.filter(e => e.student_id === student.id);
-
-    // Calculate actual average from enrolled courses
     const avgCompletion = studentEnrollments.length > 0
         ? Math.round(studentEnrollments.reduce((sum, e) => sum + e.progress, 0) / studentEnrollments.length)
         : 0;
 
     return (
         <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">Student Dashboard</h1>
-            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Welcome back, {student.name}!</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Welcome back, {student.name.split(' ')[0]}!</h1>
+            <p className="text-sm sm:text-base text-gray-600 mb-6">Here's your learning progress</p>
+
+            {/* Suggested Actions */}
+            <SuggestedActions />
 
             {/* Summary Cards - ALL CLICKABLE */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
@@ -98,6 +147,24 @@ const StudentDashboard = () => {
                     </Link>
                 </div>
             </div>
+
+            {/* Streak Widget */}
+            <div className="mt-6">
+                <StreakWidget
+                    currentStreak={1}
+                    longestStreak={5}
+                />
+            </div>
+
+            {/* Credit Popup */}
+            {showCreditPopup && (
+                <CreditPopup
+                    credits={creditReward}
+                    message="Daily login bonus"
+                    streak={currentStreak}
+                    onClose={() => setShowCreditPopup(false)}
+                />
+            )}
 
             {/* AI Chatbot - Floating */}
             <StudentChatbot studentId={student.id} />
