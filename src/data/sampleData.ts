@@ -9,7 +9,7 @@ export const sampleData = {
 
     // Students with detailed progress + GAMIFICATION FIELDS
     students: [
-        { id: 1, name: 'Pranav R', email: 'pranav.r@achariya.org', school_id: 1, class: '10-A', completion: 85, quiz_avg: 92, badges: 3, credits: 45, status: 'Active', currentStreak: 5, longestStreak: 12, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
+        { id: 1, name: 'Pranav R', email: 'pranav.r@achariya.org', school_id: 1, class: '8-A', completion: 85, quiz_avg: 92, badges: 3, credits: 45, status: 'Active', currentStreak: 5, longestStreak: 12, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
         { id: 2, name: 'Aisha Khan', email: 'aisha.k@achariya.org', school_id: 1, class: '10-A', completion: 92, quiz_avg: 95, badges: 4, credits: 55, status: 'Active', currentStreak: 8, longestStreak: 15, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
         { id: 3, name: 'Arjun Srinivasan', email: 'arjun.s@achariya.org', school_id: 1, class: '10-B', completion: 78, quiz_avg: 88, badges: 2, credits: 35, status: 'Active', currentStreak: 2, longestStreak: 7, lastLoginDate: '2025-12-09', streakFreezeUsed: false },
         { id: 4, name: 'Divya Menon', email: 'divya.m@achariya.org', school_id: 1, class: '10-B', completion: 88, quiz_avg: 90, badges: 3, credits: 42, status: 'Active', currentStreak: 15, longestStreak: 15, lastLoginDate: '2025-12-10', streakFreezeUsed: false },
