@@ -1,6 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Users, TrendingUp, BookOpen, Wallet, AlertTriangle } from 'lucide-react';
+import { Users, TrendingUp, BookOpen, Wallet, AlertTriangle, Play } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
+import { useState } from 'react';
+import StartLiveQuizModal from '../../components/StartLiveQuizModal';
+import { startLiveQuizSession } from '../../services/liveQuizService';
 
 const TeacherDashboard = () => {
     const navigate = useNavigate();
@@ -19,6 +22,29 @@ const TeacherDashboard = () => {
 
     // Identify at-risk students (completion < 70%)
     const atRiskStudents = allStudents.filter((s: any) => s.progress < 70);
+
+    // Live Quiz state
+    const [showLiveQuizModal, setShowLiveQuizModal] = useState(false);
+
+    const handleStartLiveQuiz = async (data: { classId: string; className: string; duration: number }) => {
+        try {
+            const sessionId = await startLiveQuizSession({
+                quizId: 'demo-quiz',
+                quizTitle: 'Live Quiz Demo',
+                classId: data.classId,
+                className: data.className,
+                teacherId: teacher.id.toString(),
+                teacherName: teacher.name,
+                duration: data.duration,
+                questionCount: 10
+            });
+            setShowLiveQuizModal(false);
+            navigate(`/teacher/live-quiz/${sessionId}/control`);
+        } catch (error) {
+            console.error('Error starting live quiz:', error);
+            alert('Failed to start quiz. Please try again.');
+        }
+    };
 
     return (
         <div>
@@ -81,6 +107,46 @@ const TeacherDashboard = () => {
                 </Link>
             </div>
 
+            {/* LIVE QUIZ FEATURE - Demo Ready */}
+            <div className="bg-gradient-to-br from-red-500 via-orange-500 to-yellow-500 rounded-2xl shadow-2xl p-8 mb-8 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -mr-32 -mt-32"></div>
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-white opacity-10 rounded-full -ml-24 -mb-24"></div>
+
+                <div className="relative z-10">
+                    <div className="flex items-center gap-3 mb-4">
+                        <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                        <h2 className="text-3xl font-bold">🔴 LIVE QUIZ</h2>
+                        <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-semibold backdrop-blur-sm">NEW</span>
+                    </div>
+
+                    <p className="text-xl opacity-90 mb-6">
+                        Launch timed quizzes instantly with your students. Randomized questions, real-time leaderboard, and instant feedback!
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                            <div className="text-2xl font-bold mb-1">2 min</div>
+                            <div className="text-sm opacity-80">Timed Sessions</div>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                            <div className="text-2xl font-bold mb-1">100%</div>
+                            <div className="text-sm opacity-80">Randomized</div>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                            <div className="text-2xl font-bold mb-1">Live</div>
+                            <div className="text-sm opacity-80">Leaderboard</div>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={() => setShowLiveQuizModal(true)}
+                        className="bg-white text-red-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition transform hover:scale-105 flex items-center gap-3">
+                        <Play className="w-6 h-6" />
+                        Start Live Quiz Session
+                    </button>
+                </div>
+            </div>
+
             {/* At-Risk Students Alert */}
             {atRiskStudents.length > 0 && (
                 <div className="bg-red-50 border border-red-200 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
@@ -105,6 +171,16 @@ const TeacherDashboard = () => {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Live Quiz Modal */}
+            {showLiveQuizModal && (
+                <StartLiveQuizModal
+                    quizTitle="Live Quiz Demo"
+                    questionCount={10}
+                    onStart={handleStartLiveQuiz}
+                    onClose={() => setShowLiveQuizModal(false)}
+                />
             )}
 
             {/* My Courses */}
