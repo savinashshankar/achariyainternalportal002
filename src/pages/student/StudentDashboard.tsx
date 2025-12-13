@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, TrendingUp, Wallet, Award, Play } from 'lucide-react';
+import { BookOpen, Award, TrendingUp, Wallet } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
 import { useState, useEffect } from 'react';
 import StudentChatbot from '../../components/StudentChatbot';
@@ -7,7 +7,6 @@ import CreditPopup from '../../components/CreditPopup';
 import StreakWidget from '../../components/StreakWidget';
 import SuggestedActions from '../../components/SuggestedActions';
 import { listenForActiveQuiz } from '../../services/liveQuizService';
-import type { LiveQuizSession } from '../../services/liveQuizService';
 
 const StudentDashboard = () => {
     const navigate = useNavigate();
@@ -57,10 +56,13 @@ const StudentDashboard = () => {
     useEffect(() => {
         // AUTO-START: Listen for active quizzes and auto-navigate
         const unsubscribe = listenForActiveQuiz(student.class || '8-A', (quiz) => {
-            if (quiz && quiz.id) {
-                // INSTANT AUTO-START: Navigate immediately when teacher starts quiz
+            // SAFETY: Only navigate if quiz exists, has valid ID, and is active
+            if (quiz && quiz.id && quiz.status === 'active') {
                 console.log('🔴 LIVE QUIZ DETECTED! Auto-starting...', quiz);
-                navigate(`/student/live-quiz/${quiz.id}/take`);
+                // Small delay to ensure page is ready
+                setTimeout(() => {
+                    navigate(`/student/live-quiz/${quiz.id}/take`);
+                }, 100);
             }
         });
 
