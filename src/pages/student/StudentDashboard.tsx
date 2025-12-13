@@ -53,17 +53,19 @@ const StudentDashboard = () => {
         }
     }, []);
 
-    // Live Quiz real-time listener
-    const [activeQuiz, setActiveQuiz] = useState<LiveQuizSession | null>(null);
-
+    // Live Quiz real-time listener - AUTO-START (no banner, instant navigation)
     useEffect(() => {
-        // Listen for active quizzes in student's class (assume student.class is '8-A')
+        // AUTO-START: Listen for active quizzes and auto-navigate
         const unsubscribe = listenForActiveQuiz(student.class || '8-A', (quiz) => {
-            setActiveQuiz(quiz);
+            if (quiz && quiz.id) {
+                // INSTANT AUTO-START: Navigate immediately when teacher starts quiz
+                console.log('🔴 LIVE QUIZ DETECTED! Auto-starting...', quiz);
+                navigate(`/student/live-quiz/${quiz.id}/take`);
+            }
         });
 
         return () => unsubscribe();
-    }, [student.class]);
+    }, [student.class, navigate]);
 
     // Load student data from localStorage
     const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
@@ -83,28 +85,6 @@ const StudentDashboard = () => {
 
             {/* Suggested Actions */}
             <SuggestedActions />
-
-            {/* LIVE QUIZ ALERT - Real-time Firebase */}
-            {activeQuiz && (
-                <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 rounded-2xl shadow-2xl p-6 mb-6 text-white animate-pulse">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="w-4 h-4 bg-white rounded-full animate-ping"></div>
-                            <div>
-                                <h3 className="text-2xl font-bold mb-1">🔴 LIVE QUIZ ACTIVE!</h3>
-                                <p className="text-lg opacity-90">{activeQuiz.quizTitle} - {activeQuiz.className}</p>
-                                <p className="text-sm opacity-75">Join now before time runs out!</p>
-                            </div>
-                        </div>
-                        <button
-                            onClick={() => navigate(`/student/live-quiz/${activeQuiz.id}/take`)}
-                            className="bg-white text-red-600 px-6 py-3 rounded-xl font-bold text-lg hover:shadow-2xl transition transform hover:scale-105 flex items-center gap-2">
-                            <Play className="w-6 h-6" />
-                            Join Quiz Now!
-                        </button>
-                    </div>
-                </div>
-            )}
 
             {/* Summary Cards - ALL CLICKABLE */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
