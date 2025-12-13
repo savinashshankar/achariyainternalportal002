@@ -19,6 +19,8 @@ import StudentRivals from './pages/student/StudentRivals';
 import StudentPowerUps from './pages/student/StudentPowerUps';
 import StudentSocialFeed from './pages/student/StudentSocialFeed';
 import StudentQuizPage from './pages/student/StudentQuizPage';
+import StudentLiveQuizTaking from './pages/student/StudentLiveQuizTaking';
+import StudentLiveQuizResults from './pages/student/StudentLiveQuizResults';
 
 // Teacher Pages
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
@@ -85,6 +87,8 @@ function App() {
                 <Route path="/student/powerups" element={<StudentPowerUps />} />
                 <Route path="/student/social" element={<StudentSocialFeed />} />
                 <Route path="/student/faq" element={<StudentFAQPage />} />
+                <Route path="/student/live-quiz/:sessionId/take" element={<StudentLiveQuizTaking />} />
+                <Route path="/student/live-quiz/:sessionId/results" element={<StudentLiveQuizResults />} />
 
                 {/* Teacher Routes */}
                 <Route path="/teacher/dashboard" element={<TeacherDashboard />} />

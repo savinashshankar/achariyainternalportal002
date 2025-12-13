@@ -1,13 +1,16 @@
-import { Link } from 'react-router-dom';
-import { BookOpen, TrendingUp, Wallet, Award } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { BookOpen, TrendingUp, Wallet, Award, Play } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
 import { useState, useEffect } from 'react';
 import StudentChatbot from '../../components/StudentChatbot';
 import CreditPopup from '../../components/CreditPopup';
 import StreakWidget from '../../components/StreakWidget';
 import SuggestedActions from '../../components/SuggestedActions';
+import { listenForActiveQuiz } from '../../services/liveQuizService';
+import type { LiveQuizSession } from '../../services/liveQuizService';
 
 const StudentDashboard = () => {
+    const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     let student = sampleData.students.find(s => s.email === user.email) || sampleData.students[0];
 
@@ -50,6 +53,18 @@ const StudentDashboard = () => {
         }
     }, []);
 
+    // Live Quiz real-time listener
+    const [activeQuiz, setActiveQuiz] = useState<LiveQuizSession | null>(null);
+
+    useEffect(() => {
+        // Listen for active quizzes in student's class (assume student.class is '8-A')
+        const unsubscribe = listenForActiveQuiz(student.class || '8-A', (quiz) => {
+            setActiveQuiz(quiz);
+        });
+
+        return () => unsubscribe();
+    }, [student.class]);
+
     // Load student data from localStorage
     const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
     if (studentData[student.id]) {
@@ -68,6 +83,28 @@ const StudentDashboard = () => {
 
             {/* Suggested Actions */}
             <SuggestedActions />
+
+            {/* LIVE QUIZ ALERT - Real-time Firebase */}
+            {activeQuiz && (
+                <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 rounded-2xl shadow-2xl p-6 mb-6 text-white animate-pulse">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="w-4 h-4 bg-white rounded-full animate-ping"></div>
+                            <div>
+                                <h3 className="text-2xl font-bold mb-1">🔴 LIVE QUIZ ACTIVE!</h3>
+                                <p className="text-lg opacity-90">{activeQuiz.quizTitle} - {activeQuiz.className}</p>
+                                <p className="text-sm opacity-75">Join now before time runs out!</p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => navigate(`/student/live-quiz/${activeQuiz.id}/take`)}
+                            className="bg-white text-red-600 px-6 py-3 rounded-xl font-bold text-lg hover:shadow-2xl transition transform hover:scale-105 flex items-center gap-2">
+                            <Play className="w-6 h-6" />
+                            Join Quiz Now!
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Summary Cards - ALL CLICKABLE */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
