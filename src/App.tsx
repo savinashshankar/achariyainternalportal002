@@ -30,6 +30,8 @@ import TeacherFAQPage from './pages/teacher/TeacherFAQPage';
 import TeacherAllStudentsPage from './pages/teacher/TeacherAllStudentsPage';
 import TeacherPerformanceBreakdown from './pages/teacher/TeacherPerformanceBreakdown';
 import TeacherCreditsPage from './pages/teacher/TeacherCreditsPage';
+import LiveQuizControl from './pages/teacher/LiveQuizControl';
+import LiveQuizResults from './pages/teacher/LiveQuizResults';
 
 // Principal Pages
 import PrincipalDashboard from './pages/principal/PrincipalDashboard';
@@ -94,6 +96,8 @@ function App() {
                 <Route path="/teacher/credits" element={<TeacherCreditsPage />} />
                 <Route path="/teacher/evidence" element={<TeacherEvidencePage />} />
                 <Route path="/teacher/faq" element={<TeacherFAQPage />} />
+                <Route path="/teacher/live-quiz/:sessionId/control" element={<LiveQuizControl />} />
+                <Route path="/teacher/live-quiz/:sessionId/results" element={<LiveQuizResults />} />
 
                 {/* Principal Routes */}
                 <Route path="/principal/dashboard" element={<PrincipalDashboard />} />
