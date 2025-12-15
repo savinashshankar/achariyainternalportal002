@@ -18,23 +18,34 @@ const GlobalQuizListener = () => {
     const [hasRedirected, setHasRedirected] = useState<string | null>(null);
     const [showBanner, setShowBanner] = useState(false);
     const [activeQuiz, setActiveQuiz] = useState<ActiveQuiz | null>(null);
-    const isFirstLoad = useRef(true);
     const lastKnownQuizId = useRef<string | null>(null);
 
     // Only run for students
     const isStudent = user.selectedRole === 'Student' || user.role === 'Student';
     const studentClass = student.class || '8-A';
 
+    console.log('👁️ GlobalQuizListener mounted:', { isStudent, studentClass, pathname: location.pathname });
+
     useEffect(() => {
-        if (!isStudent) return;
+        console.log('🔄 GlobalQuizListener useEffect running:', { isStudent, studentClass });
+
+        if (!isStudent) {
+            console.log('❌ Not a student - skipping');
+            return;
+        }
 
         // Skip if already on quiz page
         if (location.pathname.includes('/live-quiz/')) {
+            console.log('📍 Already on quiz page - skipping');
             setShowBanner(false);
             return;
         }
 
+        console.log('📡 Setting up Firebase listener for class:', studentClass);
+
         const unsubscribe = listenForActiveQuiz(studentClass, (quiz) => {
+            console.log('🔔 Firebase callback received:', quiz);
+
             if (quiz && quiz.id && quiz.status === 'active') {
                 const now = Date.now();
                 const quizStartTime = quiz.startTime.toDate().getTime();
@@ -44,38 +55,37 @@ const GlobalQuizListener = () => {
 
                 // Quiz expired - ignore
                 if (now > quizEndTime) {
-                    isFirstLoad.current = false;
+                    console.log('⏰ Quiz expired');
                     lastKnownQuizId.current = quiz.id || null;
                     setShowBanner(false);
                     setActiveQuiz(null);
                     return;
                 }
 
-                // Check if this is a NEW quiz (teacher just started)
+                // Check if this is a NEW quiz (not same as last known)
                 const isNewQuiz = lastKnownQuizId.current !== quiz.id;
 
-                console.log('📡 QUIZ DETECTED:', {
+                console.log('📡 QUIZ ACTIVE:', {
                     id: quiz.id,
+                    classId: quiz.classId,
                     timeSinceStart: Math.floor(timeSinceStart / 1000) + 's',
                     remainingTime: Math.floor(remainingMs / 1000) + 's',
                     isNewQuiz,
-                    isFirstLoad: isFirstLoad.current,
-                    hasRedirected
+                    hasRedirected,
+                    lastKnownQuizId: lastKnownQuizId.current
                 });
 
-                // CASE 1: Already logged in + teacher JUST started quiz (< 10 seconds)
-                // → INSTANT REDIRECT
+                // CASE 1: New quiz started recently (< 10 seconds) - AUTO REDIRECT
                 if (isNewQuiz && timeSinceStart < 10000 && hasRedirected !== quiz.id) {
-                    console.log('🚀 TEACHER STARTED QUIZ - AUTO REDIRECT!');
+                    console.log('🚀 AUTO REDIRECT - Quiz just started!');
                     setHasRedirected(quiz.id || null);
                     lastKnownQuizId.current = quiz.id || null;
                     setShowBanner(false);
                     navigate(`/student/live-quiz/${quiz.id}/take`);
                 }
-                // CASE 2: Late joiner (quiz started > 10 seconds ago OR first load with existing quiz)
-                // → SHOW JOIN BANNER
+                // CASE 2: Ongoing quiz - SHOW BANNER
                 else if (hasRedirected !== quiz.id) {
-                    console.log('⏰ ONGOING QUIZ - SHOWING JOIN BANNER');
+                    console.log('📢 SHOWING JOIN BANNER');
                     lastKnownQuizId.current = quiz.id || null;
                     setActiveQuiz({
                         id: quiz.id || '',
@@ -85,21 +95,22 @@ const GlobalQuizListener = () => {
                     });
                     setShowBanner(true);
                 }
-
-                isFirstLoad.current = false;
             } else {
-                // No active quiz
-                isFirstLoad.current = false;
+                console.log('❌ No active quiz found');
                 setShowBanner(false);
                 setActiveQuiz(null);
             }
         });
 
-        return () => unsubscribe();
+        return () => {
+            console.log('🧹 Cleaning up Firebase listener');
+            unsubscribe();
+        };
     }, [isStudent, studentClass, hasRedirected, location.pathname, navigate]);
 
     const handleJoinQuiz = () => {
         if (activeQuiz) {
+            console.log('👆 JOIN clicked - navigating to quiz');
             setHasRedirected(activeQuiz.id);
             setShowBanner(false);
             navigate(`/student/live-quiz/${activeQuiz.id}/take`);
@@ -130,6 +141,8 @@ const GlobalQuizListener = () => {
 
         return () => clearInterval(interval);
     }, [activeQuiz?.id]);
+
+    console.log('🎨 Render state:', { showBanner, activeQuiz: !!activeQuiz });
 
     if (!showBanner || !activeQuiz) return null;
 
