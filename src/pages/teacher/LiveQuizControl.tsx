@@ -59,17 +59,23 @@ const LiveQuizControl = () => {
         };
     }, [connectedCount, session.totalStudents]);
 
-    const handleEndQuiz = async () => {
+    const handleEndQuiz = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         if (!sessionId) return;
 
-        if (window.confirm('Are you sure you want to end the quiz early? Students who haven\'t submitted will be automatically submitted.')) {
-            try {
-                await endQuizSession(sessionId);
-                navigate(`/teacher/live-quiz/${sessionId}/results`);
-            } catch (error) {
-                console.error('Error ending quiz:', error);
-                alert('Failed to end quiz. Please try again.');
-            }
+        const confirmed = window.confirm('Are you sure you want to end the quiz early? Students who haven\'t submitted will be automatically submitted.');
+
+        if (confirmed) {
+            endQuizSession(sessionId)
+                .then(() => {
+                    navigate(`/teacher/live-quiz/${sessionId}/results`);
+                })
+                .catch((error) => {
+                    console.error('Error ending quiz:', error);
+                    alert('Failed to end quiz. Please try again.');
+                });
         }
     };
 
