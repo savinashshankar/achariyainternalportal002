@@ -34,46 +34,59 @@ const StudentLiveQuizTaking = () => {
     ];
 
     useEffect(() => {
-        // In production, fetch session from Firebase
+        // Fetch REAL session from Firebase to get correct endTime
         if (sessionId) {
-            const mockSession: LiveQuizSession = {
-                id: sessionId,
-                quizId: 'demo-quiz',
-                quizTitle: 'Live Quiz Demo',
-                classId: '8-A',
-                className: 'Class 8-A',
-                teacherId: 'teacher-001',
-                teacherName: 'Mr. Sharma',
-                startTime: { toDate: () => new Date() } as any,
-                endTime: { toDate: () => new Date(Date.now() + 120000) } as any,
-                duration: 120,
-                sessionSeed: sessionId,
-                status: 'active',
-                questionCount: 10
-            };
-            setSession(mockSession);
+            // Import getSessionById if not already imported
+            import('../../services/liveQuizService').then(({ getSessionById }) => {
+                getSessionById(sessionId).then((firebaseSession) => {
+                    if (firebaseSession) {
+                        // Use REAL session from Firebase with correct endTime
+                        console.log('✅ Loaded session from Firebase:', firebaseSession);
+                        setSession(firebaseSession);
+                    } else {
+                        // Fallback to mock session (for demo purposes)
+                        console.log('⚠️ No Firebase session, using mock');
+                        const mockSession: LiveQuizSession = {
+                            id: sessionId,
+                            quizId: 'demo-quiz',
+                            quizTitle: 'Live Quiz Demo',
+                            classId: '8-A',
+                            className: 'Class 8-A',
+                            teacherId: 'teacher-001',
+                            teacherName: 'Mr. Sharma',
+                            startTime: { toDate: () => new Date() } as any,
+                            endTime: { toDate: () => new Date(Date.now() + 120000) } as any,
+                            duration: 120,
+                            sessionSeed: sessionId,
+                            status: 'active',
+                            questionCount: 10
+                        };
+                        setSession(mockSession);
+                    }
 
-            // Randomize questions for this student
-            const randomized = randomizeQuestions(mockQuestions, sessionId, user.email || 'student');
+                    // Randomize questions for this student
+                    const randomized = randomizeQuestions(mockQuestions, sessionId, user.email || 'student');
 
-            // Randomize options for each question
-            const questionsWithRandomOptions = randomized.map(q => {
-                const { shuffledOptions, newCorrectIndex } = randomizeOptions(
-                    q.options,
-                    q.correctAnswer,
-                    sessionId,
-                    user.email || 'student',
-                    q.id
-                );
-                return {
-                    ...q,
-                    options: shuffledOptions,
-                    correctAnswer: newCorrectIndex
-                };
+                    // Randomize options for each question
+                    const questionsWithRandomOptions = randomized.map(q => {
+                        const { shuffledOptions, newCorrectIndex } = randomizeOptions(
+                            q.options,
+                            q.correctAnswer,
+                            sessionId,
+                            user.email || 'student',
+                            q.id
+                        );
+                        return {
+                            ...q,
+                            options: shuffledOptions,
+                            correctAnswer: newCorrectIndex
+                        };
+                    });
+
+                    setQuestions(questionsWithRandomOptions);
+                    setSelectedAnswers(new Array(10).fill(-1));
+                });
             });
-
-            setQuestions(questionsWithRandomOptions);
-            setSelectedAnswers(new Array(10).fill(-1));
         }
     }, [sessionId, user.email]);
 
