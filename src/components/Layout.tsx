@@ -1,3 +1,4 @@
+import GlobalQuizListener from './GlobalQuizListener';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { LogOut, Home, BookOpen, Wallet, Award, Users, FileText, Settings, HelpCircle, Menu, X, ShoppingCart, Target, TrendingUp, Swords, Zap, Heart } from 'lucide-react';
 import { useState, useEffect } from 'react';
@@ -161,6 +162,7 @@ const Layout = () => {
 
                 {/* Main Content - ADD LEFT MARGIN FOR SIDEBAR */}
                 <main className="flex-1 lg:ml-64 p-4 sm:p-6 lg:p-8">
+                    <GlobalQuizListener />
                     <Outlet />
                 </main>
             </div>
