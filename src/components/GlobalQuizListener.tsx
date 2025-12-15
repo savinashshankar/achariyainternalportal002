@@ -13,45 +13,42 @@ const GlobalQuizListener = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const student = JSON.parse(localStorage.getItem('studentData') || '{}')[1] || {};
+    const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+    const student = studentData[1] || {};
 
     const [hasRedirected, setHasRedirected] = useState<string | null>(null);
     const [showBanner, setShowBanner] = useState(false);
     const [activeQuiz, setActiveQuiz] = useState<ActiveQuiz | null>(null);
     const lastKnownQuizId = useRef<string | null>(null);
 
-    // Check if user is a student - check multiple possible locations
-    const role = user.selectedRole || user.role || '';
-    const isStudent = role.toLowerCase() === 'student' || location.pathname.startsWith('/student');
-    const studentClass = student.class || '8-A';
+    // Check if user is a student - check pathname
+    const isStudent = location.pathname.startsWith('/student');
+    // Try multiple class formats
+    const studentClass = student.class || student.classId || '8-A';
 
     console.log('👁️ GlobalQuizListener:', {
-        user,
-        role,
         isStudent,
         studentClass,
+        student,
         pathname: location.pathname
     });
 
     useEffect(() => {
-        console.log('🔄 useEffect:', { isStudent, studentClass });
-
         if (!isStudent) {
-            console.log('❌ Not a student - skipping');
+            console.log('❌ Not on student page');
             return;
         }
 
-        // Skip if already on quiz page
         if (location.pathname.includes('/live-quiz/')) {
             console.log('📍 Already on quiz page');
             setShowBanner(false);
             return;
         }
 
-        console.log('📡 Listening for quizzes in class:', studentClass);
+        console.log('📡 Listening for class:', studentClass);
 
         const unsubscribe = listenForActiveQuiz(studentClass, (quiz) => {
-            console.log('🔔 Firebase callback:', quiz);
+            console.log('🔔 Firebase response:', quiz);
 
             if (quiz && quiz.id && quiz.status === 'active') {
                 const now = Date.now();
@@ -59,6 +56,14 @@ const GlobalQuizListener = () => {
                 const quizEndTime = quiz.endTime.toDate().getTime();
                 const timeSinceStart = now - quizStartTime;
                 const remainingMs = quizEndTime - now;
+
+                console.log('📊 Quiz timing:', {
+                    quizClassId: quiz.classId,
+                    studentClass,
+                    match: quiz.classId === studentClass,
+                    timeSinceStart: Math.floor(timeSinceStart / 1000) + 's',
+                    remaining: Math.floor(remainingMs / 1000) + 's'
+                });
 
                 if (now > quizEndTime) {
                     console.log('⏰ Quiz expired');
@@ -69,14 +74,6 @@ const GlobalQuizListener = () => {
 
                 const isNewQuiz = lastKnownQuizId.current !== quiz.id;
 
-                console.log('📡 ACTIVE QUIZ:', {
-                    id: quiz.id,
-                    timeSinceStart: Math.floor(timeSinceStart / 1000) + 's',
-                    remaining: Math.floor(remainingMs / 1000) + 's',
-                    isNewQuiz,
-                    hasRedirected
-                });
-
                 // AUTO REDIRECT if quiz just started (< 10 seconds)
                 if (isNewQuiz && timeSinceStart < 10000 && hasRedirected !== quiz.id) {
                     console.log('🚀 AUTO REDIRECT!');
@@ -86,7 +83,7 @@ const GlobalQuizListener = () => {
                 }
                 // SHOW BANNER for ongoing quiz
                 else if (hasRedirected !== quiz.id) {
-                    console.log('📢 SHOW BANNER');
+                    console.log('📢 SHOW BANNER - Setting showBanner: true');
                     lastKnownQuizId.current = quiz.id || null;
                     setActiveQuiz({
                         id: quiz.id || '',
@@ -97,7 +94,7 @@ const GlobalQuizListener = () => {
                     setShowBanner(true);
                 }
             } else {
-                console.log('❌ No active quiz');
+                console.log('❌ No active quiz found');
                 setShowBanner(false);
                 setActiveQuiz(null);
             }
@@ -133,6 +130,8 @@ const GlobalQuizListener = () => {
         }, 1000);
         return () => clearInterval(interval);
     }, [activeQuiz?.id]);
+
+    console.log('🎨 Render:', { showBanner, hasActiveQuiz: !!activeQuiz });
 
     if (!showBanner || !activeQuiz) return null;
 
