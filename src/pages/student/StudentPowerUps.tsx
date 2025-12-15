@@ -23,6 +23,8 @@ const StudentPowerUps = () => {
         { id: 'timer', name: 'Quiz Time Extension', description: '+30 seconds on next quiz', cost: 40, duration: '1 quiz', icon: '⏱️', type: 'active', owned: 0 },
         { id: 'hints', name: 'Smart Hints', description: 'Get 2 hints during quiz', cost: 35, duration: '1 quiz', icon: '💡', type: 'active', owned: 0 },
         { id: 'xp', name: 'XP Multiplier', description: '1.5x experience points', cost: 60, duration: '48 hours', icon: '🚀', type: 'active', owned: 0 },
+        { id: 'darkTheme', name: '🌙 Dark Theme', description: 'Eye-friendly dark mode', cost: 60, type: 'theme', owned: 0, category: 'theme' },
+        { id: 'colorfulTheme', name: '🎨 Colorful Theme', description: 'Vibrant, colorful interface', cost: 30, type: 'theme', owned: 0, category: 'theme' },
         { id: 'retry', name: 'Free Retake', description: 'One free quiz retake', cost: 45, duration: '1 quiz', icon: '🔄', type: 'passive', owned: 0 }
     ]);
 
@@ -110,7 +112,7 @@ const StudentPowerUps = () => {
                                 <div className="text-6xl mb-3">{powerup.icon}</div>
                                 <h3 className="text-xl font-bold text-gray-800">{powerup.name}</h3>
                                 <p className="text-sm text-gray-600 mt-2">{powerup.description}</p>
-                                <p className="text-xs text-purple-600 font-semibold mt-1">{powerup.duration}</p>
+                                {powerup.duration && <p className="text-xs text-purple-600 font-semibold mt-1">{powerup.duration}</p>}
                             </div>
 
                             {powerup.owned > 0 && (
@@ -137,24 +139,6 @@ const StudentPowerUps = () => {
                 })}
             </div>
 
-            {/* THEME CUSTOMIZATION */}
-            <div className="bg-gradient-to-br from-purple-600 to-pink-600 text-white rounded-xl shadow-xl p-6 mb-8">
-                <h2 className="text-2xl font-bold mb-4">🎨 Theme Customization</h2>
-                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h3 className="text-xl font-bold mb-2">🌙 Dark Theme</h3>
-                            <p className="text-white/80">Transform your entire portal with dark mode</p>
-                            <p className="text-sm text-white/60 mt-1">Current: {theme === 'dark' ? 'Dark Mode Active ✓' : 'Light Mode'}</p>
-                        </div>
-                        <button
-                            onClick={toggleTheme}
-                            className="bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition transform hover:scale-105">
-                            {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
-                        </button>
-                    </div>
-                </div>
-            </div>
 
             {/* How Power-Ups Work */}
             <div className="bg-gradient-to-br from-purple-600 to-blue-600 text-white rounded-xl p-6">

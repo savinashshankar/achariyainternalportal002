@@ -48,6 +48,24 @@
   --shadow: rgba(0, 0, 0, 0.3);
 }
 
+/* Colorful theme - VIBRANT yet EYE-FRIENDLY */
+[data-theme="colorful"] {
+  /* Soft pastel backgrounds - warm and inviting */
+  --bg-primary: #fef7ff;      /* Very light lavender */
+  --bg-secondary: #f0f9ff;    /* Soft sky blue */
+  --bg-tertiary: #fffbeb;     /* Soft warm yellow */
+
+  /* Rich but not harsh text colors */
+  --text-primary: #3730a3;    /* Deep indigo */
+  --text-secondary: #0369a1;  /* Rich cyan */
+  --text-tertiary: #92400e;   /* Warm brown */
+
+  /* Colorful accents */
+  --border-color: #e0d4f7;    /* Soft purple */
+  --border-hover: #c7d2fe;    /* Light indigo */
+  --shadow: rgba(99, 102, 241, 0.15);
+}
+
 /* Apply theme variables to common elements */
 body {
   background-color: var(--bg-secondary);
