@@ -1,5 +1,5 @@
 // Student Live Quiz Results Page
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, CheckCircle, XCircle, ArrowLeft } from 'lucide-react';
 import BackButton from '../../components/BackButton';
