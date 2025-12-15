@@ -211,6 +211,7 @@ const LiveQuizControl = () => {
                 {/* End Quiz Button */}
                 <div className="mt-6 flex justify-center">
                     <button
+                        type="button"
                         onClick={handleEndQuiz}
                         className="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-8 py-4 rounded-xl font-semibold hover:from-gray-700 hover:to-gray-800 transition flex items-center gap-3 shadow-lg">
                         <StopCircle className="w-6 h-6" />
