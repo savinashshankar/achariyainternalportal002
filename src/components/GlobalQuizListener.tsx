@@ -78,6 +78,7 @@ const GlobalQuizListener = () => {
                 const safeTimeSinceStart = Math.max(0, timeSinceStart);
                 const justStarted = safeTimeSinceStart < 10000; // Quiz started less than 10s ago
                 const alreadyHandled = hasRedirected === quiz.id;
+                const onDashboard = location.pathname === '/student/dashboard';
 
                 console.log('🎯 Decision logic:', {
                     isNewQuiz,
@@ -85,20 +86,28 @@ const GlobalQuizListener = () => {
                     timeSinceStartRaw: timeSinceStart,
                     timeSinceStartSafe: Math.floor(safeTimeSinceStart / 1000) + 's',
                     alreadyHandled,
-                    willRedirect: isNewQuiz && justStarted && !alreadyHandled,
-                    willShowBanner: !isNewQuiz || !justStarted || alreadyHandled
+                    onDashboard,
+                    pathname: location.pathname,
+                    willRedirect: isNewQuiz && justStarted && !alreadyHandled && onDashboard,
+                    willShowBanner: !alreadyHandled && (!isNewQuiz || !justStarted || !onDashboard)
                 });
 
-                // AUTO REDIRECT ONLY if quiz JUST started (<10s) AND student hasn't handled it yet
-                if (isNewQuiz && justStarted && !alreadyHandled) {
-                    console.log('🚀 AUTO REDIRECT - Quiz just started, student was already logged in');
+                // AUTO REDIRECT ONLY if:
+                // 1. Quiz JUST started (<10s)
+                // 2. Student hasn't handled it yet  
+                // 3. Student is ON DASHBOARD (not other pages)
+                if (isNewQuiz && justStarted && !alreadyHandled && onDashboard) {
+                    console.log('🚀 AUTO REDIRECT from dashboard - Quiz just started');
                     setHasRedirected(quiz.id || null);
                     lastKnownQuizId.current = quiz.id || null;
                     navigate(`/student/live-quiz/${quiz.id}/take`);
                 }
-                // SHOW BANNER for late joiners (>10s) or if already redirected once
+                // SHOW BANNER for:
+                // - Late joiners (>10s)
+                // - Students on other pages (not dashboard)
+                // - Or if already redirected once
                 else if (!alreadyHandled) {
-                    console.log('📢 SHOW BANNER - Late joiner (timeSinceStart: ' + Math.floor(safeTimeSinceStart / 1000) + 's)');
+                    console.log('📢 SHOW BANNER - Late joiner or not on dashboard (timeSinceStart: ' + Math.floor(safeTimeSinceStart / 1000) + 's, page: ' + location.pathname + ')');
                     lastKnownQuizId.current = quiz.id || null;
                     setActiveQuiz({
                         id: quiz.id || '',
