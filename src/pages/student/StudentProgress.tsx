@@ -35,7 +35,7 @@ const StudentProgress = () => {
                 </div>
 
                 {/* Bar Chart */}
-                <div className="flex items-end justify-between gap-3 h-64 mb-4">
+                <div className="flex items-end justify-between gap-3 h-48 mb-4">
                     {weeklyActivity.map((item, idx) => (
                         <div key={idx} className="flex-1 flex flex-col items-center gap-3">
                             <div className="w-full relative group">
@@ -47,7 +47,7 @@ const StudentProgress = () => {
                                 </div>
 
                                 {/* Bar container */}
-                                <div className="w-full h-64 bg-gray-100 rounded-t-xl overflow-hidden flex flex-col justify-end">
+                                <div className="w-full h-48 bg-gray-100 rounded-t-xl overflow-hidden flex flex-col justify-end">
                                     <div
                                         className="w-full bg-gradient-to-t from-blue-600 to-blue-400 transition-all duration-700 ease-out hover:from-blue-700 hover:to-blue-500 cursor-pointer"
                                         style={{
