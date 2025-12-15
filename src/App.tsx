@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider } from './contexts/ThemeContext';
 import Login from './pages/Login';
 import RoleSelection from './pages/RoleSelection';
 import Layout from './components/Layout';
@@ -66,73 +67,75 @@ import AdminModuleEdit from './pages/admin/AdminModuleEdit';
 
 function App() {
     return (
-        <Routes>
-            <Route path="/" element={<Login />} />
-            <Route path="/select-role" element={<RoleSelection />} />
+        <ThemeProvider>
+            <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/select-role" element={<RoleSelection />} />
 
-            <Route element={<Layout />}>
-                {/* Student Routes */}
-                <Route path="/student/dashboard" element={<StudentDashboard />} />
-                <Route path="/student/courses" element={<StudentCourses />} />
-                <Route path="/student/course/:courseId" element={<StudentCourseDetail />} />
-                <Route path="/student/module/:moduleId" element={<StudentModuleView />} />
-                <Route path="/student/quiz/:moduleId" element={<StudentQuizPage />} />
-                <Route path="/student/wallet" element={<StudentWalletPage />} />
-                <Route path="/student/badges" element={<StudentBadgesPage />} />
-                <Route path="/student/marketplace" element={<StudentMarketplace />} />
-                <Route path="/student/leaderboard" element={<StudentLeaderboard />} />
-                <Route path="/student/challenges" element={<StudentChallenges />} />
-                <Route path="/student/progress" element={<StudentProgress />} />
-                <Route path="/student/rivals" element={<StudentRivals />} />
-                <Route path="/student/powerups" element={<StudentPowerUps />} />
-                <Route path="/student/social" element={<StudentSocialFeed />} />
-                <Route path="/student/faq" element={<StudentFAQPage />} />
-                <Route path="/student/live-quiz/:sessionId/take" element={<StudentLiveQuizTaking />} />
-                <Route path="/student/live-quiz/:sessionId/results" element={<StudentLiveQuizResults />} />
+                <Route element={<Layout />}>
+                    {/* Student Routes */}
+                    <Route path="/student/dashboard" element={<StudentDashboard />} />
+                    <Route path="/student/courses" element={<StudentCourses />} />
+                    <Route path="/student/course/:courseId" element={<StudentCourseDetail />} />
+                    <Route path="/student/module/:moduleId" element={<StudentModuleView />} />
+                    <Route path="/student/quiz/:moduleId" element={<StudentQuizPage />} />
+                    <Route path="/student/wallet" element={<StudentWalletPage />} />
+                    <Route path="/student/badges" element={<StudentBadgesPage />} />
+                    <Route path="/student/marketplace" element={<StudentMarketplace />} />
+                    <Route path="/student/leaderboard" element={<StudentLeaderboard />} />
+                    <Route path="/student/challenges" element={<StudentChallenges />} />
+                    <Route path="/student/progress" element={<StudentProgress />} />
+                    <Route path="/student/rivals" element={<StudentRivals />} />
+                    <Route path="/student/powerups" element={<StudentPowerUps />} />
+                    <Route path="/student/social" element={<StudentSocialFeed />} />
+                    <Route path="/student/faq" element={<StudentFAQPage />} />
+                    <Route path="/student/live-quiz/:sessionId/take" element={<StudentLiveQuizTaking />} />
+                    <Route path="/student/live-quiz/:sessionId/results" element={<StudentLiveQuizResults />} />
 
-                {/* Teacher Routes */}
-                <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-                <Route path="/teacher/courses" element={<TeacherCoursesPage />} />
-                <Route path="/teacher/course/:courseId" element={<TeacherCourseDetail />} />
-                <Route path="/teacher/student/:studentId" element={<TeacherStudentDetail />} />
-                <Route path="/teacher/students" element={<TeacherAllStudentsPage />} />
-                <Route path="/teacher/performance" element={<TeacherPerformanceBreakdown />} />
-                <Route path="/teacher/credits" element={<TeacherCreditsPage />} />
-                <Route path="/teacher/evidence" element={<TeacherEvidencePage />} />
-                <Route path="/teacher/faq" element={<TeacherFAQPage />} />
-                <Route path="/teacher/live-quiz/:sessionId/control" element={<LiveQuizControl />} />
-                <Route path="/teacher/live-quiz/:sessionId/results" element={<LiveQuizResults />} />
+                    {/* Teacher Routes */}
+                    <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+                    <Route path="/teacher/courses" element={<TeacherCoursesPage />} />
+                    <Route path="/teacher/course/:courseId" element={<TeacherCourseDetail />} />
+                    <Route path="/teacher/student/:studentId" element={<TeacherStudentDetail />} />
+                    <Route path="/teacher/students" element={<TeacherAllStudentsPage />} />
+                    <Route path="/teacher/performance" element={<TeacherPerformanceBreakdown />} />
+                    <Route path="/teacher/credits" element={<TeacherCreditsPage />} />
+                    <Route path="/teacher/evidence" element={<TeacherEvidencePage />} />
+                    <Route path="/teacher/faq" element={<TeacherFAQPage />} />
+                    <Route path="/teacher/live-quiz/:sessionId/control" element={<LiveQuizControl />} />
+                    <Route path="/teacher/live-quiz/:sessionId/results" element={<LiveQuizResults />} />
 
-                {/* Principal Routes */}
-                <Route path="/principal/dashboard" element={<PrincipalDashboard />} />
-                <Route path="/principal/courses" element={<PrincipalCourses />} />
-                <Route path="/principal/students" element={<PrincipalAllStudents />} />
-                <Route path="/principal/teachers" element={<PrincipalAllTeachers />} />
-                <Route path="/principal/course/:courseId" element={<PrincipalCourseDetail />} />
-                <Route path="/principal/student/:studentId" element={<PrincipalStudentDetail />} />
-                <Route path="/principal/class-analytics" element={<PrincipalClassAnalytics />} />
-                <Route path="/principal/student-activity" element={<PrincipalStudentActivity />} />
-                <Route path="/principal/school/:schoolId" element={<PrincipalSchoolDetail />} />
-                <Route path="/principal/system-stats" element={<PrincipalSystemStats />} />
-                <Route path="/principal/evidence" element={<PrincipalEvidenceApproval />} />
-                <Route path="/principal/faq" element={<PrincipalFAQPage />} />
+                    {/* Principal Routes */}
+                    <Route path="/principal/dashboard" element={<PrincipalDashboard />} />
+                    <Route path="/principal/courses" element={<PrincipalCourses />} />
+                    <Route path="/principal/students" element={<PrincipalAllStudents />} />
+                    <Route path="/principal/teachers" element={<PrincipalAllTeachers />} />
+                    <Route path="/principal/course/:courseId" element={<PrincipalCourseDetail />} />
+                    <Route path="/principal/student/:studentId" element={<PrincipalStudentDetail />} />
+                    <Route path="/principal/class-analytics" element={<PrincipalClassAnalytics />} />
+                    <Route path="/principal/student-activity" element={<PrincipalStudentActivity />} />
+                    <Route path="/principal/school/:schoolId" element={<PrincipalSchoolDetail />} />
+                    <Route path="/principal/system-stats" element={<PrincipalSystemStats />} />
+                    <Route path="/principal/evidence" element={<PrincipalEvidenceApproval />} />
+                    <Route path="/principal/faq" element={<PrincipalFAQPage />} />
 
-                {/* Admin Routes */}
-                <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                <Route path="/admin/courses" element={<AdminCoursesPage />} />
-                <Route path="/admin/users" element={<AdminUsersPage />} />
-                <Route path="/admin/users/add" element={<AdminAddUserForm />} />
-                <Route path="/admin/courses/create" element={<AdminCreateCourseForm />} />
-                <Route path="/admin/courses/edit/:courseId" element={<AdminEditCourseForm />} />
-                <Route path="/admin/modules/edit/:moduleId" element={<AdminModuleEdit />} />
-                <Route path="/admin/question-bank" element={<AdminQuestionBank />} />
-                <Route path="/admin/config" element={<AdminConfigPage />} />
-                <Route path="/admin/monitoring" element={<AdminSystemMonitoring />} />
-                <Route path="/admin/faq" element={<AdminFAQPage />} />
-            </Route>
+                    {/* Admin Routes */}
+                    <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                    <Route path="/admin/courses" element={<AdminCoursesPage />} />
+                    <Route path="/admin/users" element={<AdminUsersPage />} />
+                    <Route path="/admin/users/add" element={<AdminAddUserForm />} />
+                    <Route path="/admin/courses/create" element={<AdminCreateCourseForm />} />
+                    <Route path="/admin/courses/edit/:courseId" element={<AdminEditCourseForm />} />
+                    <Route path="/admin/modules/edit/:moduleId" element={<AdminModuleEdit />} />
+                    <Route path="/admin/question-bank" element={<AdminQuestionBank />} />
+                    <Route path="/admin/config" element={<AdminConfigPage />} />
+                    <Route path="/admin/monitoring" element={<AdminSystemMonitoring />} />
+                    <Route path="/admin/faq" element={<AdminFAQPage />} />
+                </Route>
 
-            <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+        </ThemeProvider>
     );
 }
 
