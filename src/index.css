@@ -4,8 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Theme Variables */
-:root[data-theme="light"] {
+/* Prevent animations on theme change */
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* Light theme variables (default) */
+:root {
   --bg-primary: #ffffff;
   --bg-secondary: #f9fafb;
   --bg-tertiary: #f3f4f6;
@@ -14,25 +21,31 @@
   --text-tertiary: #9ca3af;
   --border-color: #e5e7eb;
   --border-hover: #d1d5db;
-  --card-bg: #ffffff;
-  --card-hover: #f9fafb;
   --shadow: rgba(0, 0, 0, 0.1);
-  --shadow-lg: rgba(0, 0, 0, 0.15);
 }
 
-:root[data-theme="dark"] {
-  --bg-primary: #111827;
-  --bg-secondary: #1f2937;
-  --bg-tertiary: #374151;
-  --text-primary: #f9fafb;
-  --text-secondary: #d1d5db;
-  --text-tertiary: #9ca3af;
-  --border-color: #374151;
-  --border-hover: #4b5563;
-  --card-bg: #1f2937;
-  --card-hover: #374151;
+/* Dark theme - WARM, SOFT colors to prevent eye strain */
+[data-theme="dark"] {
+  /* Warm dark backgrounds - NO pure black */
+  --bg-primary: #1e1e1e;
+  /* Soft charcoal, not pure black */
+  --bg-secondary: #252525;
+  /* Slightly lighter warm gray */
+  --bg-tertiary: #2d2d2d;
+  /* Card backgrounds */
+
+  /* Warm, soft text - NO pure white */
+  --text-primary: #e8e6e3;
+  /* Warm off-white */
+  --text-secondary: #b8b5b2;
+  /* Soft warm gray */
+  --text-tertiary: #8a8784;
+  /* Muted warm gray */
+
+  /* Subtle borders */
+  --border-color: #3a3a3a;
+  --border-hover: #4a4a4a;
   --shadow: rgba(0, 0, 0, 0.3);
-  --shadow-lg: rgba(0, 0, 0, 0.5);
 }
 
 /* Apply theme variables to common elements */
@@ -119,7 +132,7 @@ body {
   color: #ffffff !important;
 }
 
-/* CRITICAL: Fix text contrast - ALL dark/black text must be light */
+/* CRITICAL: Fix text contrast - Use SOFT, WARM colors */
 [data-theme="dark"] .text-black,
 [data-theme="dark"] .text-gray-900,
 [data-theme="dark"] .text-gray-800,
@@ -149,13 +162,14 @@ body {
   color: var(--text-primary) !important;
 }
 
-/* Make sure ALL headings are visible */
+/* Make headings warm, soft - NOT bright white */
 [data-theme="dark"] h1,
 [data-theme="dark"] h2,
 [data-theme="dark"] h3,
 [data-theme="dark"] h4,
 [data-theme="dark"] h5 {
-  color: #f9fafb !important;
+  color: #e8e6e3 !important;
+  /* Warm off-white, not harsh white */
 }
 
 /* Fix ALL badges and pills */
@@ -179,16 +193,18 @@ body {
   color: #ffffff !important;
 }
 
-/* Fix icons and emojis visibility - MUCH BRIGHTER */
+/* Fix icons and emojis visibility - SOFTER brightness */
 [data-theme="dark"] svg,
 [data-theme="dark"] .lucide {
-  opacity: 1;
-  filter: brightness(1.5) !important;
+  opacity: 0.95;
+  filter: brightness(1.2) !important;
+  /* Reduced from 1.5 - less harsh */
 }
 
-/* Make stars and emojis VERY bright */
+/* Soften overall visual harshness */
 [data-theme="dark"] {
-  filter: brightness(1.0);
+  filter: brightness(0.98);
+  /* Slightly reduce overall brightness */
 }
 
 [data-theme="dark"] .text-sm,
