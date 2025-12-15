@@ -1,5 +1,5 @@
 // Live Quiz Control Dashboard  
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Users, CheckCircle, Clock, StopCircle, AlertCircle } from 'lucide-react';
 import LiveQuizTimer from '../../components/LiveQuizTimer';
@@ -11,6 +11,10 @@ const LiveQuizControl = () => {
     const { sessionId } = useParams<{ sessionId: string }>();
     const navigate = useNavigate();
 
+    // FIXED: Calculate endTime ONCE using useMemo, not on every render
+    const sessionEndTime = useMemo(() => new Date(Date.now() + 120000), []); // 2 min from first render
+    const sessionStartTime = useMemo(() => new Date(), []);
+
     // Mock session data - in production, fetch from Firebase
     const [session] = useState<LiveQuizSession>({
         id: sessionId,
@@ -20,8 +24,8 @@ const LiveQuizControl = () => {
         className: 'Class 8-A',
         teacherId: 'teacher-001',
         teacherName: 'Mr. Sharma',
-        startTime: { toDate: () => new Date() } as any,
-        endTime: { toDate: () => new Date(Date.now() + 120000) } as any, // 2 min from now
+        startTime: { toDate: () => sessionStartTime } as any,
+        endTime: { toDate: () => sessionEndTime } as any,
         duration: 120,
         sessionSeed: 'abc123',
         status: 'active',
@@ -101,7 +105,7 @@ const LiveQuizControl = () => {
                             Time Remaining
                         </h2>
                         <LiveQuizTimer
-                            endTime={session.endTime.toDate()}
+                            endTime={sessionEndTime}
                             onTimeUp={handleTimeUp}
                         />
                     </div>
