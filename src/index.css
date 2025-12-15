@@ -42,11 +42,18 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Dark theme overrides with higher specificity - Be VERY aggressive */
+/* Exclude login page from dark theme */
+[data-theme="dark"] body:has([class*="login"]) {
+  background-color: #f9fafb;
+  color: #1f2937;
+}
+
+/* Dark theme overrides - ULTRA AGGRESSIVE for all portal sections */
 [data-theme="dark"] .bg-white,
 [data-theme="dark"].bg-white,
 [data-theme="dark"] div.bg-white,
-[data-theme="dark"] section.bg-white {
+[data-theme="dark"] section.bg-white,
+[data-theme="dark"] main .bg-white {
   background-color: var(--bg-primary) !important;
   color: var(--text-primary) !important;
 }
@@ -56,13 +63,16 @@ body {
 [data-theme="dark"].bg-gray-50,
 [data-theme="dark"].bg-gray-100,
 [data-theme="dark"] div.bg-gray-50,
-[data-theme="dark"] div.bg-gray-100 {
+[data-theme="dark"] div.bg-gray-100,
+[data-theme="dark"] main .bg-gray-50,
+[data-theme="dark"] main .bg-gray-100 {
   background-color: var(--bg-secondary) !important;
 }
 
 [data-theme="dark"] .bg-gray-200,
 [data-theme="dark"].bg-gray-200,
-[data-theme="dark"] div.bg-gray-200 {
+[data-theme="dark"] div.bg-gray-200,
+[data-theme="dark"] main .bg-gray-200 {
   background-color: var(--bg-tertiary) !important;
 }
 
@@ -74,7 +84,10 @@ body {
 [data-theme="dark"] h2,
 [data-theme="dark"] h3,
 [data-theme="dark"] p.text-gray-800,
-[data-theme="dark"] span.text-gray-800 {
+[data-theme="dark"] span.text-gray-800,
+[data-theme="dark"] main h1,
+[data-theme="dark"] main h2,
+[data-theme="dark"] main h3 {
   color: var(--text-primary) !important;
 }
 
@@ -83,7 +96,8 @@ body {
 [data-theme="dark"].text-gray-600,
 [data-theme="dark"].text-gray-700,
 [data-theme="dark"] p.text-gray-600,
-[data-theme="dark"] p.text-gray-700 {
+[data-theme="dark"] p.text-gray-700,
+[data-theme="dark"] main p {
   color: var(--text-secondary) !important;
 }
 
