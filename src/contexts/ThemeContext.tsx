@@ -23,7 +23,6 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
             setTheme(savedTheme);
             document.documentElement.setAttribute('data-theme', savedTheme);
         } else {
-            // If no saved theme or invalid, set default 'light'
             document.documentElement.setAttribute('data-theme', 'light');
         }
     }, []);
@@ -46,3 +45,4 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         </ThemeContext.Provider>
     );
 };
+```
