@@ -34,7 +34,7 @@ const GlobalQuizListener = () => {
 
     useEffect(() => {
         if (!isStudent) {
-            console.log('❌ Not on student page');
+            // Silently return if not a student page
             return;
         }
 
