@@ -42,46 +42,63 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Override Tailwind defaults with theme variables */
-.bg-white {
+/* Dark theme overrides with higher specificity - Be VERY aggressive */
+[data-theme="dark"] .bg-white,
+[data-theme="dark"].bg-white,
+[data-theme="dark"] div.bg-white,
+[data-theme="dark"] section.bg-white {
   background-color: var(--bg-primary) !important;
-}
-
-.bg-gray-50,
-.bg-gray-100 {
-  background-color: var(--bg-secondary) !important;
-}
-
-.bg-gray-200 {
-  background-color: var(--bg-tertiary) !important;
-}
-
-.text-gray-800,
-.text-gray-900 {
   color: var(--text-primary) !important;
 }
 
-.text-gray-600,
-.text-gray-700 {
+[data-theme="dark"] .bg-gray-50,
+[data-theme="dark"] .bg-gray-100,
+[data-theme="dark"].bg-gray-50,
+[data-theme="dark"].bg-gray-100,
+[data-theme="dark"] div.bg-gray-50,
+[data-theme="dark"] div.bg-gray-100 {
+  background-color: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .bg-gray-200,
+[data-theme="dark"].bg-gray-200,
+[data-theme="dark"] div.bg-gray-200 {
+  background-color: var(--bg-tertiary) !important;
+}
+
+[data-theme="dark"] .text-gray-800,
+[data-theme="dark"] .text-gray-900,
+[data-theme="dark"].text-gray-800,
+[data-theme="dark"].text-gray-900,
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] p.text-gray-800,
+[data-theme="dark"] span.text-gray-800 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-gray-600,
+[data-theme="dark"] .text-gray-700,
+[data-theme="dark"].text-gray-600,
+[data-theme="dark"].text-gray-700,
+[data-theme="dark"] p.text-gray-600,
+[data-theme="dark"] p.text-gray-700 {
   color: var(--text-secondary) !important;
 }
 
-.text-gray-500 {
+[data-theme="dark"] .text-gray-500,
+[data-theme="dark"].text-gray-500 {
   color: var(--text-tertiary) !important;
 }
 
-.border-gray-200,
-.border-gray-300,
-.border {
+[data-theme="dark"] .border-gray-200,
+[data-theme="dark"] .border-gray-300,
+[data-theme="dark"] .border,
+[data-theme="dark"].border-gray-200,
+[data-theme="dark"].border-gray-300,
+[data-theme="dark"].border {
   border-color: var(--border-color) !important;
-}
-
-.shadow-sm,
-.shadow,
-.shadow-md,
-.shadow-lg,
-.shadow-xl {
-  box-shadow: 0 1px 3px 0 var(--shadow), 0 1px 2px 0 var(--shadow) !important;
 }
 
 :root {
