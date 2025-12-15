@@ -64,6 +64,9 @@ const LiveQuizControl = () => {
         e.preventDefault();
         e.stopPropagation();
 
+        // IMMEDIATE ALERT TEST
+        alert('Button clicked! SessionId: ' + sessionId);
+
         console.log('📋 Session ID:', sessionId);
 
         if (!sessionId) {
