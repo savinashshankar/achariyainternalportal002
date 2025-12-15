@@ -159,8 +159,8 @@ const LiveQuizControl = () => {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {/* Timer Card */}
-                    <div className="bg-white rounded-xl shadow-lg p-6">
+                    {/* Timer Card - STICKY */}
+                    <div className="sticky top-0 z-50 bg-white rounded-xl shadow-lg p-6 border-2 border-red-200">
                         <h2 className="text-gray-600 font-semibold mb-4 flex items-center gap-2">
                             <Clock className="w-5 h-5" />
                             Time Remaining
