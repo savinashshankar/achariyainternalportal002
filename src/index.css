@@ -39,14 +39,61 @@
 body {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Override Tailwind defaults with theme variables */
+.bg-white {
+  background-color: var(--bg-primary) !important;
+}
+
+.bg-gray-50,
+.bg-gray-100 {
+  background-color: var(--bg-secondary) !important;
+}
+
+.bg-gray-200 {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.text-gray-800,
+.text-gray-900 {
+  color: var(--text-primary) !important;
+}
+
+.text-gray-600,
+.text-gray-700 {
+  color: var(--text-secondary) !important;
+}
+
+.text-gray-500 {
+  color: var(--text-tertiary) !important;
+}
+
+.border-gray-200,
+.border-gray-300,
+.border {
+  border-color: var(--border-color) !important;
+}
+
+.shadow-sm,
+.shadow,
+.shadow-md,
+.shadow-lg,
+.shadow-xl {
+  box-shadow: 0 1px 3px 0 var(--shadow), 0 1px 2px 0 var(--shadow) !important;
 }
 
 :root {
   /* Achariya Brand Colors (Inferred/Standardized) */
-  --color-primary: #0056b3; /* Deep Blue */
-  --color-primary-light: #e6f0fa; /* Light Blue Background */
-  --color-secondary: #f8f9fa; /* Light Gray */
-  --color-accent: #ffc107; /* Gold/Yellow Accent */
+  --color-primary: #0056b3;
+  /* Deep Blue */
+  --color-primary-light: #e6f0fa;
+  /* Light Blue Background */
+  --color-secondary: #f8f9fa;
+  /* Light Gray */
+  --color-accent: #ffc107;
+  /* Gold/Yellow Accent */
   --color-text-main: #333333;
   --color-text-muted: #666666;
 }
