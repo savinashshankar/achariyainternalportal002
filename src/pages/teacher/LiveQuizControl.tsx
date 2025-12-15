@@ -11,31 +11,32 @@ const LiveQuizControl = () => {
     const { sessionId } = useParams<{ sessionId: string }>();
     const navigate = useNavigate();
 
-    // FIXED: Calculate endTime ONCE using useMemo, not on every render
-    const sessionEndTime = useMemo(() => new Date(Date.now() + 120000), []); // 2 min from first render
-    const sessionStartTime = useMemo(() => new Date(), []);
-
-    // Mock session data - in production, fetch from Firebase
-    const [session] = useState<LiveQuizSession>({
-        id: sessionId,
-        quizId: 'quadratic-equations',
-        quizTitle: 'Quadratic Equations Quiz',
-        classId: '8-A',
-        className: 'Class 8-A',
-        teacherId: 'teacher-001',
-        teacherName: 'Mr. Sharma',
-        startTime: { toDate: () => sessionStartTime } as any,
-        endTime: { toDate: () => sessionEndTime } as any,
-        duration: 120,
-        sessionSeed: 'abc123',
-        status: 'active',
-        questionCount: 10,
-        totalStudents: 30,
-        submittedCount: 0
-    });
-
+    const [session, setSession] = useState<LiveQuizSession | null>(null);
+    const [sessionEndTime, setSessionEndTime] = useState<Date | null>(null);
     const [submittedCount, setSubmittedCount] = useState(0);
     const [connectedCount, setConnectedCount] = useState(0);
+
+    // Fetch actual session from Firebase
+    useEffect(() => {
+        if (!sessionId) return;
+
+        import('../../services/liveQuizService').then(({ getSessionById }) => {
+            getSessionById(sessionId).then((firebaseSession) => {
+                if (firebaseSession) {
+                    console.log('✅ Teacher loaded session from Firebase:', firebaseSession);
+                    setSession(firebaseSession);
+                    setSessionEndTime(firebaseSession.endTime.toDate());
+                } else {
+                    console.error('❌ Session not found:', sessionId);
+                }
+            });
+        });
+    }, [sessionId]);
+
+    // Wait for session to load
+    if (!session || !sessionEndTime) {
+        return <div className="flex items-center justify-center h-screen">Loading...</div>;
+    }
 
     // Simulate students joining and submitting
     useEffect(() => {
