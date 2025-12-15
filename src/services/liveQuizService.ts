@@ -9,7 +9,9 @@ import {
     updateDoc,
     onSnapshot,
     serverTimestamp,
-    Timestamp
+    Timestamp,
+    orderBy,
+    limit
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 
@@ -48,13 +50,14 @@ export interface LiveQuizAttempt {
 
 // Generate session seed for randomization
 function generateSessionSeed(): string {
-    return Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+    return Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15);
 }
 
 /**
- * Teacher: Start a new live quiz session
+ * Teacher: Start a live quiz session
  */
-export async function startLiveQuizSession(params: {
+export async function startLiveQuiz(params: {
     quizId: string;
     quizTitle: string;
     classId: string;
@@ -66,7 +69,10 @@ export async function startLiveQuizSession(params: {
 }): Promise<string> {
     try {
         const now = Timestamp.now();
-        const endTime = Timestamp.fromMillis(now.toMillis() + params.duration * 1000);
+        const endTime = new Timestamp(
+            now.seconds + params.duration,
+            now.nanoseconds
+        );
 
         const sessionData: Omit<LiveQuizSession, 'id'> = {
             quizId: params.quizId,
@@ -104,7 +110,9 @@ export async function getActiveQuizForClass(classId: string): Promise<LiveQuizSe
         const q = query(
             collection(db, 'liveQuizSessions'),
             where('classId', '==', classId),
-            where('status', '==', 'active')
+            where('status', '==', 'active'),
+            orderBy('startTime', 'desc'),
+            limit(1)
         );
 
         const querySnapshot = await getDocs(q);
@@ -113,8 +121,15 @@ export async function getActiveQuizForClass(classId: string): Promise<LiveQuizSe
             return null;
         }
 
-        const doc = querySnapshot.docs[0];
-        return { id: doc.id, ...doc.data() } as LiveQuizSession;
+        const docData = querySnapshot.docs[0];
+        const session = { id: docData.id, ...docData.data() } as LiveQuizSession;
+
+        // Check if expired
+        if (session.endTime.toDate().getTime() < Date.now()) {
+            return null;
+        }
+
+        return session;
     } catch (error) {
         console.error('Error getting active quiz:', error);
         return null;
@@ -123,24 +138,60 @@ export async function getActiveQuizForClass(classId: string): Promise<LiveQuizSe
 
 /**
  * Student: Listen for active quiz in real-time
+ * Returns the LATEST non-expired quiz
  */
 export function listenForActiveQuiz(
     classId: string,
     callback: (session: LiveQuizSession | null) => void
 ): () => void {
+    console.log('🔌 Setting up Firebase listener for class:', classId);
+
     const q = query(
         collection(db, 'liveQuizSessions'),
         where('classId', '==', classId),
-        where('status', '==', 'active')
+        where('status', '==', 'active'),
+        orderBy('startTime', 'desc'),
+        limit(5) // Get last 5 to find non-expired one
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        console.log('📬 Firebase snapshot received, docs:', querySnapshot.docs.length);
+
         if (querySnapshot.empty) {
+            console.log('📭 No active quizzes found');
             callback(null);
-        } else {
-            const doc = querySnapshot.docs[0];
-            callback({ id: doc.id, ...doc.data() } as LiveQuizSession);
+            return;
         }
+
+        // Find the first NON-EXPIRED quiz
+        const now = Date.now();
+        for (const docSnap of querySnapshot.docs) {
+            const session = { id: docSnap.id, ...docSnap.data() } as LiveQuizSession;
+            const endTime = session.endTime.toDate().getTime();
+
+            console.log('🔍 Checking quiz:', {
+                id: session.id,
+                endTime: new Date(endTime).toLocaleTimeString(),
+                now: new Date(now).toLocaleTimeString(),
+                expired: now > endTime
+            });
+
+            if (now <= endTime) {
+                // Found a valid, non-expired quiz!
+                console.log('✅ Found valid quiz:', session.id);
+                callback(session);
+                return;
+            } else {
+                console.log('⏰ Quiz expired, checking next...');
+            }
+        }
+
+        // All quizzes are expired
+        console.log('❌ All quizzes expired');
+        callback(null);
+    }, (error) => {
+        console.error('🔥 Firebase listener error:', error);
+        callback(null);
     });
 
     return unsubscribe;
@@ -176,14 +227,14 @@ export async function submitQuizAttempt(attempt: Omit<LiveQuizAttempt, 'id'>): P
  */
 export async function getSessionById(sessionId: string): Promise<LiveQuizSession | null> {
     try {
-        const docSnap = await getDocs(query(collection(db, 'liveQuizSessions'), where('__name__', '==', sessionId)));
-
-        if (docSnap.empty) {
-            return null;
-        }
-
-        const document = docSnap.docs[0];
-        return { id: document.id, ...document.data() } as LiveQuizSession;
+        const q = query(
+            collection(db, 'liveQuizSessions'),
+            where('__name__', '==', sessionId)
+        );
+        const querySnapshot = await getDocs(q);
+        if (querySnapshot.empty) return null;
+        const docData = querySnapshot.docs[0];
+        return { id: docData.id, ...docData.data() } as LiveQuizSession;
     } catch (error) {
         console.error('Error getting session:', error);
         return null;
@@ -191,35 +242,20 @@ export async function getSessionById(sessionId: string): Promise<LiveQuizSession
 }
 
 /**
- * Teacher: Get all attempts for a session (for leaderboard)
+ * Teacher: Listen for connected students count
  */
-export async function getSessionAttempts(sessionId: string): Promise<LiveQuizAttempt[]> {
-    try {
-        const q = query(
-            collection(db, 'liveQuizAttempts'),
-            where('sessionId', '==', sessionId)
-        );
+export function listenForStudentCount(
+    sessionId: string,
+    callback: (count: number) => void
+): () => void {
+    const q = query(
+        collection(db, 'liveQuizAttempts'),
+        where('sessionId', '==', sessionId)
+    );
 
-        const querySnapshot = await getDocs(q);
-        const attempts: LiveQuizAttempt[] = [];
-
-        querySnapshot.forEach((doc) => {
-            attempts.push({ id: doc.id, ...doc.data() } as LiveQuizAttempt);
-        });
-
-        // Sort by score (desc), then by time (asc)
-        attempts.sort((a, b) => {
-            if (b.score !== a.score) {
-                return b.score - a.score;
-            }
-            return a.timeTakenMs - b.timeTakenMs;
-        });
-
-        return attempts;
-    } catch (error) {
-        console.error('Error getting session attempts:', error);
-        return [];
-    }
+    return onSnapshot(q, (snapshot) => {
+        callback(snapshot.docs.length);
+    });
 }
 
 /**
@@ -228,11 +264,9 @@ export async function getSessionAttempts(sessionId: string): Promise<LiveQuizAtt
 export async function endQuizSession(sessionId: string): Promise<void> {
     try {
         await updateDoc(doc(db, 'liveQuizSessions', sessionId), {
-            status: 'completed',
-            endTime: serverTimestamp()
+            status: 'completed'
         });
     } catch (error) {
         console.error('Error ending quiz session:', error);
-        throw error;
     }
 }
