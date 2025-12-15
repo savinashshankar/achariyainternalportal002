@@ -1,29 +1,28 @@
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { LogOut, Home, BookOpen, Wallet, Award, Users, FileText, Settings, HelpCircle, Menu, X, ShoppingCart, Target, TrendingUp, Swords, Zap, Heart } from 'lucide-react';
-import { useState, useEffect, useContext } from 'react';
-import { ThemeContext } from '../contexts/ThemeContext';
+import { useState, useEffect } from 'react';
 
 const Layout = () => {
-    const { theme, toggleTheme } = useContext(ThemeContext);
     const navigate = useNavigate();
     const location = useLocation();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const role = user.selectedRole || user.role;
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     const handleLogout = () => {
         // Reset theme to light mode on logout
         localStorage.setItem('theme', 'light');
         document.documentElement.setAttribute('data-theme', 'light');
-        toggleTheme('light'); // Reset theme context
-        localStorage.clear(); // Clear all user data
+
+        // Clear all user data
+        localStorage.clear();
 
         // Navigate to login
         navigate('/');
     };
 
     useEffect(() => {
-        setIsSidebarOpen(false); // Close sidebar on route change
+        setSidebarOpen(false); // Close sidebar on route change
     }, [location.pathname]);
 
     const getNavItems = () => {
