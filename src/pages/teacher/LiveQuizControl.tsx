@@ -15,27 +15,62 @@ const LiveQuizControl = () => {
     const [sessionEndTime, setSessionEndTime] = useState<Date | null>(null);
     const [submittedCount, setSubmittedCount] = useState(0);
     const [connectedCount, setConnectedCount] = useState(0);
+    const [loadError, setLoadError] = useState<string | null>(null);
 
     // Fetch actual session from Firebase
     useEffect(() => {
-        if (!sessionId) return;
+        console.log('🔍 LiveQuizControl mounted, sessionId:', sessionId);
 
+        if (!sessionId) {
+            console.error('❌ No sessionId in URL params');
+            setLoadError('No session ID provided');
+            return;
+        }
+
+        console.log('📡 Fetching session from Firebase...');
         import('../../services/liveQuizService').then(({ getSessionById }) => {
-            getSessionById(sessionId).then((firebaseSession) => {
-                if (firebaseSession) {
-                    console.log('✅ Teacher loaded session from Firebase:', firebaseSession);
-                    setSession(firebaseSession);
-                    setSessionEndTime(firebaseSession.endTime.toDate());
-                } else {
-                    console.error('❌ Session not found:', sessionId);
-                }
-            });
+            getSessionById(sessionId)
+                .then((firebaseSession) => {
+                    if (firebaseSession) {
+                        console.log('✅ Teacher loaded session from Firebase:', firebaseSession);
+                        setSession(firebaseSession);
+                        setSessionEndTime(firebaseSession.endTime.toDate());
+                    } else {
+                        console.error('❌ Session not found:', sessionId);
+                        setLoadError(`Session ${sessionId} not found`);
+                    }
+                })
+                .catch((error) => {
+                    console.error('❌ Error loading session:', error);
+                    setLoadError(`Error: ${error.message}`);
+                });
+        }).catch((error) => {
+            console.error('❌ Error importing liveQuizService:', error);
+            setLoadError(`Import error: ${error.message}`);
         });
     }, [sessionId]);
 
+    // Show error if loading failed
+    if (loadError) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="text-center">
+                    <p className="text-red-600 font-bold mb-2">Error Loading Quiz</p>
+                    <p className="text-gray-600">{loadError}</p>
+                    <button
+                        onClick={() => navigate('/teacher/dashboard')}
+                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
+                        Back to Dashboard
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     // Wait for session to load
     if (!session || !sessionEndTime) {
-        return <div className="flex items-center justify-center h-screen">Loading...</div>;
+        console.log('⏳ Waiting for session to load...');
+        return <div className="flex items-center justify-center h-screen">Loading quiz session...</div>;
     }
 
     // Simulate students joining and submitting
