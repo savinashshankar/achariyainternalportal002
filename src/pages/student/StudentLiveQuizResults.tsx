@@ -1,5 +1,5 @@
 // Student Live Quiz Results Page
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, CheckCircle, XCircle, ArrowLeft } from 'lucide-react';
 import BackButton from '../../components/BackButton';
@@ -7,15 +7,17 @@ import BackButton from '../../components/BackButton';
 const StudentLiveQuizResults = () => {
     const navigate = useNavigate();
 
-    // Mock results - in production, fetch from Firebase
+    // Read ACTUAL results from localStorage (saved by quiz taking page)
+    const savedResults = JSON.parse(localStorage.getItem('lastQuizResults') || 'null');
+
     const [results] = useState({
-        score: 8,
-        totalQuestions: 10,
-        timeTaken: 95000, // 1:35
-        rank: 3,
-        totalStudents: 15,
-        correctAnswers: [1, 2, 4, 5, 6, 7, 9, 10],
-        incorrectAnswers: [3, 8]
+        score: savedResults?.score ?? 0,
+        totalQuestions: savedResults?.totalQuestions ?? 10,
+        timeTaken: savedResults?.timeTaken ?? 0,
+        rank: 1, // Rank would come from Firebase in production
+        totalStudents: 30,
+        correctAnswers: savedResults?.correctAnswers ?? [],
+        incorrectAnswers: savedResults?.incorrectAnswers ?? []
     });
 
     const formatTime = (ms: number) => {
@@ -24,6 +26,7 @@ const StudentLiveQuizResults = () => {
         const seconds = totalSeconds % 60;
         return `${minutes}:${String(seconds).padStart(2, '0')}`;
     };
+
 
     const percentage = Math.round((results.score / results.totalQuestions) * 100);
     const isPerfect = results.score === results.totalQuestions;
@@ -36,8 +39,8 @@ const StudentLiveQuizResults = () => {
 
                 {/* Results Header */}
                 <div className={`rounded-2xl shadow-2xl p-8 mb-6 text-white relative overflow-hidden ${isPerfect ? 'bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500' :
-                        isPass ? 'bg-gradient-to-br from-green-500 to-emerald-600' :
-                            'bg-gradient-to-br from-gray-600 to-gray-700'
+                    isPass ? 'bg-gradient-to-br from-green-500 to-emerald-600' :
+                        'bg-gradient-to-br from-gray-600 to-gray-700'
                     }`}>
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full -mr-32 -mt-32"></div>
 
@@ -117,8 +120,8 @@ const StudentLiveQuizResults = () => {
                                 <div
                                     key={idx}
                                     className={`aspect-square rounded-lg flex items-center justify-center font-bold text-sm ${isCorrect
-                                            ? 'bg-green-100 text-green-700 border-2 border-green-500'
-                                            : 'bg-red-100 text-red-700 border-2 border-red-500'
+                                        ? 'bg-green-100 text-green-700 border-2 border-green-500'
+                                        : 'bg-red-100 text-red-700 border-2 border-red-500'
                                         }`}>
                                     {questionNum}
                                 </div>

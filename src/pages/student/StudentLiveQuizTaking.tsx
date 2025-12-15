@@ -108,15 +108,32 @@ const StudentLiveQuizTaking = () => {
         setIsSubmitting(true);
 
         try {
-            // Calculate score
+            // Calculate score and track correct/incorrect
             let score = 0;
+            const correctAnswersList: number[] = [];
+            const incorrectAnswersList: number[] = [];
+
             questions.forEach((q, idx) => {
                 if (selectedAnswers[idx] === q.correctAnswer) {
                     score++;
+                    correctAnswersList.push(idx + 1);
+                } else {
+                    incorrectAnswersList.push(idx + 1);
                 }
             });
 
             const timeTaken = Date.now() - session.startTime.toDate().getTime();
+
+            // SAVE RESULTS TO LOCALSTORAGE for results page
+            localStorage.setItem('lastQuizResults', JSON.stringify({
+                score,
+                totalQuestions: questions.length,
+                timeTaken,
+                correctAnswers: correctAnswersList,
+                incorrectAnswers: incorrectAnswersList,
+                selectedAnswers,
+                sessionId
+            }));
 
             await submitQuizAttempt({
                 sessionId: sessionId,
