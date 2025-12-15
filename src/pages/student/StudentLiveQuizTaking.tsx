@@ -99,6 +99,24 @@ const StudentLiveQuizTaking = () => {
         }
     }, [sessionId, user.email]);
 
+    // FALLBACK: Auto-submit when quiz time expires (in case timer callback fails)
+    useEffect(() => {
+        if (!quizEndTime || isSubmitting) return;
+
+        const checkExpired = setInterval(() => {
+            const now = Date.now();
+            const timeLeft = quizEndTime.getTime() - now;
+
+            if (timeLeft <= 0) {
+                console.log('⏰ FALLBACK: Quiz time expired - auto-submitting');
+                clearInterval(checkExpired);
+                handleSubmit();
+            }
+        }, 1000);
+
+        return () => clearInterval(checkExpired);
+    }, [quizEndTime, isSubmitting]); // Only handleSubmit is missing, but it's stable
+
     const handleAnswerSelect = (optionIndex: number) => {
         const newAnswers = [...selectedAnswers];
         newAnswers[currentQuestionIndex] = optionIndex;

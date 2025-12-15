@@ -60,24 +60,38 @@ const LiveQuizControl = () => {
     }, [connectedCount, session.totalStudents]);
 
     const handleEndQuiz = (e: React.MouseEvent) => {
+        console.log('🛑 End Quiz button clicked');
         e.preventDefault();
         e.stopPropagation();
 
-        if (!sessionId) return;
+        console.log('📋 Session ID:', sessionId);
 
+        if (!sessionId) {
+            console.error('❌ No sessionId - cannot end quiz');
+            alert('Error: No session ID found. Cannot end quiz.');
+            return;
+        }
+
+        console.log('💬 Showing confirm dialog...');
         const confirmed = window.confirm('Are you sure you want to end the quiz early? Students who haven\'t submitted will be automatically submitted.');
+        console.log('✅ User confirmed:', confirmed);
 
         if (confirmed) {
+            console.log('🔥 Calling endQuizSession with ID:', sessionId);
             endQuizSession(sessionId)
                 .then(() => {
+                    console.log('✅ Quiz ended successfully, navigating to results...');
                     navigate(`/teacher/live-quiz/${sessionId}/results`);
                 })
                 .catch((error) => {
-                    console.error('Error ending quiz:', error);
-                    alert('Failed to end quiz. Please try again.');
+                    console.error('❌ Error ending quiz:', error);
+                    alert(`Failed to end quiz: ${error.message || 'Unknown error'}`);
                 });
+        } else {
+            console.log('❌ User cancelled');
         }
     };
+
 
     const handleTimeUp = () => {
         // Quiz time is up, redirect to results

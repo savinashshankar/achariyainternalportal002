@@ -72,17 +72,26 @@ const GlobalQuizListener = () => {
                 }
 
                 const isNewQuiz = lastKnownQuizId.current !== quiz.id;
+                const justStarted = timeSinceStart < 10000; // Quiz started less than 10s ago
+                const alreadyHandled = hasRedirected === quiz.id;
 
-                // AUTO REDIRECT if quiz just started (< 10 seconds)
-                if (isNewQuiz && timeSinceStart < 10000 && hasRedirected !== quiz.id) {
-                    console.log('🚀 AUTO REDIRECT!');
+                console.log('🎯 Decision logic:', {
+                    isNewQuiz,
+                    justStarted,
+                    timeSinceStart: Math.floor(timeSinceStart / 1000) + 's',
+                    alreadyHandled
+                });
+
+                // AUTO REDIRECT ONLY if quiz JUST started (<10s) AND student hasn't handled it yet
+                if (isNewQuiz && justStarted && !alreadyHandled) {
+                    console.log('🚀 AUTO REDIRECT - Quiz just started, student was already logged in');
                     setHasRedirected(quiz.id || null);
                     lastKnownQuizId.current = quiz.id || null;
                     navigate(`/student/live-quiz/${quiz.id}/take`);
                 }
-                // SHOW BANNER for ongoing quiz
-                else if (hasRedirected !== quiz.id) {
-                    console.log('📢 SHOW BANNER');
+                // SHOW BANNER for late joiners (>10s) or if already redirected once
+                else if (!alreadyHandled) {
+                    console.log('📢 SHOW BANNER - Late joiner or quiz already running');
                     lastKnownQuizId.current = quiz.id || null;
                     setActiveQuiz({
                         id: quiz.id || '',
@@ -92,6 +101,7 @@ const GlobalQuizListener = () => {
                     });
                     setShowBanner(true);
                 }
+
             } else {
                 console.log('❌ No active quiz');
                 setShowBanner(false);
