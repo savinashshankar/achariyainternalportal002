@@ -57,6 +57,7 @@ function generateSessionSeed(): string {
 /**
  * Teacher: Start a live quiz session
  */
+export const startLiveQuizSession = startLiveQuiz;
 export async function startLiveQuiz(params: {
     quizId: string;
     quizTitle: string;
