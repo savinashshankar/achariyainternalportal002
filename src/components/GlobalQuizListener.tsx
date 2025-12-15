@@ -76,7 +76,7 @@ const GlobalQuizListener = () => {
                 // IMPORTANT: timeSinceStart could be negative if clocks are out of sync
                 // Treat negative values as 0 (quiz just started)
                 const safeTimeSinceStart = Math.max(0, timeSinceStart);
-                const justStarted = safeTimeSinceStart < 10000; // Quiz started less than 10s ago
+                const justStarted = safeTimeSinceStart < 5000; // Quiz started less than 5s ago
                 const alreadyHandled = hasRedirected === quiz.id;
                 const onDashboard = location.pathname === '/student/dashboard';
 
@@ -93,7 +93,7 @@ const GlobalQuizListener = () => {
                 });
 
                 // AUTO REDIRECT ONLY if:
-                // 1. Quiz JUST started (<10s)
+                // 1. Quiz JUST started (<5s)
                 // 2. Student hasn't handled it yet  
                 // 3. Student is ON DASHBOARD (not other pages)
                 if (isNewQuiz && justStarted && !alreadyHandled && onDashboard) {
@@ -103,7 +103,7 @@ const GlobalQuizListener = () => {
                     navigate(`/student/live-quiz/${quiz.id}/take`);
                 }
                 // SHOW BANNER for:
-                // - Late joiners (>10s)
+                // - Late joiners (>5s)
                 // - Students on other pages (not dashboard)
                 // - Or if already redirected once
                 else if (!alreadyHandled) {
