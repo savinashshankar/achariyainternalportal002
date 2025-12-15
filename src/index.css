@@ -158,6 +158,54 @@ body {
   color: #f9fafb !important;
 }
 
+/* Fix ALL badges and pills */
+[data-theme="dark"] .bg-green-100,
+[data-theme="dark"] .bg-blue-100,
+[data-theme="dark"] .bg-purple-100,
+[data-theme="dark"] .bg-yellow-100,
+[data-theme="dark"] .bg-red-100,
+[data-theme="dark"] .bg-orange-100 {
+  background-color: var(--bg-tertiary) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--border-hover) !important;
+}
+
+/* Text colors for badges */
+[data-theme="dark"] .text-green-800,
+[data-theme="dark"] .text-blue-800,
+[data-theme="dark"] .text-purple-800,
+[data-theme="dark"] .text-yellow-800,
+[data-theme="dark"] .text-red-800 {
+  color: #ffffff !important;
+}
+
+/* Fix icons and emojis visibility - MUCH BRIGHTER */
+[data-theme="dark"] svg,
+[data-theme="dark"] .lucide {
+  opacity: 1;
+  filter: brightness(1.5) !important;
+}
+
+/* Make stars and emojis VERY bright */
+[data-theme="dark"] {
+  filter: brightness(1.0);
+}
+
+[data-theme="dark"] .text-sm,
+[data-theme="dark"] .text-xs,
+[data-theme="dark"] small {
+  color: #d1d5db !important;
+  /* Much brighter gray */
+  opacity: 1 !important;
+}
+
+/* Fix white button text in dark mode */
+[data-theme="dark"] button.bg-white,
+[data-theme="dark"] .bg-white button {
+  color: #1f2937 !important;
+  /* Dark text on white button */
+}
+
 [data-theme="dark"] .text-gray-600,
 [data-theme="dark"] .text-gray-700,
 [data-theme="dark"].text-gray-600,
