@@ -1,5 +1,5 @@
 // Live Quiz Control Dashboard  
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Users, CheckCircle, Clock, StopCircle, AlertCircle } from 'lucide-react';
 import LiveQuizTimer from '../../components/LiveQuizTimer';
