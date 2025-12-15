@@ -50,6 +50,30 @@ const LiveQuizControl = () => {
         });
     }, [sessionId]);
 
+    // Simulate students joining and submitting (must be BEFORE conditional returns)
+    useEffect(() => {
+        if (!session) return; // Don't run if session not loaded yet
+
+        const connectInterval = setInterval(() => {
+            setConnectedCount(prev => {
+                const newCount = Math.min(prev + Math.floor(Math.random() * 3), session.totalStudents || 30);
+                return newCount;
+            });
+        }, 2000);
+
+        const submitInterval = setInterval(() => {
+            setSubmittedCount(prev => {
+                const newCount = Math.min(prev + 1, session.totalStudents || 30);
+                return newCount;
+            });
+        }, 3000);
+
+        return () => {
+            clearInterval(connectInterval);
+            clearInterval(submitInterval);
+        };
+    }, [session]);
+
     // Show error if loading failed
     if (loadError) {
         return (
@@ -72,28 +96,6 @@ const LiveQuizControl = () => {
         console.log('⏳ Waiting for session to load...');
         return <div className="flex items-center justify-center h-screen">Loading quiz session...</div>;
     }
-
-    // Simulate students joining and submitting
-    useEffect(() => {
-        const connectInterval = setInterval(() => {
-            setConnectedCount(prev => {
-                const newCount = Math.min(prev + Math.floor(Math.random() * 3), session.totalStudents || 30);
-                return newCount;
-            });
-        }, 2000);
-
-        const submitInterval = setInterval(() => {
-            setSubmittedCount(prev => {
-                if (prev >= connectedCount) return prev;
-                return Math.min(prev + 1, connectedCount);
-            });
-        }, 5000);
-
-        return () => {
-            clearInterval(connectInterval);
-            clearInterval(submitInterval);
-        };
-    }, [connectedCount, session.totalStudents]);
 
     const handleEndQuiz = (e: React.MouseEvent) => {
         console.log('🛑 End Quiz button clicked');
