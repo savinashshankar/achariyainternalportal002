@@ -80,15 +80,15 @@ const StudentDashboard = () => {
                 });
 
                 // Only auto-navigate if:
-                // 1. Quiz just started (< 5 seconds ago)
+                // 1. Quiz just started (< 30 seconds ago)
                 // 2. We haven't seen this quiz before (not a refresh)
-                if (timeSinceStart < 5000 && hasSeenQuiz !== quiz.id) {
+                if (timeSinceStart < 30000 && hasSeenQuiz !== quiz.id) {
                     console.log('✅ NEWLY STARTED - Auto-navigating!');
                     setHasSeenQuiz(quiz.id);
                     setTimeout(() => {
                         navigate(`/student/live-quiz/${quiz.id}/take`);
                     }, 100);
-                } else if (timeSinceStart >= 5000) {
+                } else if (timeSinceStart >= 30000) {
                     // Quiz already running - show join banner
                     console.log('⏰ ONGOING QUIZ - Showing join banner');
                     setActiveQuiz(quiz);
