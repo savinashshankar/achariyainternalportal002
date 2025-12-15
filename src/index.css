@@ -48,6 +48,11 @@ body {
   color: #1f2937;
 }
 
+/* Dark theme - NUCLEAR OPTION: Override ALL backgrounds except gradients */
+[data-theme="dark"] [class*="bg-"]:not([class*="bg-gradient"]):not([class*="bg-blue"]):not([class*="bg-purple"]):not([class*="bg-green-5"]):not([class*="bg-red"]):not([class*="bg-orange"]):not([class*="bg-yellow"]) {
+  background-color: var(--bg-primary) !important;
+}
+
 /* Dark theme overrides - ULTRA AGGRESSIVE for all portal sections */
 [data-theme="dark"] .bg-white,
 [data-theme="dark"].bg-white,
@@ -74,6 +79,12 @@ body {
 [data-theme="dark"] div.bg-gray-200,
 [data-theme="dark"] main .bg-gray-200 {
   background-color: var(--bg-tertiary) !important;
+}
+
+/* Override light green backgrounds specifically */
+[data-theme="dark"] .bg-green-50,
+[data-theme="dark"] .bg-green-100 {
+  background-color: var(--bg-primary) !important;
 }
 
 [data-theme="dark"] .text-gray-800,
