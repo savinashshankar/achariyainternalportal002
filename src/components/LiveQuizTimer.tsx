@@ -1,5 +1,5 @@
-// Live Quiz Timer Component
-import { useEffect, useState } from 'react';
+// Live Quiz Timer Component - with visibility change handling
+import { useEffect, useState, useCallback } from 'react';
 import { Clock } from 'lucide-react';
 
 interface LiveQuizTimerProps {
@@ -10,16 +10,18 @@ interface LiveQuizTimerProps {
 const LiveQuizTimer = ({ endTime, onTimeUp }: LiveQuizTimerProps) => {
     const [timeLeft, setTimeLeft] = useState<number>(0);
 
-    useEffect(() => {
-        const calculateTimeLeft = () => {
-            const now = new Date().getTime();
-            const end = endTime.getTime();
-            const diff = Math.max(0, end - now);
-            return Math.floor(diff / 1000); // seconds
-        };
+    const calculateTimeLeft = useCallback(() => {
+        const now = Date.now();
+        const end = endTime.getTime();
+        const diff = Math.max(0, end - now);
+        return Math.floor(diff / 1000);
+    }, [endTime]);
 
+    useEffect(() => {
+        // Initial calculation
         setTimeLeft(calculateTimeLeft());
 
+        // Update every second
         const interval = setInterval(() => {
             const newTimeLeft = calculateTimeLeft();
             setTimeLeft(newTimeLeft);
@@ -30,8 +32,26 @@ const LiveQuizTimer = ({ endTime, onTimeUp }: LiveQuizTimerProps) => {
             }
         }, 1000);
 
-        return () => clearInterval(interval);
-    }, [endTime, onTimeUp]);
+        // CRITICAL: Recalculate immediately when tab becomes visible
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                const newTimeLeft = calculateTimeLeft();
+                setTimeLeft(newTimeLeft);
+
+                // If time is up while tab was hidden, trigger callback
+                if (newTimeLeft === 0 && onTimeUp) {
+                    onTimeUp();
+                }
+            }
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            clearInterval(interval);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [endTime, onTimeUp, calculateTimeLeft]);
 
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft % 60;
@@ -41,10 +61,10 @@ const LiveQuizTimer = ({ endTime, onTimeUp }: LiveQuizTimerProps) => {
 
     return (
         <div className={`flex items-center gap-3 px-6 py-4 rounded-xl font-bold text-2xl transition ${isVeryLowTime
-                ? 'bg-red-50 text-red-600 animate-pulse'
-                : isLowTime
-                    ? 'bg-orange-50 text-orange-600'
-                    : 'bg-blue-50 text-blue-600'
+            ? 'bg-red-50 text-red-600 animate-pulse'
+            : isLowTime
+                ? 'bg-orange-50 text-orange-600'
+                : 'bg-blue-50 text-blue-600'
             }`}>
             <Clock className={`w-8 h-8 ${isVeryLowTime ? 'animate-bounce' : ''}`} />
             <span className="font-mono">
