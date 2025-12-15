@@ -178,7 +178,7 @@ const LiveQuizControl = () => {
                             Connected Students
                         </h2>
                         <div className="text-4xl font-bold text-blue-600 mb-2">
-                            {connectedCount} / {session.totalStudents}
+                            {connectedCount} / {session.totalStudents || connectedCount || 30}
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-3">
                             <div
