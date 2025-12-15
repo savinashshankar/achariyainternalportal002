@@ -72,14 +72,21 @@ const GlobalQuizListener = () => {
                 }
 
                 const isNewQuiz = lastKnownQuizId.current !== quiz.id;
-                const justStarted = timeSinceStart < 10000; // Quiz started less than 10s ago
+
+                // IMPORTANT: timeSinceStart could be negative if clocks are out of sync
+                // Treat negative values as 0 (quiz just started)
+                const safeTimeSinceStart = Math.max(0, timeSinceStart);
+                const justStarted = safeTimeSinceStart < 10000; // Quiz started less than 10s ago
                 const alreadyHandled = hasRedirected === quiz.id;
 
                 console.log('🎯 Decision logic:', {
                     isNewQuiz,
                     justStarted,
-                    timeSinceStart: Math.floor(timeSinceStart / 1000) + 's',
-                    alreadyHandled
+                    timeSinceStartRaw: timeSinceStart,
+                    timeSinceStartSafe: Math.floor(safeTimeSinceStart / 1000) + 's',
+                    alreadyHandled,
+                    willRedirect: isNewQuiz && justStarted && !alreadyHandled,
+                    willShowBanner: !isNewQuiz || !justStarted || alreadyHandled
                 });
 
                 // AUTO REDIRECT ONLY if quiz JUST started (<10s) AND student hasn't handled it yet
@@ -91,7 +98,7 @@ const GlobalQuizListener = () => {
                 }
                 // SHOW BANNER for late joiners (>10s) or if already redirected once
                 else if (!alreadyHandled) {
-                    console.log('📢 SHOW BANNER - Late joiner or quiz already running');
+                    console.log('📢 SHOW BANNER - Late joiner (timeSinceStart: ' + Math.floor(safeTimeSinceStart / 1000) + 's)');
                     lastKnownQuizId.current = quiz.id || null;
                     setActiveQuiz({
                         id: quiz.id || '',
@@ -100,6 +107,8 @@ const GlobalQuizListener = () => {
                         remainingSeconds: Math.floor(remainingMs / 1000)
                     });
                     setShowBanner(true);
+                } else {
+                    console.log('ℹ️ Already handled this quiz - no action');
                 }
 
             } else {
