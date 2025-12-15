@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { listenForActiveQuiz, LiveQuizSession } from '../services/liveQuizService';
+import { listenForActiveQuiz } from '../services/liveQuizService';
 
 const GlobalQuizListener = () => {
     const navigate = useNavigate();
