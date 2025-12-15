@@ -1,6 +1,5 @@
 import { Zap, Shield } from 'lucide-react';
-import { useState, useContext } from 'react';
-import { ThemeContext } from '../../contexts/ThemeContext';
+import { useState } from 'react';
 import BackButton from '../../components/BackButton';
 
 interface PowerUp {
