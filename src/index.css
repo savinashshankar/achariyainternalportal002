@@ -87,19 +87,40 @@ body {
   background-color: var(--bg-primary) !important;
 }
 
-[data-theme="dark"] .text-gray-800,
+/* CRITICAL: Fix text contrast - ALL dark/black text must be light */
+[data-theme="dark"] .text-black,
 [data-theme="dark"] .text-gray-900,
+[data-theme="dark"] .text-gray-800,
 [data-theme="dark"].text-gray-800,
 [data-theme="dark"].text-gray-900,
+[data-theme="dark"].text-black,
 [data-theme="dark"] h1,
 [data-theme="dark"] h2,
 [data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6,
 [data-theme="dark"] p.text-gray-800,
 [data-theme="dark"] span.text-gray-800,
+[data-theme="dark"] div.text-gray-900,
+[data-theme="dark"] div.text-gray-800,
 [data-theme="dark"] main h1,
 [data-theme="dark"] main h2,
-[data-theme="dark"] main h3 {
+[data-theme="dark"] main h3,
+[data-theme="dark"] main h4,
+[data-theme="dark"] main p,
+[data-theme="dark"] main span,
+[data-theme="dark"] main div {
   color: var(--text-primary) !important;
+}
+
+/* Make sure ALL headings are visible */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5 {
+  color: #f9fafb !important;
 }
 
 [data-theme="dark"] .text-gray-600,
@@ -108,13 +129,21 @@ body {
 [data-theme="dark"].text-gray-700,
 [data-theme="dark"] p.text-gray-600,
 [data-theme="dark"] p.text-gray-700,
-[data-theme="dark"] main p {
+[data-theme="dark"] p,
+[data-theme="dark"] span {
   color: var(--text-secondary) !important;
 }
 
 [data-theme="dark"] .text-gray-500,
 [data-theme="dark"].text-gray-500 {
   color: var(--text-tertiary) !important;
+}
+
+/* Fix icons and emojis visibility */
+[data-theme="dark"] svg,
+[data-theme="dark"] .lucide {
+  opacity: 0.9;
+  filter: brightness(1.2);
 }
 
 [data-theme="dark"] .border-gray-200,
