@@ -1,5 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, Award, TrendingUp, Wallet, Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { BookOpen, Award, TrendingUp, Wallet } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
 import { useState, useEffect } from 'react';
 import StudentChatbot from '../../components/StudentChatbot';
@@ -8,7 +8,6 @@ import StreakWidget from '../../components/StreakWidget';
 import SuggestedActions from '../../components/SuggestedActions';
 
 const StudentDashboard = () => {
-    const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     let student = sampleData.students.find(s => s.email === user.email) || sampleData.students[0];
 
