@@ -2,7 +2,6 @@ import { Zap, Shield } from 'lucide-react';
 import { useState, useContext } from 'react';
 import { ThemeContext } from '../../contexts/ThemeContext';
 import BackButton from '../../components/BackButton';
-import toast from 'react-hot-toast';
 
 interface PowerUp {
     id: string;
@@ -17,7 +16,7 @@ interface PowerUp {
 }
 
 const StudentPowerUps = () => {
-    const { theme, toggleTheme } = useContext(ThemeContext);
+    const { theme } = useContext(ThemeContext);
     const [credits, setCredits] = useState(245);
     const [powerups, setPowerups] = useState<PowerUp[]>([
         { id: 'double', name: '2x Credit Booster', description: 'Earn double credits for 24 hours', cost: 50, duration: '24 hours', icon: '⚡', type: 'active', owned: 2 },
