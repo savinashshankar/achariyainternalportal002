@@ -1,4 +1,3 @@
-```typescript
 // Theme Context for Dark Mode support
 import { createContext, useState, useEffect, ReactNode } from 'react';
 
@@ -11,7 +10,7 @@ interface ThemeContextType {
 
 export const ThemeContext = createContext<ThemeContextType>({
     theme: 'light',
-    toggleTheme: () => {},
+    toggleTheme: () => { },
 });
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
@@ -27,16 +26,14 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
-    // Effect to update the document element's data-theme attribute whenever the theme state changes
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme); // Keep localStorage in sync with current theme state
+        localStorage.setItem('theme', theme);
     }, [theme]);
 
     const toggleTheme = (newTheme?: Theme) => {
         const nextTheme = newTheme || (theme === 'light' ? 'dark' : theme === 'dark' ? 'colorful' : 'light');
         setTheme(nextTheme);
-        // The localStorage.setItem and document.documentElement.setAttribute are now handled by the useEffect above
     };
 
     return (
@@ -45,4 +42,3 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         </ThemeContext.Provider>
     );
 };
-```

@@ -11,7 +11,11 @@ interface PowerUp {
     duration: string;
     icon: string;
     type: 'active' | 'passive';
+    duration?: string; // Made optional as theme power-ups don't have it
+    icon?: string; // Made optional as theme power-ups don't have it
+    type: 'active' | 'passive' | 'theme'; // Added 'theme'
     owned: number;
+    category?: string; // Added category for theme power-ups
 }
 
 const StudentPowerUps = () => {
