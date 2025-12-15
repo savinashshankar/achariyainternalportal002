@@ -48,22 +48,22 @@
   --shadow: rgba(0, 0, 0, 0.3);
 }
 
-/* Colorful theme - VIBRANT yet EYE-FRIENDLY */
+/* Colorful theme - BOLD, VIBRANT, ENERGETIC */
 [data-theme="colorful"] {
-  /* Soft pastel backgrounds - warm and inviting */
-  --bg-primary: #fef7ff;      /* Very light lavender */
-  --bg-secondary: #f0f9ff;    /* Soft sky blue */
-  --bg-tertiary: #fffbeb;     /* Soft warm yellow */
-
-  /* Rich but not harsh text colors */
-  --text-primary: #3730a3;    /* Deep indigo */
-  --text-secondary: #0369a1;  /* Rich cyan */
-  --text-tertiary: #92400e;   /* Warm brown */
-
-  /* Colorful accents */
-  --border-color: #e0d4f7;    /* Soft purple */
-  --border-hover: #c7d2fe;    /* Light indigo */
-  --shadow: rgba(99, 102, 241, 0.15);
+  /* Bright, saturated backgrounds - CLEARLY DIFFERENT */
+  --bg-primary: #ffe4f9;      /* Bright pink tint */
+  --bg-secondary: #ccf2ff;    /* Vibrant sky blue */
+  --bg-tertiary: #fff0db;     /* Bright peach */
+  
+  /* High contrast, vivid text */
+  --text-primary: #9333ea;    /* Vibrant purple */
+  --text-secondary: #ec4899;  /* Bright pink */
+  --text-tertiary: #f97316;   /* Bold orange */
+  
+  /* Eye-catching borders and accents */
+  --border-color: #f0abfc;    /* Bright fuchsia */
+  --border-hover: #818cf8;    /* Vibrant indigo */
+  --shadow: rgba(236, 72, 153, 0.3);
 }
 
 /* Apply theme variables to common elements */
