@@ -6,8 +6,6 @@ import StudentChatbot from '../../components/StudentChatbot';
 import CreditPopup from '../../components/CreditPopup';
 import StreakWidget from '../../components/StreakWidget';
 import SuggestedActions from '../../components/SuggestedActions';
-import { listenForActiveQuiz } from '../../services/liveQuizService';
-import type { LiveQuizSession } from '../../services/liveQuizService';
 
 const StudentDashboard = () => {
     const navigate = useNavigate();
