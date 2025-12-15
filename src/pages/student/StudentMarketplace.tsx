@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { X, Check } from 'lucide-react';
 import BackButton from '../../components/BackButton';
+import { ThemeContext } from '../../contexts/ThemeContext';
 
 interface MarketplaceItem {
     id: string;
@@ -12,6 +13,7 @@ interface MarketplaceItem {
 }
 
 const StudentMarketplace = () => {
+    const { toggleTheme } = useContext(ThemeContext);
     const student = JSON.parse(localStorage.getItem('studentData') || '{}')[1] || { credits: 45 };
 
     const [showSuccess, setShowSuccess] = useState(false);
@@ -29,8 +31,7 @@ const StudentMarketplace = () => {
     const handlePurchase = (item: MarketplaceItem) => {
         // Handle free light theme
         if (item.id === 'theme_light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            localStorage.setItem('theme', 'light');
+            toggleTheme('light');
             setPurchasedItem(item.name);
             setShowSuccess(true);
             setTimeout(() => setShowSuccess(false), 3000);
@@ -54,11 +55,9 @@ const StudentMarketplace = () => {
             // Instantly apply theme if it's a theme type
             if (item.type === 'theme') {
                 if (item.id === 'theme_dark') {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('theme', 'dark');
+                    toggleTheme('dark');
                 } else if (item.id === 'theme_colorful') {
-                    document.documentElement.setAttribute('data-theme', 'colorful');
-                    localStorage.setItem('theme', 'colorful');
+                    toggleTheme('colorful');
                 }
             }
 
