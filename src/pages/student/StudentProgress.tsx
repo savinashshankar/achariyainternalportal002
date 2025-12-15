@@ -13,8 +13,6 @@ const StudentProgress = () => {
         { day: 'Sun', completion: 82, quizzes: 3, timeSpent: 110 }
     ];
 
-    const maxCompletion = Math.max(...weeklyActivity.map(d => d.completion));
-
     return (
         <div className="min-h-screen bg-gray-50 p-6">
             <BackButton />
