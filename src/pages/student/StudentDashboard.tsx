@@ -73,33 +73,9 @@ const StudentDashboard = () => {
             {/* Suggested Actions */}
             <SuggestedActions />
 
-            {/* ONGOING QUIZ JOIN BANNER - Shows for late arrivals */}
-            {activeQuiz && (
-                <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl shadow-xl p-6 mb-6 text-white animate-pulse">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                                <div className="w-4 h-4 bg-white rounded-full animate-ping"></div>
-                            </div>
-                            <div>
-                                <h3 className="text-2xl font-bold mb-1">⏰ Quiz in Progress!</h3>
-                                <p className="text-lg opacity-90">{activeQuiz.quizTitle} - {activeQuiz.className}</p>
-                                <p className="text-sm opacity-75 mt-1">
-                                    Started {Math.floor((Date.now() - activeQuiz.startTime.toDate().getTime()) / 1000)}s ago
-                                    {' • '}
-                                    Time remaining: {Math.floor((activeQuiz.endTime.toDate().getTime() - Date.now()) / 60000)}:{String(Math.floor(((activeQuiz.endTime.toDate().getTime() - Date.now()) % 60000) / 1000)).padStart(2, '0')}
-                                </p>
-                            </div>
-                        </div>
-                        <button
-                            onClick={() => navigate(`/student/live-quiz/${activeQuiz.id}/take`)}
-                            className="bg-white text-orange-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition transform hover:scale-105 flex items-center gap-3">
-                            <Play className="w-6 h-6" />
-                            Join Now
-                        </button>
-                    </div>
-                </div>
-            )}
+
+            {/* NOTE: Live quiz banner is now displayed by GlobalQuizListener */}
+
 
             {/* Summary Cards - ALL CLICKABLE */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
