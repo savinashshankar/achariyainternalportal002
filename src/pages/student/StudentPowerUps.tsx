@@ -16,7 +16,6 @@ interface PowerUp {
 }
 
 const StudentPowerUps = () => {
-    const { theme } = useContext(ThemeContext);
     const [credits, setCredits] = useState(245);
     const [powerups, setPowerups] = useState<PowerUp[]>([
         { id: 'double', name: '2x Credit Booster', description: 'Earn double credits for 24 hours', cost: 50, duration: '24 hours', icon: '⚡', type: 'active', owned: 2 },
