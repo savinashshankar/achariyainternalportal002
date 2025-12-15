@@ -222,15 +222,16 @@ const LiveQuizResults = () => {
                     </div>
                 )}
 
-                {/* Back to Quizzes Button */}
+                {/* Back to Dashboard Button */}
                 <div className="mt-8 flex justify-center">
                     <button
-                        onClick={() => navigate('/teacher/quizzes')}
+                        onClick={() => navigate('/teacher/dashboard')}
                         className="flex items-center gap-2 px-6 py-3 bg-gray-600 text-white rounded-xl hover:bg-gray-700 transition font-semibold">
                         <ArrowLeft className="w-5 h-5" />
-                        Back to Quizzes
+                        Back to Dashboard
                     </button>
                 </div>
+
             </div>
         </div>
     );
