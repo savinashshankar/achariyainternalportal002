@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import BackButton from '../../components/BackButton';
 import { TrendingUp, BarChart3 } from 'lucide-react';
 
