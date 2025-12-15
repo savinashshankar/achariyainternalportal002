@@ -1,5 +1,6 @@
 import { Zap, Shield } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { ThemeContext } from '../../contexts/ThemeContext';
 import BackButton from '../../components/BackButton';
 
 interface PowerUp {
@@ -14,6 +15,7 @@ interface PowerUp {
 }
 
 const StudentPowerUps = () => {
+    const { theme, toggleTheme } = useContext(ThemeContext);
     const [credits, setCredits] = useState(245);
     const [powerups, setPowerups] = useState<PowerUp[]>([
         { id: 'double', name: '2x Credit Booster', description: 'Earn double credits for 24 hours', cost: 50, duration: '24 hours', icon: '⚡', type: 'active', owned: 2 },
@@ -133,6 +135,25 @@ const StudentPowerUps = () => {
                         </div>
                     );
                 })}
+            </div>
+
+            {/* THEME CUSTOMIZATION */}
+            <div className="bg-gradient-to-br from-purple-600 to-pink-600 text-white rounded-xl shadow-xl p-6 mb-8">
+                <h2 className="text-2xl font-bold mb-4">🎨 Theme Customization</h2>
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="text-xl font-bold mb-2">🌙 Dark Theme</h3>
+                            <p className="text-white/80">Transform your entire portal with dark mode</p>
+                            <p className="text-sm text-white/60 mt-1">Current: {theme === 'dark' ? 'Dark Mode Active ✓' : 'Light Mode'}</p>
+                        </div>
+                        <button
+                            onClick={toggleTheme}
+                            className="bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition transform hover:scale-105">
+                            {theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode'}
+                        </button>
+                    </div>
+                </div>
             </div>
 
             {/* How Power-Ups Work */}
