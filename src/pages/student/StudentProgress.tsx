@@ -34,40 +34,87 @@ const StudentProgress = () => {
                     </div>
                 </div>
 
-                {/* Bar Chart */}
-                <div className="flex items-end justify-between gap-3 h-24 mb-4 mt-4">
-                    {weeklyActivity.map((item, idx) => (
-                        <div key={idx} className="flex-1 flex flex-col items-center gap-3">
-                            <div className="w-full relative group">
-                                {/* Hover tooltip */}
-                                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
-                                    <div>{item.completion}% completion</div>
-                                    <div>{item.quizzes} quizzes</div>
-                                    <div>{item.timeSpent} min</div>
-                                </div>
+                {/* Line Graph */}
+                <div className="relative h-48 mb-4 mt-6">
+                    {/* Y-axis labels */}
+                    <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-xs text-gray-500 w-8">
+                        <span>100%</span>
+                        <span>75%</span>
+                        <span>50%</span>
+                        <span>25%</span>
+                        <span>0%</span>
+                    </div>
 
-                                {/* Bar container */}
-                                <div className="w-full h-24 bg-gray-100 rounded-t-xl overflow-hidden flex flex-col justify-end">
-                                    <div
-                                        className="w-full bg-gradient-to-t from-blue-600 to-blue-400 transition-all duration-700 ease-out hover:from-blue-700 hover:to-blue-500 cursor-pointer"
-                                        style={{
-                                            height: `${(item.completion / maxCompletion) * 100}%`,
-                                        }}
-                                    >
-                                        {/* Display percentage on bar if there's space */}
-                                        {item.completion > 30 && (
-                                            <div className="text-white text-sm font-bold text-center pt-2">
-                                                {item.completion}%
-                                            </div>
-                                        )}
+                    {/* Graph area */}
+                    <div className="ml-10 h-full relative bg-gray-50 rounded-xl p-4">
+                        <svg className="w-full h-full" viewBox="0 0 700 180" preserveAspectRatio="none">
+                            {/* Grid lines */}
+                            <line x1="0" y1="45" x2="700" y2="45" stroke="#e5e7eb" strokeWidth="1" />
+                            <line x1="0" y1="90" x2="700" y2="90" stroke="#e5e7eb" strokeWidth="1" />
+                            <line x1="0" y1="135" x2="700" y2="135" stroke="#e5e7eb" strokeWidth="1" />
+
+                            {/* Line path */}
+                            <path
+                                d={`M 50,${180 - (weeklyActivity[0].completion * 1.8)} 
+                                    L 150,${180 - (weeklyActivity[1].completion * 1.8)} 
+                                    L 250,${180 - (weeklyActivity[2].completion * 1.8)} 
+                                    L 350,${180 - (weeklyActivity[3].completion * 1.8)} 
+                                    L 450,${180 - (weeklyActivity[4].completion * 1.8)} 
+                                    L 550,${180 - (weeklyActivity[5].completion * 1.8)} 
+                                    L 650,${180 - (weeklyActivity[6].completion * 1.8)}`}
+                                fill="none"
+                                stroke="url(#lineGradient)"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+
+                            {/* Gradient definition */}
+                            <defs>
+                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#3b82f6" />
+                                    <stop offset="100%" stopColor="#8b5cf6" />
+                                </linearGradient>
+                            </defs>
+
+                            {/* Data points with tooltips */}
+                            {weeklyActivity.map((item, idx) => (
+                                <g key={idx}>
+                                    <circle
+                                        cx={50 + idx * 100}
+                                        cy={180 - (item.completion * 1.8)}
+                                        r="6"
+                                        fill="#3b82f6"
+                                        stroke="#ffffff"
+                                        strokeWidth="2"
+                                        className="cursor-pointer hover:r-8 transition-all"
+                                    />
+                                </g>
+                            ))}
+                        </svg>
+
+                        {/* Tooltip overlay */}
+                        <div className="absolute inset-0 flex items-end">
+                            {weeklyActivity.map((item, idx) => (
+                                <div key={idx} className="flex-1 flex items-center justify-center relative group">
+                                    <div className="absolute bottom-0 transform translate-y-full mt-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-20">
+                                        <div className="font-semibold">{item.day}</div>
+                                        <div>{item.completion}% completion</div>
+                                        <div>{item.quizzes} quizzes</div>
+                                        <div>{item.timeSpent} min</div>
                                     </div>
+                                    <div className="w-full h-full cursor-pointer"></div>
                                 </div>
-                            </div>
-
-                            {/* Day label */}
-                            <span className="text-sm font-semibold text-gray-700">{item.day}</span>
+                            ))}
                         </div>
-                    ))}
+                    </div>
+
+                    {/* X-axis labels */}
+                    <div className="ml-10 flex justify-between mt-2 text-xs text-gray-600">
+                        {weeklyActivity.map((item, idx) => (
+                            <span key={idx} className="flex-1 text-center">{item.day}</span>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Legend */}

@@ -87,6 +87,38 @@ body {
   background-color: var(--bg-primary) !important;
 }
 
+/* CRITICAL: Fix ALL buttons visibility */
+[data-theme="dark"] button,
+[data-theme="dark"] .btn,
+[data-theme="dark"] [role="button"] {
+  border-color: var(--border-hover) !important;
+}
+
+[data-theme="dark"] button:not(.bg-blue-600):not(.bg-green-600):not(.bg-red-600):not(.bg-purple-600):not(.bg-yellow-500):not(.bg-orange-500),
+[data-theme="dark"] .text-white {
+  background-color: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Ensure colored buttons stay visible but with better contrast */
+[data-theme="dark"] .bg-blue-600,
+[data-theme="dark"] .bg-blue-500 {
+  background-color: #3b82f6 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .bg-green-600,
+[data-theme="dark"] .bg-green-500 {
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .bg-purple-600,
+[data-theme="dark"] .bg-purple-500 {
+  background-color: #9333ea !important;
+  color: #ffffff !important;
+}
+
 /* CRITICAL: Fix text contrast - ALL dark/black text must be light */
 [data-theme="dark"] .text-black,
 [data-theme="dark"] .text-gray-900,
@@ -110,7 +142,10 @@ body {
 [data-theme="dark"] main h4,
 [data-theme="dark"] main p,
 [data-theme="dark"] main span,
-[data-theme="dark"] main div {
+[data-theme="dark"] main div,
+[data-theme="dark"] label,
+[data-theme="dark"] strong,
+[data-theme="dark"] b {
   color: var(--text-primary) !important;
 }
 
@@ -135,7 +170,8 @@ body {
 }
 
 [data-theme="dark"] .text-gray-500,
-[data-theme="dark"].text-gray-500 {
+[data-theme="dark"].text-gray-500,
+[data-theme="dark"] .text-sm {
   color: var(--text-tertiary) !important;
 }
 
