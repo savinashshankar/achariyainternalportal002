@@ -62,7 +62,15 @@ const StudentDashboard = () => {
             if (quiz && quiz.id && quiz.status === 'active') {
                 const now = Date.now();
                 const quizStartTime = quiz.startTime.toDate().getTime();
+                const quizEndTime = quiz.endTime.toDate().getTime();
                 const timeSinceStart = now - quizStartTime;
+
+                // CRITICAL FIX: Check if quiz has already ended
+                if (now > quizEndTime) {
+                    console.log('❌ Quiz EXPIRED - Ignoring stale Firebase data');
+                    setActiveQuiz(null);
+                    return;
+                }
 
                 console.log('🔴 QUIZ DETECTED:', {
                     id: quiz.id,
