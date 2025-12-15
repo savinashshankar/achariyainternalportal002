@@ -20,14 +20,21 @@ const GlobalQuizListener = () => {
     const [activeQuiz, setActiveQuiz] = useState<ActiveQuiz | null>(null);
     const lastKnownQuizId = useRef<string | null>(null);
 
-    // Only run for students
-    const isStudent = user.selectedRole === 'Student' || user.role === 'Student';
+    // Check if user is a student - check multiple possible locations
+    const role = user.selectedRole || user.role || '';
+    const isStudent = role.toLowerCase() === 'student' || location.pathname.startsWith('/student');
     const studentClass = student.class || '8-A';
 
-    console.log('👁️ GlobalQuizListener mounted:', { isStudent, studentClass, pathname: location.pathname });
+    console.log('👁️ GlobalQuizListener:', {
+        user,
+        role,
+        isStudent,
+        studentClass,
+        pathname: location.pathname
+    });
 
     useEffect(() => {
-        console.log('🔄 GlobalQuizListener useEffect running:', { isStudent, studentClass });
+        console.log('🔄 useEffect:', { isStudent, studentClass });
 
         if (!isStudent) {
             console.log('❌ Not a student - skipping');
@@ -36,15 +43,15 @@ const GlobalQuizListener = () => {
 
         // Skip if already on quiz page
         if (location.pathname.includes('/live-quiz/')) {
-            console.log('📍 Already on quiz page - skipping');
+            console.log('📍 Already on quiz page');
             setShowBanner(false);
             return;
         }
 
-        console.log('📡 Setting up Firebase listener for class:', studentClass);
+        console.log('📡 Listening for quizzes in class:', studentClass);
 
         const unsubscribe = listenForActiveQuiz(studentClass, (quiz) => {
-            console.log('🔔 Firebase callback received:', quiz);
+            console.log('🔔 Firebase callback:', quiz);
 
             if (quiz && quiz.id && quiz.status === 'active') {
                 const now = Date.now();
@@ -53,39 +60,33 @@ const GlobalQuizListener = () => {
                 const timeSinceStart = now - quizStartTime;
                 const remainingMs = quizEndTime - now;
 
-                // Quiz expired - ignore
                 if (now > quizEndTime) {
                     console.log('⏰ Quiz expired');
-                    lastKnownQuizId.current = quiz.id || null;
                     setShowBanner(false);
                     setActiveQuiz(null);
                     return;
                 }
 
-                // Check if this is a NEW quiz (not same as last known)
                 const isNewQuiz = lastKnownQuizId.current !== quiz.id;
 
-                console.log('📡 QUIZ ACTIVE:', {
+                console.log('📡 ACTIVE QUIZ:', {
                     id: quiz.id,
-                    classId: quiz.classId,
                     timeSinceStart: Math.floor(timeSinceStart / 1000) + 's',
-                    remainingTime: Math.floor(remainingMs / 1000) + 's',
+                    remaining: Math.floor(remainingMs / 1000) + 's',
                     isNewQuiz,
-                    hasRedirected,
-                    lastKnownQuizId: lastKnownQuizId.current
+                    hasRedirected
                 });
 
-                // CASE 1: New quiz started recently (< 10 seconds) - AUTO REDIRECT
+                // AUTO REDIRECT if quiz just started (< 10 seconds)
                 if (isNewQuiz && timeSinceStart < 10000 && hasRedirected !== quiz.id) {
-                    console.log('🚀 AUTO REDIRECT - Quiz just started!');
+                    console.log('🚀 AUTO REDIRECT!');
                     setHasRedirected(quiz.id || null);
                     lastKnownQuizId.current = quiz.id || null;
-                    setShowBanner(false);
                     navigate(`/student/live-quiz/${quiz.id}/take`);
                 }
-                // CASE 2: Ongoing quiz - SHOW BANNER
+                // SHOW BANNER for ongoing quiz
                 else if (hasRedirected !== quiz.id) {
-                    console.log('📢 SHOWING JOIN BANNER');
+                    console.log('📢 SHOW BANNER');
                     lastKnownQuizId.current = quiz.id || null;
                     setActiveQuiz({
                         id: quiz.id || '',
@@ -96,21 +97,17 @@ const GlobalQuizListener = () => {
                     setShowBanner(true);
                 }
             } else {
-                console.log('❌ No active quiz found');
+                console.log('❌ No active quiz');
                 setShowBanner(false);
                 setActiveQuiz(null);
             }
         });
 
-        return () => {
-            console.log('🧹 Cleaning up Firebase listener');
-            unsubscribe();
-        };
+        return () => unsubscribe();
     }, [isStudent, studentClass, hasRedirected, location.pathname, navigate]);
 
     const handleJoinQuiz = () => {
         if (activeQuiz) {
-            console.log('👆 JOIN clicked - navigating to quiz');
             setHasRedirected(activeQuiz.id);
             setShowBanner(false);
             navigate(`/student/live-quiz/${activeQuiz.id}/take`);
@@ -123,14 +120,10 @@ const GlobalQuizListener = () => {
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     };
 
-    // Update remaining time every second
     useEffect(() => {
         if (!activeQuiz) return;
-
         const interval = setInterval(() => {
-            const now = Date.now();
-            const remaining = Math.floor((activeQuiz.endTime.getTime() - now) / 1000);
-
+            const remaining = Math.floor((activeQuiz.endTime.getTime() - Date.now()) / 1000);
             if (remaining <= 0) {
                 setShowBanner(false);
                 setActiveQuiz(null);
@@ -138,11 +131,8 @@ const GlobalQuizListener = () => {
                 setActiveQuiz(prev => prev ? { ...prev, remainingSeconds: remaining } : null);
             }
         }, 1000);
-
         return () => clearInterval(interval);
     }, [activeQuiz?.id]);
-
-    console.log('🎨 Render state:', { showBanner, activeQuiz: !!activeQuiz });
 
     if (!showBanner || !activeQuiz) return null;
 
