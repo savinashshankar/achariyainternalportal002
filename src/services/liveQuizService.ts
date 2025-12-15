@@ -260,14 +260,25 @@ export function listenForStudentCount(
 }
 
 /**
- * Teacher: End quiz session
+ * Teacher: End quiz session - marks as completed and updates endTime
  */
 export async function endQuizSession(sessionId: string): Promise<void> {
+    console.log('🛑 Ending quiz session:', sessionId);
+    
+    if (!sessionId) {
+        console.error('❌ No sessionId provided');
+        throw new Error('No session ID provided');
+    }
+    
     try {
-        await updateDoc(doc(db, 'liveQuizSessions', sessionId), {
-            status: 'completed'
+        const sessionRef = doc(db, 'liveQuizSessions', sessionId);
+        await updateDoc(sessionRef, {
+            status: 'completed',
+            endTime: Timestamp.now() // Update endTime to now
         });
+        console.log('✅ Quiz session ended successfully');
     } catch (error) {
-        console.error('Error ending quiz session:', error);
+        console.error('❌ Error ending quiz session:', error);
+        throw error; // Re-throw so caller knows it failed
     }
 }
