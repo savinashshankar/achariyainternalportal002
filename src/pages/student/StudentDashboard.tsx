@@ -53,57 +53,8 @@ const StudentDashboard = () => {
         }
     }, []);
 
-    // Live Quiz real-time listener - SMART AUTO-START
-    const [activeQuiz, setActiveQuiz] = useState<LiveQuizSession | null>(null);
-    const [hasSeenQuiz, setHasSeenQuiz] = useState<string | null>(null);
-
-    useEffect(() => {
-        const unsubscribe = listenForActiveQuiz(student.class || '8-A', (quiz) => {
-            if (quiz && quiz.id && quiz.status === 'active') {
-                const now = Date.now();
-                const quizStartTime = quiz.startTime.toDate().getTime();
-                const quizEndTime = quiz.endTime.toDate().getTime();
-                const timeSinceStart = now - quizStartTime;
-
-                // CRITICAL FIX: Check if quiz has already ended
-                if (now > quizEndTime) {
-                    console.log('❌ Quiz EXPIRED - Ignoring stale Firebase data');
-                    setActiveQuiz(null);
-                    return;
-                }
-
-                console.log('🔴 QUIZ DETECTED:', {
-                    id: quiz.id,
-                    timeSinceStart: Math.floor(timeSinceStart / 1000) + 's',
-                    hasSeenQuiz,
-                    status: quiz.status
-                });
-
-                // Only auto-navigate if:
-                // 1. Quiz just started (< 30 seconds ago)
-                // 2. We haven't seen this quiz before (not a refresh)
-                if (timeSinceStart < 30000 && hasSeenQuiz !== quiz.id) {
-                    console.log('✅ NEWLY STARTED - Auto-navigating!');
-                    setHasSeenQuiz(quiz.id);
-                    setTimeout(() => {
-                        navigate(`/student/live-quiz/${quiz.id}/take`);
-                    }, 100);
-                } else if (timeSinceStart >= 30000) {
-                    // Quiz already running - show join banner
-                    console.log('⏰ ONGOING QUIZ - Showing join banner');
-                    setActiveQuiz(quiz);
-                } else {
-                    // Already seen this quiz (page refresh during quiz)
-                    console.log('🔁 Quiz already seen - no action');
-                }
-            } else {
-                // No active quiz
-                setActiveQuiz(null);
-            }
-        });
-
-        return () => unsubscribe();
-    }, [student.class, navigate, hasSeenQuiz]);
+    // NOTE: Live quiz detection is now handled by GlobalQuizListener component
+    // which provides consistent behavior across all student pages
 
     // Load student data from localStorage
     const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
