@@ -46,7 +46,7 @@ const GlobalQuizListener = () => {
                 // INSTANT REDIRECT: Quiz just started (< 30 seconds) and not yet redirected
                 if (timeSinceStart < 30000 && hasRedirected !== quiz.id) {
                     console.log('🚀 INSTANT REDIRECT TO QUIZ!');
-                    setHasRedirected(quiz.id);
+                    setHasRedirected(quiz.id || null);
                     navigate(`/student/live-quiz/${quiz.id}/take`);
                 } else if (timeSinceStart >= 30000 && hasRedirected !== quiz.id) {
                     // Late joiner - show banner
@@ -65,7 +65,7 @@ const GlobalQuizListener = () => {
 
     const handleJoinQuiz = () => {
         if (activeQuiz) {
-            setHasRedirected(activeQuiz.id);
+            setHasRedirected(activeQuiz.id || null);
             setShowBanner(false);
             navigate(`/student/live-quiz/${activeQuiz.id}/take`);
         }
@@ -74,7 +74,7 @@ const GlobalQuizListener = () => {
     const handleDismiss = () => {
         setShowBanner(false);
         if (activeQuiz) {
-            setHasRedirected(activeQuiz.id); // Don't show again
+            setHasRedirected(activeQuiz.id || null);
         }
     };
 
@@ -86,7 +86,7 @@ const GlobalQuizListener = () => {
                 <div className="text-3xl">🔴</div>
                 <div>
                     <p className="font-bold text-lg">LIVE QUIZ IN PROGRESS!</p>
-                    <p className="text-sm opacity-90">{activeQuiz.title} - Class {activeQuiz.classId}</p>
+                    <p className="text-sm opacity-90">Class {activeQuiz.classId}</p>
                 </div>
                 <button
                     onClick={handleJoinQuiz}
