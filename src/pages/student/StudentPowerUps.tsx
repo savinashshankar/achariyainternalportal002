@@ -22,8 +22,6 @@ const StudentPowerUps = () => {
         { id: 'timer', name: 'Quiz Time Extension', description: '+30 seconds on next quiz', cost: 40, duration: '1 quiz', icon: '⏱️', type: 'active', owned: 0 },
         { id: 'hints', name: 'Smart Hints', description: 'Get 2 hints during quiz', cost: 35, duration: '1 quiz', icon: '💡', type: 'active', owned: 0 },
         { id: 'xp', name: 'XP Multiplier', description: '1.5x experience points', cost: 60, duration: '48 hours', icon: '🚀', type: 'active', owned: 0 },
-        { id: 'darkTheme', name: '🌙 Dark Theme', description: 'Eye-friendly dark mode', cost: 60, type: 'theme', owned: 0, category: 'theme' },
-        { id: 'colorfulTheme', name: '🎨 Colorful Theme', description: 'Vibrant, colorful interface', cost: 30, type: 'theme', owned: 0, category: 'theme' },
         { id: 'retry', name: 'Free Retake', description: 'One free quiz retake', cost: 45, duration: '1 quiz', icon: '🔄', type: 'passive', owned: 0 }
     ]);
 
@@ -149,7 +147,7 @@ const StudentPowerUps = () => {
                 })}
             </div>
 
-{/* How Power-Ups Work */}
+            {/* How Power-Ups Work */}
             <div className="bg-gradient-to-br from-purple-600 to-blue-600 text-white rounded-xl p-6">
                 <h2 className="text-2xl font-bold mb-4">⚡ Power-Up Guide</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

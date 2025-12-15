@@ -18,15 +18,25 @@ const StudentMarketplace = () => {
     const [purchasedItem, setPurchasedItem] = useState('');
 
     const items: MarketplaceItem[] = [
-        { id: 'avatar1', name: 'Custom Avatar', description: 'Choose your own profile picture', cost: 50, type: 'avatar', icon: '🎨' },
-        { id: 'theme_dark', name: 'Dark Mode Theme', description: 'Sleek dark interface', cost: 30, type: 'theme', icon: '🌙' },
-        { id: 'theme_colorful', name: 'Colorful Theme', description: 'Vibrant learning experience', cost: 30, type: 'theme', icon: '🌈' },
+        { id: 'theme_light', name: 'Light Theme (Default)', description: 'Clean, bright interface', cost: 0, type: 'theme', icon: '☀️' },
+        { id: 'theme_dark', name: 'Dark Theme', description: 'Eye-friendly dark mode', cost: 60, type: 'theme', icon: '🌙' },
+        { id: 'theme_colorful', name: 'Colorful Theme', description: 'Vibrant, energetic colors', cost: 30, type: 'theme', icon: '🎨' },
+        { id: 'avatar1', name: 'Custom Avatar', description: 'Choose your own profile picture', cost: 50, type: 'avatar', icon: '🖼️' },
         { id: 'music', name: 'Study Music Access', description: 'Lo-fi beats while you learn', cost: 30, type: 'music', icon: '🎵' },
-        { id: 'cert_premium', name: 'Premium Certificate', description: 'Enhanced certificate design', cost: 100, type: 'certificate', icon: '📜' },
-        { id: 'theme_minimal', name: 'Minimalist Theme', description: 'Clean, distraction-free', cost: 30, type: 'theme', icon: '⚪' }
+        { id: 'cert_premium', name: 'Premium Certificate', description: 'Enhanced certificate design', cost: 100, type: 'certificate', icon: '📜' }
     ];
 
     const handlePurchase = (item: MarketplaceItem) => {
+        // Handle free light theme
+        if (item.id === 'theme_light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            setPurchasedItem(item.name);
+            setShowSuccess(true);
+            setTimeout(() => setShowSuccess(false), 3000);
+            return;
+        }
+
         if (student.credits >= item.cost) {
             // Deduct credits
             const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
@@ -40,6 +50,17 @@ const StudentMarketplace = () => {
             const purchases = JSON.parse(localStorage.getItem('marketplace_purchases') || '[]');
             purchases.push({ itemId: item.id, purchasedAt: new Date().toISOString() });
             localStorage.setItem('marketplace_purchases', JSON.stringify(purchases));
+
+            // Instantly apply theme if it's a theme type
+            if (item.type === 'theme') {
+                if (item.id === 'theme_dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                } else if (item.id === 'theme_colorful') {
+                    document.documentElement.setAttribute('data-theme', 'colorful');
+                    localStorage.setItem('theme', 'colorful');
+                }
+            }
 
             setPurchasedItem(item.name);
             setShowSuccess(true);
