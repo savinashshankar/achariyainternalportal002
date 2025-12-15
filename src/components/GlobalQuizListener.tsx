@@ -12,7 +12,6 @@ interface ActiveQuiz {
 const GlobalQuizListener = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
     const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
     const student = studentData[1] || {};
 
@@ -21,7 +20,7 @@ const GlobalQuizListener = () => {
     const [activeQuiz, setActiveQuiz] = useState<ActiveQuiz | null>(null);
     const lastKnownQuizId = useRef<string | null>(null);
 
-    // Check if user is a student - check pathname
+    // Check if user is on a student page
     const isStudent = location.pathname.startsWith('/student');
     // Try multiple class formats
     const studentClass = student.class || student.classId || '8-A';
@@ -83,7 +82,7 @@ const GlobalQuizListener = () => {
                 }
                 // SHOW BANNER for ongoing quiz
                 else if (hasRedirected !== quiz.id) {
-                    console.log('📢 SHOW BANNER - Setting showBanner: true');
+                    console.log('📢 SHOW BANNER');
                     lastKnownQuizId.current = quiz.id || null;
                     setActiveQuiz({
                         id: quiz.id || '',
@@ -94,7 +93,7 @@ const GlobalQuizListener = () => {
                     setShowBanner(true);
                 }
             } else {
-                console.log('❌ No active quiz found');
+                console.log('❌ No active quiz');
                 setShowBanner(false);
                 setActiveQuiz(null);
             }
