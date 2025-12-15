@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { BookOpen, Award, TrendingUp, Wallet } from 'lucide-react';
+import { BookOpen, Award, TrendingUp, Wallet, Play } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
 import { useState, useEffect } from 'react';
 import StudentChatbot from '../../components/StudentChatbot';
@@ -7,6 +7,7 @@ import CreditPopup from '../../components/CreditPopup';
 import StreakWidget from '../../components/StreakWidget';
 import SuggestedActions from '../../components/SuggestedActions';
 import { listenForActiveQuiz } from '../../services/liveQuizService';
+import type { LiveQuizSession } from '../../services/liveQuizService';
 
 const StudentDashboard = () => {
     const navigate = useNavigate();
@@ -52,22 +53,49 @@ const StudentDashboard = () => {
         }
     }, []);
 
-    // Live Quiz real-time listener - AUTO-START (no banner, instant navigation)
+    // Live Quiz real-time listener - SMART AUTO-START
+    const [activeQuiz, setActiveQuiz] = useState<LiveQuizSession | null>(null);
+    const [hasSeenQuiz, setHasSeenQuiz] = useState<string | null>(null);
+
     useEffect(() => {
-        // AUTO-START: Listen for active quizzes and auto-navigate
         const unsubscribe = listenForActiveQuiz(student.class || '8-A', (quiz) => {
-            // SAFETY: Only navigate if quiz exists, has valid ID, and is active
             if (quiz && quiz.id && quiz.status === 'active') {
-                console.log('🔴 LIVE QUIZ DETECTED! Auto-starting...', quiz);
-                // Small delay to ensure page is ready
-                setTimeout(() => {
-                    navigate(`/student/live-quiz/${quiz.id}/take`);
-                }, 100);
+                const now = Date.now();
+                const quizStartTime = quiz.startTime.toDate().getTime();
+                const timeSinceStart = now - quizStartTime;
+
+                console.log('🔴 QUIZ DETECTED:', {
+                    id: quiz.id,
+                    timeSinceStart: Math.floor(timeSinceStart / 1000) + 's',
+                    hasSeenQuiz,
+                    status: quiz.status
+                });
+
+                // Only auto-navigate if:
+                // 1. Quiz just started (< 5 seconds ago)
+                // 2. We haven't seen this quiz before (not a refresh)
+                if (timeSinceStart < 5000 && hasSeenQuiz !== quiz.id) {
+                    console.log('✅ NEWLY STARTED - Auto-navigating!');
+                    setHasSeenQuiz(quiz.id);
+                    setTimeout(() => {
+                        navigate(`/student/live-quiz/${quiz.id}/take`);
+                    }, 100);
+                } else if (timeSinceStart >= 5000) {
+                    // Quiz already running - show join banner
+                    console.log('⏰ ONGOING QUIZ - Showing join banner');
+                    setActiveQuiz(quiz);
+                } else {
+                    // Already seen this quiz (page refresh during quiz)
+                    console.log('🔁 Quiz already seen - no action');
+                }
+            } else {
+                // No active quiz
+                setActiveQuiz(null);
             }
         });
 
         return () => unsubscribe();
-    }, [student.class, navigate]);
+    }, [student.class, navigate, hasSeenQuiz]);
 
     // Load student data from localStorage
     const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
@@ -87,6 +115,34 @@ const StudentDashboard = () => {
 
             {/* Suggested Actions */}
             <SuggestedActions />
+
+            {/* ONGOING QUIZ JOIN BANNER - Shows for late arrivals */}
+            {activeQuiz && (
+                <div className="bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl shadow-xl p-6 mb-6 text-white animate-pulse">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                                <div className="w-4 h-4 bg-white rounded-full animate-ping"></div>
+                            </div>
+                            <div>
+                                <h3 className="text-2xl font-bold mb-1">⏰ Quiz in Progress!</h3>
+                                <p className="text-lg opacity-90">{activeQuiz.quizTitle} - {activeQuiz.className}</p>
+                                <p className="text-sm opacity-75 mt-1">
+                                    Started {Math.floor((Date.now() - activeQuiz.startTime.toDate().getTime()) / 1000)}s ago
+                                    {' • '}
+                                    Time remaining: {Math.floor((activeQuiz.endTime.toDate().getTime() - Date.now()) / 60000)}:{String(Math.floor(((activeQuiz.endTime.toDate().getTime() - Date.now()) % 60000) / 1000)).padStart(2, '0')}
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            onClick={() => navigate(`/student/live-quiz/${activeQuiz.id}/take`)}
+                            className="bg-white text-orange-600 px-8 py-4 rounded-xl font-bold text-lg hover:shadow-2xl transition transform hover:scale-105 flex items-center gap-3">
+                            <Play className="w-6 h-6" />
+                            Join Now
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Summary Cards - ALL CLICKABLE */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
