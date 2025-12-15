@@ -264,12 +264,12 @@ export function listenForStudentCount(
  */
 export async function endQuizSession(sessionId: string): Promise<void> {
     console.log('🛑 Ending quiz session:', sessionId);
-    
+
     if (!sessionId) {
         console.error('❌ No sessionId provided');
         throw new Error('No session ID provided');
     }
-    
+
     try {
         const sessionRef = doc(db, 'liveQuizSessions', sessionId);
         await updateDoc(sessionRef, {
@@ -280,5 +280,53 @@ export async function endQuizSession(sessionId: string): Promise<void> {
     } catch (error) {
         console.error('❌ Error ending quiz session:', error);
         throw error; // Re-throw so caller knows it failed
+    }
+}
+
+/**
+ * Get quiz leaderboard - all attempts for a session, sorted by score
+ */
+export async function getQuizLeaderboard(sessionId: string): Promise<Array<{
+    studentEmail: string;
+    score: number;
+    totalQuestions: number;
+    submittedAt: Date;
+    rank: number;
+}>> {
+    try {
+        const q = query(
+            collection(db, 'liveQuizAttempts'),
+            where('sessionId', '==', sessionId)
+        );
+
+        const snapshot = await getDocs(q);
+
+        // Get all attempts
+        const attempts = snapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+                studentEmail: data.studentEmail,
+                score: data.score,
+                totalQuestions: data.totalQuestions,
+                submittedAt: data.submittedAt?.toDate() || new Date()
+            };
+        });
+
+        // Sort by score (descending), then by submission time (ascending)
+        attempts.sort((a, b) => {
+            if (b.score !== a.score) {
+                return b.score - a.score; // Higher score first
+            }
+            return a.submittedAt.getTime() - b.submittedAt.getTime(); // Earlier submission first
+        });
+
+        // Add rank
+        return attempts.map((attempt, index) => ({
+            ...attempt,
+            rank: index + 1
+        }));
+    } catch (error) {
+        console.error('❌ Error getting leaderboard:', error);
+        return [];
     }
 }

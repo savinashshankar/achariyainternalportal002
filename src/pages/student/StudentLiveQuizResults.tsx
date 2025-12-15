@@ -1,24 +1,56 @@
 // Student Live Quiz Results Page
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Trophy, CheckCircle, XCircle, ArrowLeft } from 'lucide-react';
 import BackButton from '../../components/BackButton';
 
 const StudentLiveQuizResults = () => {
     const navigate = useNavigate();
+    const { sessionId } = useParams<{ sessionId: string }>();
 
     // Read ACTUAL results from localStorage (saved by quiz taking page)
     const savedResults = JSON.parse(localStorage.getItem('lastQuizResults') || 'null');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-    const [results] = useState({
+    const [results, setResults] = useState({
         score: savedResults?.score ?? 0,
         totalQuestions: savedResults?.totalQuestions ?? 10,
         timeTaken: savedResults?.timeTaken ?? 0,
-        rank: 1, // Rank would come from Firebase in production
-        totalStudents: 30,
+        rank: null as number | null,
+        totalStudents: 0,
         correctAnswers: savedResults?.correctAnswers ?? [],
         incorrectAnswers: savedResults?.incorrectAnswers ?? []
     });
+
+    // Fetch real leaderboard and calculate rank
+    useEffect(() => {
+        if (!sessionId || !user.email) return;
+
+        console.log('📊 Fetching leaderboard for session:', sessionId);
+        import('../../services/liveQuizService').then(({ getQuizLeaderboard }) => {
+            getQuizLeaderboard(sessionId).then(leaderboard => {
+                console.log('✅ Leaderboard loaded:', leaderboard);
+
+                // Find current student's rank
+                const myEntry = leaderboard.find(entry => entry.studentEmail === user.email);
+
+                if (myEntry) {
+                    setResults(prev => ({
+                        ...prev,
+                        rank: myEntry.rank,
+                        totalStudents: leaderboard.length
+                    }));
+                    console.log(`🏆 Your rank: #${myEntry.rank} out of ${leaderboard.length}`);
+                } else {
+                    // Fallback if not found
+                    setResults(prev => ({
+                        ...prev,
+                        totalStudents: leaderboard.length || 1
+                    }));
+                }
+            });
+        });
+    }, [sessionId, user.email]);
 
     const formatTime = (ms: number) => {
         const totalSeconds = Math.floor(ms / 1000);
@@ -56,15 +88,21 @@ const StudentLiveQuizResults = () => {
                         <div className="grid grid-cols-3 gap-4">
                             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
                                 <div className="text-3xl font-bold">{results.score}/{results.totalQuestions}</div>
-                                <div className="text-sm opacity-80">Score</div>
+                                <div className="text-sm opacity-90">Your Score</div>
                             </div>
                             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                                <div className="text-3xl font-bold">{formatTime(results.timeTaken)}</div>
-                                <div className="text-sm opacity-80">Time</div>
+                                <div className="text-3xl font-bold">{percentage}%</div>
+                                <div className="text-sm opacity-90">Percentage</div>
                             </div>
                             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                                <div className="text-3xl font-bold">#{results.rank}</div>
-                                <div className="text-sm opacity-80">Rank</div>
+                                <div className="text-3xl font-bold">
+                                    {results.rank !== null ? `#${results.rank}` : '...'}
+                                </div>
+                                <div className="text-sm opacity-90">
+                                    {results.totalStudents > 0
+                                        ? `Out of ${results.totalStudents} student${results.totalStudents !== 1 ? 's' : ''}`
+                                        : 'Loading...'}
+                                </div>
                             </div>
                         </div>
                     </div>
