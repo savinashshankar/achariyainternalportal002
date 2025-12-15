@@ -2,20 +2,18 @@ import { Zap, Shield } from 'lucide-react';
 import { useState, useContext } from 'react';
 import { ThemeContext } from '../../contexts/ThemeContext';
 import BackButton from '../../components/BackButton';
+import toast from 'react-hot-toast';
 
 interface PowerUp {
     id: string;
     name: string;
     description: string;
     cost: number;
-    duration: string;
-    icon: string;
-    type: 'active' | 'passive';
-    duration?: string; // Made optional as theme power-ups don't have it
-    icon?: string; // Made optional as theme power-ups don't have it
-    type: 'active' | 'passive' | 'theme'; // Added 'theme'
+    duration?: string;
+    icon?: string;
+    type: 'active' | 'passive' | 'theme';
     owned: number;
-    category?: string; // Added category for theme power-ups
+    category?: string;
 }
 
 const StudentPowerUps = () => {
