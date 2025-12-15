@@ -149,45 +149,7 @@ const StudentPowerUps = () => {
                 })}
             </div>
 
-            {/* Marketplace - Themes Section */}
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">🎨 Marketplace - Themes</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                {powerups.filter(p => p.type === 'theme').map(powerup => {
-                    const canAfford = credits >= powerup.cost;
-
-                    return (
-                        <div key={powerup.id} className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl shadow-lg p-6 border-2 border-purple-200 hover:border-purple-400 hover:shadow-xl transition">
-                            <div className="text-center mb-4">
-                                <div className="text-6xl mb-3">{powerup.name.split(' ')[0]}</div>
-                                <h3 className="text-xl font-bold text-gray-800">{powerup.name.substring(2)}</h3>
-                                <p className="text-sm text-gray-600 mt-2">{powerup.description}</p>
-                            </div>
-
-                            {powerup.owned > 0 && (
-                                <div className="bg-green-100 text-green-700 text-center py-2 rounded-lg mb-3 font-semibold">
-                                    ✓ Owned
-                                </div>
-                            )}
-
-                            <div className="flex items-center justify-between">
-                                <div className="text-2xl font-bold text-purple-600">{powerup.cost} ⭐</div>
-                                <button
-                                    onClick={() => handleBuyPowerUp(powerup.id)}
-                                    disabled={!canAfford}
-                                    className={`px-6 py-2 rounded-lg font-semibold transition ${canAfford
-                                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700'
-                                        : 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                                        }`}
-                                >
-                                    {canAfford ? 'Buy & Apply' : 'Locked 🔒'}
-                                </button>
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-
-            {/* How Power-Ups Work */}
+{/* How Power-Ups Work */}
             <div className="bg-gradient-to-br from-purple-600 to-blue-600 text-white rounded-xl p-6">
                 <h2 className="text-2xl font-bold mb-4">⚡ Power-Up Guide</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
