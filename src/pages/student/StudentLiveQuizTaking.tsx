@@ -14,10 +14,12 @@ const StudentLiveQuizTaking = () => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
     const [session, setSession] = useState<LiveQuizSession | null>(null);
+    const [quizEndTime, setQuizEndTime] = useState<Date | null>(null); // STABLE endTime
     const [questions, setQuestions] = useState<any[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
+
 
     // Mock quiz questions
     const mockQuestions = [
@@ -36,16 +38,20 @@ const StudentLiveQuizTaking = () => {
     useEffect(() => {
         // Fetch REAL session from Firebase to get correct endTime
         if (sessionId) {
-            // Import getSessionById if not already imported
             import('../../services/liveQuizService').then(({ getSessionById }) => {
                 getSessionById(sessionId).then((firebaseSession) => {
                     if (firebaseSession) {
                         // Use REAL session from Firebase with correct endTime
                         console.log('✅ Loaded session from Firebase:', firebaseSession);
                         setSession(firebaseSession);
+                        // CRITICAL: Set endTime ONCE - prevents timer reset
+                        setQuizEndTime(firebaseSession.endTime.toDate());
                     } else {
                         // Fallback to mock session (for demo purposes)
                         console.log('⚠️ No Firebase session, using mock');
+                        // Calculate endTime ONCE here, not in toDate()
+                        const mockEndTime = new Date(Date.now() + 120000);
+                        const mockStartTime = new Date();
                         const mockSession: LiveQuizSession = {
                             id: sessionId,
                             quizId: 'demo-quiz',
@@ -54,15 +60,18 @@ const StudentLiveQuizTaking = () => {
                             className: 'Class 8-A',
                             teacherId: 'teacher-001',
                             teacherName: 'Mr. Sharma',
-                            startTime: { toDate: () => new Date() } as any,
-                            endTime: { toDate: () => new Date(Date.now() + 120000) } as any,
+                            startTime: { toDate: () => mockStartTime } as any,
+                            endTime: { toDate: () => mockEndTime } as any,
                             duration: 120,
                             sessionSeed: sessionId,
                             status: 'active',
                             questionCount: 10
                         };
                         setSession(mockSession);
+                        // CRITICAL: Set endTime ONCE
+                        setQuizEndTime(mockEndTime);
                     }
+
 
                     // Randomize questions for this student
                     const randomized = randomizeQuestions(mockQuestions, sessionId, user.email || 'student');
@@ -175,7 +184,7 @@ const StudentLiveQuizTaking = () => {
         handleSubmit();
     };
 
-    if (!session || questions.length === 0) {
+    if (!session || !quizEndTime || questions.length === 0) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
@@ -202,8 +211,9 @@ const StudentLiveQuizTaking = () => {
                             <p className="opacity-90">Question {currentQuestionIndex + 1} of {questions.length}</p>
                         </div>
                         <LiveQuizTimer
-                            endTime={session.endTime.toDate()}
+                            endTime={quizEndTime!}
                             onTimeUp={handleTimeUp}
+
                         />
                     </div>
 
