@@ -147,12 +147,12 @@ export function listenForActiveQuiz(
 ): () => void {
     console.log('🔌 Setting up Firebase listener for class:', classId);
 
+    // SIMPLIFIED: No orderBy to avoid needing Firestore index
+    // We'll sort and filter client-side instead
     const q = query(
         collection(db, 'liveQuizSessions'),
         where('classId', '==', classId),
-        where('status', '==', 'active'),
-        orderBy('startTime', 'desc'),
-        limit(5) // Get last 5 to find non-expired one
+        where('status', '==', 'active')
     );
 
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
