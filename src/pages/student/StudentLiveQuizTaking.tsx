@@ -7,6 +7,8 @@ import LiveQuizTimer from '../../components/LiveQuizTimer';
 import { submitQuizAttempt } from '../../services/liveQuizService';
 import { randomizeQuestions, randomizeOptions, getQuestionOrderMapping, getOptionOrderMappings } from '../../utils/quizRandomizer';
 import type { LiveQuizSession } from '../../services/liveQuizService';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../../services/firebase';
 
 const StudentLiveQuizTaking = () => {
     const { sessionId } = useParams<{ sessionId: string }>();
@@ -116,6 +118,28 @@ const StudentLiveQuizTaking = () => {
 
         return () => clearInterval(checkExpired);
     }, [quizEndTime, isSubmitting]); // Only handleSubmit is missing, but it's stable
+
+    // LISTEN FOR TEACHER ENDING QUIZ EARLY
+    useEffect(() => {
+        if (!sessionId || !session || isSubmitting) return;
+
+        console.log('👂 Listening for teacher ending quiz early...');
+        const sessionRef = doc(db, 'liveQuizSessions', sessionId);
+
+        const unsubscribe = onSnapshot(sessionRef, (snapshot) => {
+            const data = snapshot.data();
+
+            if (data?.status === 'completed' && !isSubmitting) {
+                console.log('🛑 Teacher ended quiz early - auto-submitting student answers');
+                handleSubmit();
+            }
+        });
+
+        return () => {
+            console.log('🔌 Unsubscribing from session status listener');
+            unsubscribe();
+        };
+    }, [sessionId, session, isSubmitting]);
 
     const handleAnswerSelect = (optionIndex: number) => {
         const newAnswers = [...selectedAnswers];
