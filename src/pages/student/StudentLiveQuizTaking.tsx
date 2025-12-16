@@ -8,7 +8,7 @@ import { submitQuizAttempt } from '../../services/liveQuizService';
 import { randomizeQuestions, randomizeOptions, getQuestionOrderMapping, getOptionOrderMappings } from '../../utils/quizRandomizer';
 import type { LiveQuizSession } from '../../services/liveQuizService';
 import { doc, onSnapshot } from 'firebase/firestore';
-import { db } from '../../services/firebase';
+import { db } from '../../config/firebase';
 
 const StudentLiveQuizTaking = () => {
     const { sessionId } = useParams<{ sessionId: string }>();
