@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, CheckCircle, XCircle, Clock, FileText, History, ArrowLeft, Trash2 } from 'lucide-react';
-import { getPendingEvidence, getReviewedEvidence, getReviewHistory, submitReview, allowResubmission, clearAllEvidence, type EvidenceSubmission, type EvidenceReview } from '../../services/evidenceService';
+import { getPendingEvidence, getReviewedEvidence, getReviewHistory, submitReview, clearAllEvidence, type EvidenceSubmission, type EvidenceReview } from '../../services/evidenceService';
 
 const EvidenceApproval = () => {
     const navigate = useNavigate();
