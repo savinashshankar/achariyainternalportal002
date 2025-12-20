@@ -84,15 +84,16 @@ const EvidenceApproval = () => {
         }
     };
 
-    const handleAllowResubmission = async (evidenceId: string) => {
-        try {
-            await allowResubmission(evidenceId);
-            alert('Teacher can now resubmit');
-            loadEvidence();
-        } catch (error) {
-            console.error('Resubmission error:', error);
-        }
-    };
+    // Resubmission function - to be implemented in future
+    // const handleAllowResubmission = async (evidenceId: string) => {
+    //     try {
+    //         await allowResubmission(evidenceId);
+    //         alert('Teacher can now resubmit');
+    //         loadEvidence();
+    //     } catch (error) {
+    //         console.error('Resubmission error:', error);
+    //     }
+    // };
 
     const handleClearAllData = async () => {
         if (!confirm('⚠️ WARNING: This will delete ALL evidence submissions!\n\nThis action cannot be undone. Are you sure?')) {

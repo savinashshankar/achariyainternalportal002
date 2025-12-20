@@ -29,7 +29,6 @@ export interface ChatContext {
 
 // Conversation history
 let conversationHistory: ChatMessage[] = [];
-const MAX_HISTORY = 10;
 
 export function clearHistory() {
     conversationHistory = [];
@@ -59,7 +58,7 @@ function tryStaticQA(userMessage: string, enrolledCourseIds: number[], studentNa
 }
 
 // TIER 3: RAG - Placeholder for future GDrive integration
-async function tryRAG(userMessage: string): Promise<{ response: string; source: string } | null> {
+async function tryRAG(_userMessage: string): Promise<{ response: string; source: string } | null> {
     console.log('📂 Tier 3: RAG system (not yet implemented)');
     // TODO: Implement GDrive-based RAG when corpus is ready
     // 1. Fetch relevant documents from GDrive
@@ -167,7 +166,7 @@ Focus on helping students understand concepts, not solving homework for them.`;
 // MAIN FUNCTION: 5-Tier Waterfall System
 export async function sendMessage(
     userMessage: string,
-    context?: ChatContext,
+    _context?: ChatContext,
     studentId?: string,
     enrolledCourseIds?: number[],
     studentName?: string
@@ -242,7 +241,7 @@ export async function sendMessage(
 }
 
 // Get suggested prompts
-export function getSuggestedPrompts(context?: ChatContext): string[] {
+export function getSuggestedPrompts(_context?: ChatContext): string[] {
     return [
         'Explain quadratic equations',
         "What are Newton's laws?",

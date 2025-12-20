@@ -1,7 +1,7 @@
 // Upgraded Student Chatbot with Gemini AI and Guardrails
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
-import { sendMessage, clearHistory } from '../services/chatbotService';
+import { sendMessage } from '../services/chatbotService';
 import { sampleData } from '../data/sampleData';
 
 interface Message {
