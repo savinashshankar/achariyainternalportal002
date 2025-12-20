@@ -224,7 +224,7 @@ const StudentCourseDetail = () => {
             </div>
 
             {/* AI Chatbot */}
-            <StudentChatbot studentId={student.id} />
+            <StudentChatbot studentId={student.id} studentName={student.name} />
         </div>
     );
 };

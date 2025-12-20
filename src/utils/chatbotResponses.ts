@@ -78,8 +78,28 @@ const generalResponses: Record<string, string> = {
     'help': "🤖 **I'm Your Study Assistant!**\n\nAsk me:\n• Course topics (\"explain derivatives\", \"Newton's laws\")\n• Portal features (credits, badges, progress)\n• Study tips\n• Quiz guidelines\n\nI'll pull from your course materials!"
 };
 
-export const generateChatbotResponse = (userMessage: string, enrolledCourseIds: number[]): ChatMessage => {
-    const message = userMessage.toLowerCase();
+// Generate intelligent responses based on query and student context
+export const generateChatbotResponse = (
+    query: string,
+    enrolledCourseIds: number[] = [],
+    studentName?: string
+): ChatMessage => {
+    const normalizedQuery = query.toLowerCase();
+
+    // PRIORITY 0: Personal Information (NEW - Highest Priority)
+    // Handle all variations of self-related questions
+    const personalInfoPattern = /\b(my name|who am i|who i am|who do you think i am|about me|more about me|tell me about|myself|what grade|which grade|which class|what class|my information|my details|my profile|do you know me|what do you know about me|information about me)\b/;
+
+    if (normalizedQuery.match(personalInfoPattern)) {
+        const firstName = studentName?.split(' ')[0] || 'Student';
+        const fullName = studentName || 'Student';
+
+        return {
+            role: 'assistant',
+            content: `👤 **Your Profile:**\n\n• **Name:** ${fullName}\n• **Grade:** 7th Grade\n• **School:** Achariya Siksha Mandir (ASM)\n• **Location:** Villianur, Puducherry\n\n📚 **Your Learning Journey:**\nYou're currently enrolled in ${enrolledCourseIds.length} course${enrolledCourseIds.length !== 1 ? 's' : ''}. Keep up the great work, ${firstName}!\n\n💡 **Need help?** Ask me about your subjects, quiz strategies, or how to earn more credits!`,
+            source: '📋 Your Personal Profile'
+        };
+    }
 
     // PRIORITY 1: Course-specific subject questions (MOST IMPORTANT)
     for (const courseId of enrolledCourseIds) {
@@ -88,7 +108,7 @@ export const generateChatbotResponse = (userMessage: string, enrolledCourseIds: 
 
         // Check each keyword in course content
         for (const [keyword, answer] of Object.entries(courseDoc)) {
-            if (message.includes(keyword)) {
+            if (normalizedQuery.includes(keyword)) {
                 const course = sampleData.courses.find(c => c.id === courseId);
                 return {
                     role: 'assistant',
@@ -101,7 +121,7 @@ export const generateChatbotResponse = (userMessage: string, enrolledCourseIds: 
 
     // PRIORITY 2: General portal questions
     for (const [keyword, response] of Object.entries(generalResponses)) {
-        if (message.includes(keyword)) {
+        if (normalizedQuery.includes(keyword)) {
             return {
                 role: 'assistant',
                 content: response,
@@ -111,7 +131,7 @@ export const generateChatbotResponse = (userMessage: string, enrolledCourseIds: 
     }
 
     // PRIORITY 3: List enrolled courses
-    if (message.includes('course') || message.includes('enrolled') || message.includes('subject')) {
+    if (normalizedQuery.includes('course') || normalizedQuery.includes('enrolled') || normalizedQuery.includes('subject')) {
         const courses = sampleData.courses.filter(c => enrolledCourseIds.includes(c.id));
         if (courses.length > 0) {
             const list = courses.map(c => `• **${c.title}** (${c.level})`).join('\n');

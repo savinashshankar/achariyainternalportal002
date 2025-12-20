@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Image as ImageIcon, Presentation, Video, Headphones, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Image as ImageIcon, Presentation, Video, Headphones, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
 import { sampleData } from '../../data/sampleData';
 import StudentChatbot from '../../components/StudentChatbot';
+import ExplainerPlayer from '../../components/ExplainerPlayer';
+import SlideBySlideViewer from '../../components/SlideBySlideViewer';
 
 // Sample content mapping for demo
 const moduleContent: Record<number, {
     videoUrl: string;
     audioUrl: string;
     images: string[];
-    slides: { title: string; content: string; image?: string }[];
+    slides: { title: string; content: string; image?: string; pdfUrl?: string }[];
 }> = {
     1: { // Advanced Math Module 1 - Calculus Fundamentals
         videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
@@ -75,14 +77,12 @@ const moduleContent: Record<number, {
             { title: "Vectors", content: "Vector: Quantity with magnitude and direction\n\nv = [x, y, z]\n\nOperations: Addition, Scalar multiplication, Dot product" }
         ]
     },
-    3: { // Advanced Math Module 3 - Probability & Statistics
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
-        images: ["/math_quadratic_visual_1764926787773.png"],
+    3: { // Advanced Math Module 3 - Probability & Statistics (REAL ASSETS)
+        videoUrl: "/assets/Probability & Statistics - Law of Large Numbers.mp4",
+        audioUrl: "/assets/Probability & Statistics - Law of Large Numbers.m4a",
+        images: ["/assets/Probability & Statistics - Law of Large Numbers.png"],
         slides: [
-            { title: "Probability Basics", content: "Probability: Measure of likelihood\n\nP(event) = favorable outcomes / total outcomes\n\nRange: 0 to 1" },
-            { title: "Statistics", content: "Mean: Average value\nMedian: Middle value\nMode: Most frequent value\n\nStandard deviation: Measure of spread" },
-            { title: "Distributions", content: "Normal Distribution (Bell Curve)\nBinomial Distribution\nPoisson Distribution\n\nUsed for probability modeling" }
+            { title: "Probability & Statistics", content: "Law of Large Numbers\n\nView the presentation slides below for comprehensive coverage of probability theory and statistical analysis.", pdfUrl: "/assets/Probability & Statistics - Law of Large Numbers.pdf" }
         ]
     },
     5: { // Physics Module 2 - Thermodynamics
@@ -95,31 +95,12 @@ const moduleContent: Record<number, {
             { title: "Entropy", content: "Measure of disorder in a system\n\nS = k log W\n\nEntropy always increases (Second Law)" }
         ]
     },
-    6: { // Physics Module 3 - Electromagnetism (FIX FOR ISSUE #1)
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-        images: [
-            "/physics_newtons_laws_1764926812539.png",
-            "/physics_energy_diagram_1764926850307.png"
-        ],
+    6: { // Physics Module 3 - Electromagnetism (REAL ASSETS)
+        videoUrl: "/assets/Electromagnetism_ Faraday's Law.mp4",
+        audioUrl: "/assets/Electromagnetism_ Faraday's Law.m4a",
+        images: ["/assets/Electromagnetism_ Faraday's Law.png"],
         slides: [
-            {
-                title: "Electromagnetism - Introduction",
-                content: "Electromagnetism is the study of electric and magnetic fields and their interactions.\n\nDiscovered by James Clerk Maxwell in the 19th century.\n\nOne of the four fundamental forces of nature."
-            },
-            {
-                title: "Electric Fields",
-                content: "Electric field (E) is a region around a charged particle where forces act on other charges.\n\nE = F/q\n\nUnits: Newtons per Coulomb (N/C)\n\nDirection: Away from positive, toward negative charges.",
-                image: "/physics_energy_diagram_1764926850307.png"
-            },
-            {
-                title: "Magnetic Fields",
-                content: "Magnetic field (B) created by moving charges (electric currents).\n\nF = qvB sin(θ)\n\nWhere:\n• q = charge\n• v = velocity\n• B = magnetic field strength\n• θ = angle between v and B"
-            },
-            {
-                title: "Maxwell's Equations",
-                content: "Four fundamental equations unifying electricity and magnetism:\n\n1. Gauss's Law (Electric)\n2. Gauss's Law (Magnetic)\n3. Faraday's Law\n4. Ampère-Maxwell Law\n\nThese equations predict electromagnetic waves (light!)."
-            }
+            { title: "Electromagnetism: Faraday's Law", content: "Faraday's Law of Electromagnetic Induction\n\nView the presentation slides below for detailed explanations of electric and magnetic field interactions.", pdfUrl: "/assets/Electromagnetism_ Faraday's Law.pdf" }
         ]
     },
     7: { // Data Structures Module 1 - Arrays & Linked Lists
@@ -142,14 +123,12 @@ const moduleContent: Record<number, {
             { title: "Graphs", content: "Vertices + Edges\n\nTypes:\n• Directed/Undirected\n• Weighted/Unweighted\n\nTraversal: DFS, BFS" }
         ]
     },
-    9: { // Data Structures Module 3 - Dynamic Programming
-        videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-        audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3",
-        images: ["/math_quadratic_visual_1764926787773.png"],
+    9: { // Data Structures Module 3 - Dynamic Programming (REAL ASSETS)
+        videoUrl: "/assets/Data Structures - Dynamic Programming.mp4",
+        audioUrl: "/assets/Data Structures - Dynamic Programming.m4a",
+        images: ["/assets/Data Structures - Dynamic Programming.png"],
         slides: [
-            { title: "Dynamic Programming", content: "Optimization technique\n\nBreak problem into subproblems\nStore results (memoization)\nAvoid recomputation" },
-            { title: "Fibonacci DP", content: "Naive: O(2^n)\n\nDP approach:\nfib[0] = 0\nfib[1] = 1\nfib[n] = fib[n-1] + fib[n-2]\n\nTime: O(n)" },
-            { title: "Common Problems", content: "• Knapsack\n• Longest Common Subsequence\n• Edit Distance\n• Coin Change\n• Matrix Chain Multiplication" }
+            { title: "Dynamic Programming", content: "Optimization Through Memoization\n\nView the presentation slides below for detailed coverage of dynamic programming techniques and algorithms.", pdfUrl: "/assets/Data Structures - Dynamic Programming.pdf" }
         ]
     },
     10: { // DBMS Module 1 - Relational Databases
@@ -207,7 +186,7 @@ const moduleContent: Record<number, {
 const StudentModuleView = () => {
     const { moduleId } = useParams();
     const navigate = useNavigate();
-    const [mode, setMode] = useState<'video' | 'audio' | 'images' | 'slides'>('video');
+    const [mode, setMode] = useState<'video' | 'audio' | 'images' | 'slides' | 'explainer'>('video'); // Default to video
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
@@ -265,7 +244,7 @@ const StudentModuleView = () => {
 
             {/* Learning Mode Selector */}
             <div className="bg-white rounded-xl shadow-sm p-4 border mb-6">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                     <button
                         onClick={() => setMode('video')}
                         className={`flex items-center justify-center py-3 px-4 rounded-lg font-semibold transition ${mode === 'video'
@@ -306,11 +285,42 @@ const StudentModuleView = () => {
                         <Presentation className="w-5 h-5 mr-2" />
                         Slides
                     </button>
+                    <button
+                        onClick={() => setMode('explainer')}
+                        className={`flex items-center justify-center py-3 px-4 rounded-lg font-semibold transition ${mode === 'explainer'
+                            ? 'bg-pink-600 text-white'
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                    >
+                        <Sparkles className="w-5 h-5 mr-2" />
+                        Explainer
+                    </button>
                 </div>
             </div>
 
             {/* Content Area */}
             <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+                {/* Explainer Mode - NEW */}
+                {mode === 'explainer' && (
+                    <div className="p-6">
+                        {(module as any).explainerUrl ? (
+                            <ExplainerPlayer
+                                videoUrl={(module as any).explainerUrl}
+                                moduleTitle={module.title}
+                            />
+                        ) : (
+                            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8 text-center">
+                                <Sparkles className="w-16 h-16 mx-auto mb-4 text-yellow-600" />
+                                <h3 className="text-xl font-bold text-gray-800 mb-2">Explainer Coming Soon</h3>
+                                <p className="text-gray-600">
+                                    Visual storytelling content for this module is being prepared.
+                                    Check back soon for an engaging whiteboard-style explanation!
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                )}
+
                 {/* Video Mode */}
                 {mode === 'video' && (
                     <div className="relative bg-black" style={{ aspectRatio: '16/9' }}>
@@ -410,31 +420,41 @@ const StudentModuleView = () => {
                                 <div className="text-xl text-gray-700 whitespace-pre-line leading-relaxed">
                                     {content.slides[currentSlideIndex].content}
                                 </div>
+
+                                {/* Slide-by-Slide PDF Viewer */}
+                                {content.slides[currentSlideIndex].pdfUrl && (
+                                    <div className="mt-8">
+                                        <SlideBySlideViewer pdfUrl={content.slides[currentSlideIndex].pdfUrl} />
+                                    </div>
+                                )}
                             </div>
 
-                            <div className="flex items-center justify-between mt-6">
-                                <button
-                                    onClick={prevSlide}
-                                    disabled={currentSlideIndex === 0}
-                                    className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    <ChevronLeft className="w-5 h-5 mr-2" />
-                                    Previous
-                                </button>
+                            {/* Slide Navigation - Only show for text slides without PDF */}
+                            {!content.slides[currentSlideIndex].pdfUrl && content.slides.length > 1 && (
+                                <div className="flex items-center justify-between mt-6">
+                                    <button
+                                        onClick={prevSlide}
+                                        disabled={currentSlideIndex === 0}
+                                        className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        <ChevronLeft className="w-5 h-5 mr-2" />
+                                        Previous
+                                    </button>
 
-                                <span className="text-gray-600 font-semibold">
-                                    Slide {currentSlideIndex + 1} of {content.slides.length}
-                                </span>
+                                    <span className="text-gray-600 font-semibold">
+                                        Slide {currentSlideIndex + 1} of {content.slides.length}
+                                    </span>
 
-                                <button
-                                    onClick={nextSlide}
-                                    disabled={currentSlideIndex === content.slides.length - 1}
-                                    className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    Next
-                                    <ChevronRight className="w-5 h-5 ml-2" />
-                                </button>
-                            </div>
+                                    <button
+                                        onClick={nextSlide}
+                                        disabled={currentSlideIndex === content.slides.length - 1}
+                                        className="flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        Next
+                                        <ChevronRight className="w-5 h-5 ml-2" />
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}

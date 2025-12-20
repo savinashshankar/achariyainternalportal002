@@ -1,5 +1,7 @@
-import { CheckCircle, XCircle, Clock, BookOpen } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { CheckCircle, XCircle, Clock, BookOpen, Lightbulb } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { generateExplanation } from '../services/geminiService';
 
 interface QuizReviewProps {
     quiz: {
@@ -17,16 +19,84 @@ interface QuizReviewProps {
     userAnswers: (number | null)[];
     score: number;
     timeUsed: number;
+    attemptNumber?: number;  // MS2: Track which attempt this is
     onContinue: () => void;
 }
 
-const QuizReview = ({ quiz, userAnswers, score, timeUsed, onContinue }: QuizReviewProps) => {
+const QuizReview = ({ quiz, userAnswers, score, timeUsed, attemptNumber = 1, onContinue }: QuizReviewProps) => {
     const percentage = Math.round((score / quiz.questions.length) * 100);
+    const [aiExplanations, setAiExplanations] = useState<{ [key: number]: string }>({});
+    const [loadingExplanations, setLoadingExplanations] = useState(false);
+    const [attemptHistory, setAttemptHistory] = useState<{ attempt: number, score: number, percentage: number }[]>([]);
+
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return `${mins}m ${secs}s`;
     };
+
+    // Load attempt history for comparison
+    useEffect(() => {
+        try {
+            const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '{}');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+            // Find this quiz's attempts (try both module-based and quiz-based keys)
+            let attemptData = null;
+            for (const key in attempts) {
+                if (key.includes(user.id || 'student')) {
+                    attemptData = attempts[key];
+                    break;
+                }
+            }
+
+            if (attemptData && attemptData.scores) {
+                const history = attemptData.scores.map((s: number, idx: number) => ({
+                    attempt: idx + 1,
+                    score: s,
+                    percentage: Math.round((s / quiz.questions.length) * 100)
+                }));
+                setAttemptHistory(history);
+            }
+        } catch (error) {
+            console.error('Error loading attempt history:', error);
+        }
+    }, [quiz.questions.length]);
+
+    // Generate AI explanations for wrong answers on Attempt 2+
+    useEffect(() => {
+        if (attemptNumber >= 2) {
+            setLoadingExplanations(true);
+            const generateExplanations = async () => {
+                const explanationsMap: { [key: number]: string } = {};
+
+                for (let i = 0; i < quiz.questions.length; i++) {
+                    const question = quiz.questions[i];
+                    const userAnswer = userAnswers[i];
+                    const isCorrect = userAnswer === question.correctAnswer;
+
+                    if (!isCorrect && userAnswer !== null) {
+                        try {
+                            const explanation = await generateExplanation(
+                                question.question,
+                                question.options[question.correctAnswer],
+                                question.options[userAnswer]
+                            );
+                            explanationsMap[i] = explanation;
+                        } catch (error) {
+                            console.error('Error generating explanation:', error);
+                            explanationsMap[i] = question.explanation || 'Review the correct answer and try to understand why it is correct.';
+                        }
+                    }
+                }
+
+                setAiExplanations(explanationsMap);
+                setLoadingExplanations(false);
+            };
+
+            generateExplanations();
+        }
+    }, [attemptNumber, quiz.questions, userAnswers]);
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -58,6 +128,39 @@ const QuizReview = ({ quiz, userAnswers, score, timeUsed, onContinue }: QuizRevi
                         </p>
                     </div>
                 </div>
+
+                {/* MS2: Attempt History Comparison */}
+                {attemptHistory.length > 1 && (
+                    <div className="mx-8 mt-6 bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-6">
+                        <h3 className="text-lg font-bold text-gray-800 mb-4">📊 Your Progress</h3>
+                        <div className="flex items-center justify-around">
+                            {attemptHistory.map((attempt, idx) => (
+                                <div key={idx} className="text-center">
+                                    <div className={`text-3xl font-bold mb-1 ${attempt.attempt === attemptNumber ? 'text-purple-600' : 'text-gray-400'
+                                        }`}>
+                                        {attempt.percentage}%
+                                    </div>
+                                    <div className={`text-sm ${attempt.attempt === attemptNumber ? 'font-bold text-purple-700' : 'text-gray-600'
+                                        }`}>
+                                        Attempt {attempt.attempt}
+                                    </div>
+                                    {idx < attemptHistory.length - 1 && (
+                                        <div className="absolute mt-4">→</div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                        {attemptNumber > 1 && (
+                            <p className="text-center text-sm text-purple-700 font-semibold mt-4">
+                                {percentage > attemptHistory[attemptHistory.length - 2].percentage
+                                    ? '🎉 Great improvement!'
+                                    : percentage === 100
+                                        ? '🏆 Perfect score!'
+                                        : 'Keep learning!'}
+                            </p>
+                        )}
+                    </div>
+                )}
 
                 {/* Review */}
                 <div className="p-8">
@@ -117,10 +220,18 @@ const QuizReview = ({ quiz, userAnswers, score, timeUsed, onContinue }: QuizRevi
                                                 ))}
                                             </div>
 
-                                            <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-                                                <p className="text-sm font-semibold text-blue-900 mb-1">Explanation:</p>
-                                                <p className="text-sm text-blue-800">{question.explanation}</p>
-                                            </div>
+                                            {/* MS2: Show explanations only on Attempt 2+ */}
+                                            {attemptNumber >= 2 && !isCorrect && (
+                                                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded mt-3">
+                                                    <div className="flex items-center gap-2 mb-2">
+                                                        <Lightbulb className="w-5 h-5 text-yellow-600" />
+                                                        <p className="text-sm font-semibold text-blue-900">AI Explanation:</p>
+                                                    </div>
+                                                    <p className="text-sm text-blue-800">
+                                                        {loadingExplanations ? 'Generating explanation...' : (aiExplanations[index] || question.explanation)}
+                                                    </p>
+                                                </div>
+                                            )}
 
                                             {/* Module Review Link for Wrong Answers */}
                                             {!isCorrect && question.moduleId && (

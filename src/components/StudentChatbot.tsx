@@ -1,16 +1,19 @@
+// Upgraded Student Chatbot with Gemini AI and Guardrails
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
-import { generateChatbotResponse, conversationStarters } from '../utils/chatbotResponses';
+import { sendMessage, clearHistory } from '../services/chatbotService';
 import { sampleData } from '../data/sampleData';
 
 interface Message {
     role: 'user' | 'assistant';
     content: string;
     source?: string;
+    flagged?: boolean;
 }
 
 interface StudentChatbotProps {
     studentId: number;
+    studentName?: string; // Optional if not always available
 }
 
 // Simple markdown formatter for chat messages
@@ -24,22 +27,29 @@ const formatMessage = (text: string) => {
     return formatted;
 };
 
-const StudentChatbot = ({ studentId }: StudentChatbotProps) => {
+const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
         {
             role: 'assistant',
-            content: "👋 Hi! I'm your AI Study Assistant. I can help answer questions about your enrolled courses, quizzes, credits, and more. What would you like to know?",
+            content: studentName
+                ? `👋 Hi ${studentName.split(' ')[0]}! I'm your AI Study Assistant. I can help answer questions about your enrolled courses, explain concepts, and guide you through your learning. What would you like to know?`
+                : "👋 Hi! I'm your AI Study Assistant. I can help answer questions about your enrolled courses, explain concepts, and guide you through your learning. What would you like to know?",
             source: '🤖 AI Study Assistant'
         }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    // Get student's enrolled courses
+    // Get student's enrolled courses for context
     const enrollments = sampleData.enrollments.filter(e => e.student_id === studentId);
     const enrolledCourseIds = enrollments.map(e => e.course_id);
+    const enrolledCourses = enrollments.map(e => {
+        const course = sampleData.courses.find(c => c.id === e.course_id);
+        return course?.title;
+    }).filter(Boolean);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -49,25 +59,75 @@ const StudentChatbot = ({ studentId }: StudentChatbotProps) => {
         scrollToBottom();
     }, [messages]);
 
-    const handleSend = () => {
-        if (!input.trim()) return;
+    const handleSend = async () => {
+        if (!input.trim() || isTyping) return;
 
         // Add user message
         const userMessage: Message = { role: 'user', content: input };
         setMessages(prev => [...prev, userMessage]);
+        const userInput = input;
         setInput('');
         setIsTyping(true);
 
-        // Simulate typing delay
-        setTimeout(() => {
-            const response = generateChatbotResponse(input, enrolledCourseIds);
-            setMessages(prev => [...prev, response]);
+        try {
+            // Call 5-tier chatbot system
+            const result = await sendMessage(
+                userInput,
+                {
+                    courseName: enrolledCourses[0] || 'Your Courses'
+                },
+                studentId.toString(),
+                enrolledCourseIds, // Pass course IDs for static Q&A fallback
+                studentName // Pass student name for personalized responses
+            );
+
+            // Add AI response
+            const assistantMessage: Message = {
+                role: 'assistant',
+                content: result.response,
+                flagged: result.flagged,
+                source: result.source || '🤖 AI Study Assistant'
+            };
+
+            setMessages(prev => [...prev, assistantMessage]);
+
+            // Auto-focus input field after response
+            setTimeout(() => {
+                inputRef.current?.focus();
+            }, 100);
+        } catch (error) {
+            console.error('Chatbot error:', error);
+            const errorMessage: Message = {
+                role: 'assistant',
+                content: "I'm having trouble right now. Please try again or ask your teacher for help.",
+                source: '❌ Error'
+            };
+            setMessages(prev => [...prev, errorMessage]);
+
+            // Auto-focus input field even on error
+            setTimeout(() => {
+                inputRef.current?.focus();
+            }, 100);
+        } finally {
             setIsTyping(false);
-        }, 800);
+        }
     };
+
+    const conversationStarters = [
+        'Explain a concept from my course',
+        'Help me with a difficult topic',
+        'What should I focus on?',
+        'Give me study tips'
+    ];
 
     const handleStarterClick = (starter: string) => {
         setInput(starter);
+    };
+
+    const handleClose = () => {
+        setIsOpen(false);
+        // Optional: Clear history when closing
+        // clearHistory();
     };
 
     return (
@@ -87,18 +147,18 @@ const StudentChatbot = ({ studentId }: StudentChatbotProps) => {
 
             {/* Chat Window */}
             {isOpen && (
-                <div className="fixed bottom-6 right-6 w-96 h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col z-50 border border-gray-200">
+                <div className="fixed bottom-6 right-6 w-[576px] h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col z-50 border border-gray-200">
                     {/* Header */}
                     <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
                         <div className="flex items-center">
                             <Sparkles className="w-5 h-5 mr-2" />
                             <div>
                                 <h3 className="font-bold">AI Study Assistant</h3>
-                                <p className="text-xs opacity-90">Powered by RAG Model</p>
+                                <p className="text-xs opacity-90">Your Learning Companion</p>
                             </div>
                         </div>
                         <button
-                            onClick={() => setIsOpen(false)}
+                            onClick={handleClose}
                             className="hover:bg-white/20 p-1 rounded transition"
                         >
                             <X className="w-5 h-5" />
@@ -114,7 +174,9 @@ const StudentChatbot = ({ studentId }: StudentChatbotProps) => {
                             >
                                 <div
                                     className={`max-w-[80%] rounded-2xl px-4 py-3 ${msg.role === 'user'
-                                            ? 'bg-blue-600 text-white'
+                                        ? 'bg-blue-600 text-white'
+                                        : msg.flagged
+                                            ? 'bg-yellow-50 border-2 border-yellow-300 text-gray-800'
                                             : 'bg-gray-100 text-gray-800'
                                         }`}
                                 >
@@ -166,21 +228,25 @@ const StudentChatbot = ({ studentId }: StudentChatbotProps) => {
                     <div className="p-4 border-t">
                         <div className="flex items-center space-x-2">
                             <input
+                                ref={inputRef}
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                                 placeholder="Ask me anything..."
+                                autoFocus
                                 className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                disabled={isTyping}
                             />
                             <button
                                 onClick={handleSend}
-                                disabled={!input.trim()}
+                                disabled={!input.trim() || isTyping}
                                 className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <Send className="w-5 h-5" />
                             </button>
                         </div>
+                        <p className="text-xs text-gray-400 text-center mt-1">Safe & filtered for education</p>
                     </div>
                 </div>
             )}

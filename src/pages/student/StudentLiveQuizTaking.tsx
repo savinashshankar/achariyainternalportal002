@@ -188,6 +188,15 @@ const StudentLiveQuizTaking = () => {
 
             const timeTaken = Date.now() - session.startTime.toDate().getTime();
 
+            // Build detailed answers for MS2 (AI explanations)
+            const detailedAnswers = questions.map((q, idx) => ({
+                questionId: q.id.toString(),
+                questionText: q.text,
+                selectedAnswer: q.options[selectedAnswers[idx]] || 'No answer',
+                correctAnswer: q.options[q.correctAnswer],
+                isCorrect: selectedAnswers[idx] === q.correctAnswer
+            }));
+
             // SAVE RESULTS TO LOCALSTORAGE for results page
             localStorage.setItem('lastQuizResults', JSON.stringify({
                 score,
@@ -196,6 +205,7 @@ const StudentLiveQuizTaking = () => {
                 correctAnswers: correctAnswersList,
                 incorrectAnswers: incorrectAnswersList,
                 selectedAnswers,
+                detailedAnswers, // MS2: For AI explanations
                 sessionId
             }));
 

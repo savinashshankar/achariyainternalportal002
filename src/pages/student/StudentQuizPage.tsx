@@ -46,19 +46,22 @@ const StudentQuizPage = () => {
 
     const getQuizAttempts = (quizId: number) => {
         const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '{}');
-        return attempts[`${student.id}_${quizId}`] || { attempts: 0, scores: [], bestScore: 0 };
+        // Use moduleId for tracking if available (for dynamic quizzes)
+        const trackingKey = moduleId ? `${student.id}_module_${moduleId}` : `${student.id}_${quizId}`;
+        return attempts[trackingKey] || { attempts: 0, scores: [], bestScore: 0 };
     };
 
     const saveQuizAttempt = (quizId: number, score: number) => {
         const attempts = JSON.parse(localStorage.getItem('quizAttempts') || '{}');
-        const key = `${student.id}_${quizId}`;
-        const existing = attempts[key] || { attempts: 0, scores: [], bestScore: 0 };
+        // Use moduleId for tracking if available (for dynamic quizzes)
+        const trackingKey = moduleId ? `${student.id}_module_${moduleId}` : `${student.id}_${quizId}`;
+        const existing = attempts[trackingKey] || { attempts: 0, scores: [], bestScore: 0 };
 
         existing.attempts += 1;
         existing.scores.push(score);
         existing.bestScore = Math.max(existing.bestScore, score);
 
-        attempts[key] = existing;
+        attempts[trackingKey] = existing;
         localStorage.setItem('quizAttempts', JSON.stringify(attempts));
 
         return existing;
@@ -122,9 +125,17 @@ const StudentQuizPage = () => {
                                     <p>⏱️ Time Limit: {quiz.timeLimit / 60} minutes</p>
                                     <p>🎯 Max Attempts: {quiz.maxAttempts}</p>
                                     {attempts.attempts > 0 && (
-                                        <p className="text-green-600 font-semibold">
-                                            ⭐ Best Score: {Math.round((attempts.bestScore / quiz.questions.length) * 100)}%
-                                        </p>
+                                        <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mt-2">
+                                            <p className="font-semibold text-purple-900 mb-2">📊 Your Scores:</p>
+                                            {attempts.scores.map((score: number, idx: number) => {
+                                                const percentage = Math.round((score / quiz.questions.length) * 100);
+                                                return (
+                                                    <p key={idx} className={`text-sm ${percentage === 100 ? 'text-green-600 font-bold' : 'text-gray-700'}`}>
+                                                        Attempt {idx + 1}: {percentage}% {percentage === 100 && '🏆'}
+                                                    </p>
+                                                );
+                                            })}
+                                        </div>
                                     )}
                                 </div>
 
@@ -193,6 +204,7 @@ const StudentQuizPage = () => {
                     userAnswers={userAnswers}
                     score={quizResults.currentScore}
                     timeUsed={quizResults.timeUsed}
+                    attemptNumber={quizResults.attempts}
                     onContinue={() => {
                         setShowReview(false);
                         setQuizResults(null);

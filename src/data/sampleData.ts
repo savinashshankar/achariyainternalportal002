@@ -45,21 +45,21 @@ export const sampleData = {
         // Advanced Mathematics modules
         { id: 1, course_id: 1, title: 'Calculus Fundamentals', order: 1, completion_rate: 90 },
         { id: 2, course_id: 1, title: 'Linear Algebra', order: 2, completion_rate: 85 },
-        { id: 3, course_id: 1, title: 'Probability & Statistics', order: 3, completion_rate: 80 },
+        { id: 3, course_id: 1, title: 'Probability & Statistics', order: 3, completion_rate: 80, explainerUrl: '/explainers/probability-statistics.mp4' }, // POC
 
         // Physics modules
-        { id: 4, course_id: 2, title: 'Mechanics', order: 1, completion_rate: 85 },
-        { id: 5, course_id: 2, title: 'Thermodynamics', order: 2, completion_rate: 78 },
-        { id: 6, course_id: 2, title: 'Electromagnetism', order: 3, completion_rate: 75 },
+        { id: 4, course_id: 2, title: 'Mechanics', order: 1, completion_rate: 88 },
+        { id: 5, course_id: 2, title: 'Thermodynamics', order: 2, completion_rate: 82 },
+        { id: 6, course_id: 2, title: 'Electromagnetism', order: 3, completion_rate: 85, explainerUrl: '/explainers/electromagnetism.mp4' }, // POC
 
-        // English Literature modules (ADDED)
-        { id: 13, course_id: 3, title: 'Shakespeare & Classic Drama', order: 1, completion_rate: 92 },
-        { id: 14, course_id: 3, title: 'Modern Poetry & Prose', order: 2, completion_rate: 88 },
+        // English Lit modules
+        { id: 13, course_id: 3, title: 'Shakespeare', order: 1, completion_rate: 92 },
+        { id: 14, course_id: 3, title: 'Modern Poetry', order: 2, completion_rate: 88 },
 
-        // DSA modules
-        { id: 7, course_id: 4, title: 'Arrays & Linked Lists', order: 1, completion_rate: 92 },
-        { id: 8, course_id: 4, title: 'Trees & Graphs', order: 2, completion_rate: 88 },
-        { id: 9, course_id: 4, title: 'Dynamic Programming', order: 3, completion_rate: 82 },
+        // Data Structures modules
+        { id: 7, course_id: 4, title: 'Arrays & Linked Lists', order: 1, completion_rate: 90 },
+        { id: 8, course_id: 4, title: 'Trees & Graphs', order: 2, completion_rate: 85 },
+        { id: 9, course_id: 4, title: 'Dynamic Programming', order: 3, completion_rate: 80, explainerUrl: '/explainers/dynamic-programming.mp4' }, // POC
 
         // DBMS modules
         { id: 10, course_id: 5, title: 'Relational Databases', order: 1, completion_rate: 88 },

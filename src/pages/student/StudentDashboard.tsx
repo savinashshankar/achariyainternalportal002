@@ -174,7 +174,7 @@ const StudentDashboard = () => {
             )}
 
             {/* AI Chatbot - Floating */}
-            <StudentChatbot studentId={student.id} />
+            <StudentChatbot studentId={student.id} studentName={student.name} />
         </div>
     );
 };

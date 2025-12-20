@@ -47,14 +47,14 @@ const Layout = () => {
                 return [
                     { to: '/teacher/dashboard', icon: Home, label: 'Dashboard' },
                     { to: '/teacher/courses', icon: BookOpen, label: 'Courses' },
-                    { to: '/teacher/evidence', icon: FileText, label: 'Evidence' },
+                    { to: '/teacher/evidence-submit', icon: FileText, label: 'Submit Evidence' },
                     { to: '/teacher/faq', icon: HelpCircle, label: 'FAQ' }
                 ];
             case 'Principal':
                 return [
                     { to: '/principal/dashboard', icon: Home, label: 'Dashboard' },
                     { to: '/principal/courses', icon: BookOpen, label: 'Courses' },
-                    { to: '/principal/evidence', icon: FileText, label: 'Evidence Approval' },
+                    { to: '/principal/evidence-approval', icon: FileText, label: 'Evidence Approval' },
                     { to: '/principal/faq', icon: HelpCircle, label: 'FAQ' }
                 ];
             case 'Admin':

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Clock, ChevronLeft } from 'lucide-react';
+import { X, Clock, ChevronLeft, Lightbulb } from 'lucide-react';
 
 interface QuizQuestion {
     id: number;
@@ -26,6 +26,7 @@ const QuizModal = ({ quiz, onClose, onComplete, currentAttempt }: QuizModalProps
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState<(number | null)[]>(Array(quiz.questions.length).fill(null));
     const [timeRemaining, setTimeRemaining] = useState(quiz.timeLimit);
+    const [showHintForQuestion, setShowHintForQuestion] = useState(false); // MS2: Show hint after wrong answer
 
     useEffect(() => {
         if (timeRemaining <= 0) {
@@ -45,11 +46,35 @@ const QuizModal = ({ quiz, onClose, onComplete, currentAttempt }: QuizModalProps
         newAnswers[currentQuestion] = answerIndex;
         setAnswers(newAnswers);
 
-        // Auto-advance to next question after brief delay
+        const isCorrect = answerIndex === question.correctAnswer;
+
+        // MS2 Attempt 3: Show hint if wrong, hide if correct
+        if (currentAttempt === 3) {
+            if (!isCorrect) {
+                setShowHintForQuestion(true); // Show hint for wrong answer
+                return; // Don't advance - let them try again with hint
+            } else {
+                setShowHintForQuestion(false); // Hide hint, they got it right
+            }
+        }
+
+        // Auto-advance logic:
+        // - Attempts 1-2: Always auto-advance
+        // - Attempt 3: Only advance if answer is CORRECT (ensures 100% accuracy)
         if (currentQuestion < quiz.questions.length - 1) {
-            setTimeout(() => {
-                setCurrentQuestion(prev => prev + 1);
-            }, 300);
+            if (currentAttempt < 3) {
+                // Attempts 1-2: Auto-advance always
+                setTimeout(() => {
+                    setCurrentQuestion(prev => prev + 1);
+                }, 300);
+            } else if (currentAttempt === 3 && isCorrect) {
+                // Attempt 3: Only advance if CORRECT
+                setTimeout(() => {
+                    setCurrentQuestion(prev => prev + 1);
+                    setShowHintForQuestion(false); // Reset hint for next question
+                }, 300);
+            }
+            // If Attempt 3 and WRONG: stay on same question (let them try again with hint)
         }
     };
 
@@ -112,9 +137,24 @@ const QuizModal = ({ quiz, onClose, onComplete, currentAttempt }: QuizModalProps
 
                 {/* Question */}
                 <div className="p-8">
-                    <h3 className="text-xl font-semibold text-gray-800 mb-6">
-                        {question.question}
-                    </h3>
+                    <div className="flex items-start gap-3 mb-6">
+                        <h3 className="text-xl font-semibold text-gray-800 flex-1">
+                            {question.question}
+                        </h3>
+
+                        {/* MS2: Hint only appears AFTER wrong answer on Attempt 3 */}
+                        {currentAttempt === 3 && showHintForQuestion && (
+                            <div className="group relative">
+                                <Lightbulb className="w-6 h-6 text-yellow-500 cursor-help animate-pulse" />
+                                <div className="hidden group-hover:block absolute right-0 top-8 w-64 bg-yellow-50 border-2 border-yellow-400 rounded-lg p-3 shadow-lg z-10">
+                                    <p className="text-xs font-semibold text-yellow-900 mb-1">💡 Hint:</p>
+                                    <p className="text-xs text-yellow-800">
+                                        Think about the key concepts you've learned. What formula or principle applies here?
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
 
                     {/* Options */}
                     <div className="space-y-3">

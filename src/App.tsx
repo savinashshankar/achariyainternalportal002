@@ -22,6 +22,7 @@ import StudentSocialFeed from './pages/student/StudentSocialFeed';
 import StudentQuizPage from './pages/student/StudentQuizPage';
 import StudentLiveQuizTaking from './pages/student/StudentLiveQuizTaking';
 import StudentLiveQuizResults from './pages/student/StudentLiveQuizResults';
+import StudentChatbot from './pages/student/StudentChatbot';
 
 // Teacher Pages
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
@@ -35,6 +36,7 @@ import TeacherPerformanceBreakdown from './pages/teacher/TeacherPerformanceBreak
 import TeacherCreditsPage from './pages/teacher/TeacherCreditsPage';
 import LiveQuizControl from './pages/teacher/LiveQuizControl';
 import LiveQuizResults from './pages/teacher/LiveQuizResults';
+import TeacherEvidenceSubmission from './pages/teacher/EvidenceSubmission';
 
 // Principal Pages
 import PrincipalDashboard from './pages/principal/PrincipalDashboard';
@@ -49,6 +51,7 @@ import PrincipalStudentActivity from './pages/principal/PrincipalStudentActivity
 import PrincipalSchoolDetail from './pages/principal/PrincipalSchoolDetail';
 import PrincipalSystemStats from './pages/principal/PrincipalSystemStats';
 import PrincipalEvidenceApproval from './pages/principal/PrincipalEvidenceApproval';
+import EvidenceApproval from './pages/principal/EvidenceApproval';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -91,6 +94,9 @@ function App() {
                     <Route path="/student/faq" element={<StudentFAQPage />} />
                     <Route path="/student/live-quiz/:sessionId/take" element={<StudentLiveQuizTaking />} />
                     <Route path="/student/live-quiz/:sessionId/results" element={<StudentLiveQuizResults />} />
+                    <Route path="/student/chat" element={<StudentChatbot />} />
+                    <Route path="/student/chat/:courseId" element={<StudentChatbot />} />
+                    <Route path="/student/chat/:courseId/:moduleId" element={<StudentChatbot />} />
 
                     {/* Teacher Routes */}
                     <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
@@ -101,6 +107,7 @@ function App() {
                     <Route path="/teacher/performance" element={<TeacherPerformanceBreakdown />} />
                     <Route path="/teacher/credits" element={<TeacherCreditsPage />} />
                     <Route path="/teacher/evidence" element={<TeacherEvidencePage />} />
+                    <Route path="/teacher/evidence-submit" element={<TeacherEvidenceSubmission />} />
                     <Route path="/teacher/faq" element={<TeacherFAQPage />} />
                     <Route path="/teacher/live-quiz/:sessionId/control" element={<LiveQuizControl />} />
                     <Route path="/teacher/live-quiz/:sessionId/results" element={<LiveQuizResults />} />
@@ -117,6 +124,7 @@ function App() {
                     <Route path="/principal/school/:schoolId" element={<PrincipalSchoolDetail />} />
                     <Route path="/principal/system-stats" element={<PrincipalSystemStats />} />
                     <Route path="/principal/evidence" element={<PrincipalEvidenceApproval />} />
+                    <Route path="/principal/evidence-approval" element={<EvidenceApproval />} />
                     <Route path="/principal/faq" element={<PrincipalFAQPage />} />
 
                     {/* Admin Routes */}
