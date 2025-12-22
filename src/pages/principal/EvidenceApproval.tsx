@@ -115,7 +115,7 @@ const EvidenceApproval = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-6">
+        <div className="min-h-screen bg-gray-50 p-4 md:p-6">
             <div className="max-w-7xl mx-auto">
                 <button
                     onClick={() => navigate('/principal/dashboard')}
@@ -125,10 +125,10 @@ const EvidenceApproval = () => {
                     Back to Dashboard
                 </button>
 
-                <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-3xl font-bold flex items-center gap-2">
-                        <FileText className="w-8 h-8" />
-                        Evidence Approval Dashboard
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <h1 className="text-xl md:text-3xl font-bold flex items-center gap-2">
+                        <FileText className="w-6 h-6 md:w-8 md:h-8" />
+                        Evidence Approval
                     </h1>
 
                     {/* Hidden Clear Button - Shift+D to toggle */}
@@ -145,9 +145,9 @@ const EvidenceApproval = () => {
                     )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                     {/* Left: Pending Evidence List */}
-                    <div className="bg-white rounded-xl shadow-lg p-6">
+                    <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
                         <h2 className="text-xl font-semibold mb-4">
                             Pending Evidence ({pendingEvidence.length})
                         </h2>
@@ -180,7 +180,7 @@ const EvidenceApproval = () => {
                     </div>
 
                     {/* Right: Evidence Viewer & Review */}
-                    <div className="bg-white rounded-xl shadow-lg p-6">
+                    <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
                         {!selectedEvidence ? (
                             <div className="flex items-center justify-center h-full text-gray-400">
                                 <div className="text-center">
@@ -278,7 +278,7 @@ const EvidenceApproval = () => {
                             <History className="w-6 h-6" />
                             Today's Reviewed Evidence ({reviewedEvidence.length})
                         </h2>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {reviewedEvidence.map(evidence => (
                                 <div
                                     key={evidence.id}

@@ -18,10 +18,10 @@ const PrincipalSystemStats = () => {
                 Back to Dashboard
             </Link>
 
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">System Statistics</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4">System Statistics</h1>
 
             {/* System Status Note - Moved to Top (FIX FOR ISSUE #14) */}
-            <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 flex items-center">
+            <div className="mb-4 sm:mb-6 bg-green-50 border border-green-200 rounded-xl p-3 sm:p-4 flex items-center">
                 <Activity className="w-5 h-5 text-green-600 mr-3" />
                 <p className="text-sm text-green-700">
                     <strong>All systems operational.</strong> No issues detected in the past 24 hours.
@@ -29,32 +29,32 @@ const PrincipalSystemStats = () => {
             </div>
 
             {/* Server Health */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                <div className="bg-gradient-to-r from-green-400 to-green-600 rounded-xl p-6 text-white">
-                    <Server className="w-12 h-12 mb-3 opacity-80" />
-                    <p className="text-sm opacity-90">Server Health</p>
-                    <p className="text-4xl font-bold">{stats.serverHealth}%</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                <div className="bg-gradient-to-r from-green-400 to-green-600 rounded-xl p-4 sm:p-6 text-white">
+                    <Server className="w-10 h-10 sm:w-12 sm:h-12 mb-2 sm:mb-3 opacity-80" />
+                    <p className="text-xs sm:text-sm opacity-90">Server Health</p>
+                    <p className="text-2xl sm:text-3xl lg:text-4xl font-bold">{stats.serverHealth}%</p>
                     <p className="text-xs opacity-75 mt-2">All systems operational</p>
                 </div>
 
-                <div className="bg-gradient-to-r from-blue-400 to-blue-600 rounded-xl p-6 text-white">
-                    <Database className="w-12 h-12 mb-3 opacity-80" />
-                    <p className="text-sm opacity-90">Database Size</p>
-                    <p className="text-4xl font-bold">{stats.databaseSize} GB</p>
+                <div className="bg-gradient-to-r from-blue-400 to-blue-600 rounded-xl p-4 sm:p-6 text-white">
+                    <Database className="w-10 h-10 sm:w-12 sm:h-12 mb-2 sm:mb-3 opacity-80" />
+                    <p className="text-xs sm:text-sm opacity-90">Database Size</p>
+                    <p className="text-2xl sm:text-3xl lg:text-4xl font-bold">{stats.databaseSize} GB</p>
                     <p className="text-xs opacity-75 mt-2">PostgreSQL 14.5</p>
                 </div>
 
-                <div className="bg-gradient-to-r from-purple-400 to-purple-600 rounded-xl p-6 text-white">
-                    <Users className="w-12 h-12 mb-3 opacity-80" />
-                    <p className="text-sm opacity-90">Active Users (24h)</p>
-                    <p className="text-4xl font-bold">{stats.activeUsers}</p>
+                <div className="bg-gradient-to-r from-purple-400 to-purple-600 rounded-xl p-4 sm:p-6 text-white">
+                    <Users className="w-10 h-10 sm:w-12 sm:h-12 mb-2 sm:mb-3 opacity-80" />
+                    <p className="text-xs sm:text-sm opacity-90">Active Users (24h)</p>
+                    <p className="text-2xl sm:text-3xl lg:text-4xl font-bold">{stats.activeUsers}</p>
                     <p className="text-xs opacity-75 mt-2">Students & Faculty</p>
                 </div>
             </div>
 
             {/* Performance Metrics */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                <div className="bg-white rounded-xl shadow-sm p-6 border">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
                     <h3 className="font-bold text-gray-800 mb-4 flex items-center">
                         <Activity className="w-5 h-5 mr-2 text-blue-600" />
                         Performance Metrics
@@ -90,7 +90,7 @@ const PrincipalSystemStats = () => {
                     </div>
                 </div>
 
-                <div className="bg-white rounded-xl shadow-sm p-6 border">
+                <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
                     <h3 className="font-bold text-gray-800 mb-4 flex items-center">
                         <HardDrive className="w-5 h-5 mr-2 text-green-600" />
                         Resource Usage
@@ -131,9 +131,9 @@ const PrincipalSystemStats = () => {
             </div>
 
             {/* System Info */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border">
-                <h3 className="font-bold text-gray-800 mb-4">System Information</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
+                <h3 className="font-bold text-gray-800 mb-3 sm:mb-4">System Information</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                     <div>
                         <p className="text-xs text-gray-500 mb-1">Backend</p>
                         <p className="font-semibold text-gray-800">FastAPI 0.104.1</p>

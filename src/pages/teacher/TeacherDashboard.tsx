@@ -16,7 +16,9 @@ const TeacherDashboard = () => {
         const enrollments = sampleData.enrollments.filter(e => e.course_id === course.id);
         return enrollments.map(e => {
             const student = sampleData.students.find(s => s.id === e.student_id);
-            return { ...student, ...e, courseName: course.title };
+            // Calculate progress from completed modules (enforces sequential module completion)
+            const progress = Math.round((e.modules_completed / e.total_modules) * 100);
+            return { ...student, ...e, progress, courseName: course.title };
         });
     });
 
@@ -67,12 +69,12 @@ const TeacherDashboard = () => {
                     </div>
                 </Link>
 
-                <Link to="/teacher/students" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition cursor-pointer">
+                <Link to="/teacher/students" className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md transition cursor-pointer">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Total Students</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{[...new Set(allStudents.map((s: any) => s.id))].length}</p>
-                            <p className="text-xs text-gray-500 mt-1">{allStudents.length} total enrollments</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Total Students</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{[...new Set(allStudents.map((s: any) => s.id))].length}</p>
+                            <p className="text-xs text-gray-500 mt-1">{allStudents.length} enrollments</p>
                         </div>
                         <div className="bg-green-500 p-3 rounded-lg">
                             <Users className="w-6 h-6 text-white" />
@@ -80,12 +82,12 @@ const TeacherDashboard = () => {
                     </div>
                 </Link>
 
-                <Link to="/teacher/performance" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition cursor-pointer">
+                <Link to="/teacher/performance" className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md transition cursor-pointer">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Avg Completion</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{teacher.completion_avg}%</p>
-                            <p className="text-xs text-gray-500 mt-1">Click for breakdown →</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Avg Completion</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{teacher.completion_avg}%</p>
+                            <p className="text-xs text-gray-500 mt-1">Breakdown →</p>
                         </div>
                         <div className="bg-purple-500 p-3 rounded-lg">
                             <TrendingUp className="w-6 h-6 text-white" />
@@ -93,11 +95,11 @@ const TeacherDashboard = () => {
                     </div>
                 </Link>
 
-                <Link to="/teacher/credits" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition cursor-pointer">
+                <Link to="/teacher/credits" className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md transition cursor-pointer">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Wallet Balance</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{teacher.credits}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Wallet Balance</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{teacher.credits}</p>
                             <p className="text-xs text-gray-500 mt-1">Click for details →</p>
                         </div>
                         <div className="bg-yellow-500 p-3 rounded-lg">

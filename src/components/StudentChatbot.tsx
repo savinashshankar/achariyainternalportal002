@@ -1,4 +1,5 @@
 // Upgraded Student Chatbot with Gemini AI and Guardrails
+// P0-3: Mobile-first fullscreen chatbot
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
 import { sendMessage } from '../services/chatbotService';
@@ -27,6 +28,22 @@ const formatMessage = (text: string) => {
     return formatted;
 };
 
+// Hook to detect mobile viewport
+const useIsMobile = () => {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
+    return isMobile;
+};
+
 const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
@@ -42,6 +59,7 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const isMobile = useIsMobile();
 
     // Get student's enrolled courses for context
     const enrollments = sampleData.enrollments.filter(e => e.student_id === studentId);
@@ -58,6 +76,18 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    // P0-3: Lock body scroll when chatbot is open on mobile
+    useEffect(() => {
+        if (isOpen && isMobile) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, [isOpen, isMobile]);
 
     const handleSend = async () => {
         if (!input.trim() || isTyping) return;
@@ -126,9 +156,12 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
 
     const handleClose = () => {
         setIsOpen(false);
-        // Optional: Clear history when closing
-        // clearHistory();
     };
+
+    // P0-3: Mobile fullscreen vs desktop floating modal
+    const chatWindowClasses = isMobile
+        ? 'fixed inset-0 bg-white flex flex-col z-50' // Fullscreen on mobile
+        : 'fixed bottom-6 right-6 w-[576px] h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col z-50 border border-gray-200';
 
     return (
         <>
@@ -147,9 +180,9 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
 
             {/* Chat Window */}
             {isOpen && (
-                <div className="fixed bottom-6 right-6 w-[576px] h-[80vh] bg-white rounded-2xl shadow-2xl flex flex-col z-50 border border-gray-200">
+                <div className={chatWindowClasses}>
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-2xl flex items-center justify-between">
+                    <div className={`bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between ${isMobile ? '' : 'rounded-t-2xl'}`}>
                         <div className="flex items-center">
                             <Sparkles className="w-5 h-5 mr-2" />
                             <div>
@@ -159,9 +192,9 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
                         </div>
                         <button
                             onClick={handleClose}
-                            className="hover:bg-white/20 p-1 rounded transition"
+                            className="hover:bg-white/20 p-2 rounded transition"
                         >
-                            <X className="w-5 h-5" />
+                            <X className="w-6 h-6" />
                         </button>
                     </div>
 
@@ -173,7 +206,7 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
                                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
                                 <div
-                                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${msg.role === 'user'
+                                    className={`max-w-[85%] rounded-2xl px-4 py-3 ${msg.role === 'user'
                                         ? 'bg-blue-600 text-white'
                                         : msg.flagged
                                             ? 'bg-yellow-50 border-2 border-yellow-300 text-gray-800'
@@ -224,8 +257,8 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
                         </div>
                     )}
 
-                    {/* Input */}
-                    <div className="p-4 border-t">
+                    {/* Input - P0-3: Pinned at bottom, works with mobile keyboard */}
+                    <div className={`p-4 border-t bg-white ${isMobile ? 'pb-safe' : ''}`}>
                         <div className="flex items-center space-x-2">
                             <input
                                 ref={inputRef}
@@ -235,13 +268,13 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
                                 onKeyPress={(e) => e.key === 'Enter' && handleSend()}
                                 placeholder="Ask me anything..."
                                 autoFocus
-                                className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
                                 disabled={isTyping}
                             />
                             <button
                                 onClick={handleSend}
                                 disabled={!input.trim() || isTyping}
-                                className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <Send className="w-5 h-5" />
                             </button>
@@ -255,3 +288,4 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
 };
 
 export default StudentChatbot;
+

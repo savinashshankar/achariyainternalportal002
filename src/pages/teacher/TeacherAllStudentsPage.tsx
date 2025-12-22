@@ -47,7 +47,7 @@ const TeacherAllStudentsPage = () => {
                             {students.map(student => {
                                 const studentEnrollments = enrollments.filter(e => e.student_id === student.id);
                                 const avgCompletion = Math.round(
-                                    studentEnrollments.reduce((sum, e) => sum + e.progress, 0) / studentEnrollments.length
+                                    studentEnrollments.reduce((sum, e) => sum + Math.round((e.modules_completed / e.total_modules) * 100), 0) / studentEnrollments.length
                                 );
                                 const lastActive = studentEnrollments.sort((a, b) =>
                                     new Date(b.last_active).getTime() - new Date(a.last_active).getTime()
@@ -93,7 +93,7 @@ const TeacherAllStudentsPage = () => {
                     {students.map(student => {
                         const studentEnrollments = enrollments.filter(e => e.student_id === student.id);
                         const avgCompletion = Math.round(
-                            studentEnrollments.reduce((sum, e) => sum + e.progress, 0) / studentEnrollments.length
+                            studentEnrollments.reduce((sum, e) => sum + Math.round((e.modules_completed / e.total_modules) * 100), 0) / studentEnrollments.length
                         );
                         const lastActive = studentEnrollments.sort((a, b) =>
                             new Date(b.last_active).getTime() - new Date(a.last_active).getTime()

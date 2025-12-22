@@ -45,17 +45,17 @@ const PrincipalCourseDetail = () => {
                     <p className="text-xs sm:text-sm text-gray-600">Total Enrollments</p>
                     <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{course.enrollments}</p>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-6 border">
-                    <p className="text-sm text-gray-600">Active Students</p>
-                    <p className="text-3xl font-bold text-gray-800 mt-2">{course.active_users}</p>
+                <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
+                    <p className="text-xs sm:text-sm text-gray-600">Active Students</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{course.active_users}</p>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-6 border">
-                    <p className="text-sm text-gray-600">Avg Completion</p>
-                    <p className="text-3xl font-bold text-green-600 mt-2">{course.completion_avg}%</p>
+                <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
+                    <p className="text-xs sm:text-sm text-gray-600">Avg Completion</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-green-600 mt-1 sm:mt-2">{course.completion_avg}%</p>
                 </div>
-                <div className="bg-white rounded-xl shadow-sm p-6 border">
-                    <p className="text-sm text-gray-600">Traffic Level</p>
-                    <p className={`text-2xl font-bold mt-2 ${course.traffic === 'High' ? 'text-orange-600' :
+                <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
+                    <p className="text-xs sm:text-sm text-gray-600">Traffic Level</p>
+                    <p className={`text-xl sm:text-2xl font-bold mt-1 sm:mt-2 ${course.traffic === 'High' ? 'text-orange-600' :
                         course.traffic === 'Medium' ? 'text-blue-600' : 'text-gray-600'
                         }`}>{course.traffic}</p>
                 </div>
@@ -66,14 +66,14 @@ const PrincipalCourseDetail = () => {
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Course Modules</h2>
                 <div className="space-y-3">
                     {modules.map((module) => (
-                        <div key={module.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div key={module.id} className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 sm:p-4 bg-gray-50 rounded-lg gap-2">
                             <div>
                                 <p className="font-semibold text-gray-800">{module.title}</p>
                                 <p className="text-sm text-gray-600">Module {module.order}</p>
                             </div>
                             <div className="flex items-center">
-                                <div className="mr-4">
-                                    <div className="w-32 bg-gray-200 rounded-full h-2">
+                                <div className="mr-2 sm:mr-4">
+                                    <div className="w-20 sm:w-32 bg-gray-200 rounded-full h-2">
                                         <div
                                             className="bg-blue-600 h-2 rounded-full"
                                             style={{ width: `${module.completion_rate}%` }}

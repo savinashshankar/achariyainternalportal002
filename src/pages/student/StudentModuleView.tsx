@@ -321,37 +321,110 @@ const StudentModuleView = () => {
                     </div>
                 )}
 
-                {/* Video Mode */}
+                {/* Video Mode - P0-5: No fast-forward enforcement */}
                 {mode === 'video' && (
-                    <div className="relative bg-black" style={{ aspectRatio: '16/9' }}>
-                        <video
-                            src={content.videoUrl}
-                            controls
-                            className="w-full h-full"
-                            poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='450'%3E%3Crect fill='%23000' width='800' height='450'/%3E%3Ctext fill='%23fff' font-size='24' font-family='Arial' x='50%25' y='50%25' text-anchor='middle' dominant-baseline='middle'%3E📹 Educational Video Lecture%3C/text%3E%3C/svg%3E"
-                        >
-                            Your browser does not support the video tag.
-                        </video>
-                        <div className="absolute bottom-4 left-4 bg-black/70 text-white px-3 py-1 rounded text-sm">
-                            🎓 {module.title} - Video Lecture
+                    <div className="p-4 md:p-6">
+                        <div className="relative bg-black rounded-lg overflow-hidden" style={{ aspectRatio: '16/9' }}>
+                            <video
+                                id="video-player"
+                                src={content.videoUrl}
+                                className="w-full h-full"
+                                playsInline
+                                preload="auto"
+                                controls={false}
+                                controlsList="nodownload nofullscreen noremoteplayback"
+                                disablePictureInPicture
+                                onContextMenu={(e) => e.preventDefault()}
+                            >
+                                Your browser does not support the video tag.
+                            </video>
+                            <div className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs text-gray-600">
+                                ASM Learning Portal
+                            </div>
                         </div>
+
+                        {/* Custom Video Controls */}
+                        <div className="mt-4 flex items-center justify-center gap-4">
+                            <button
+                                onClick={() => {
+                                    const video = document.getElementById('video-player') as HTMLVideoElement;
+                                    if (video) {
+                                        if (video.paused) video.play(); else video.pause();
+                                    }
+                                }}
+                                className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition flex items-center gap-2"
+                            >
+                                <Video className="w-5 h-5" />
+                                Play / Pause
+                            </button>
+                            <button
+                                onClick={() => {
+                                    const video = document.getElementById('video-player') as HTMLVideoElement;
+                                    if (video) { video.currentTime = 0; video.play(); }
+                                }}
+                                className="px-4 py-3 bg-gray-600 text-white rounded-lg font-semibold hover:bg-gray-700 transition"
+                            >
+                                Restart
+                            </button>
+                        </div>
+
+                        {/* P0-5: Same legend as Explainer */}
+                        <p className="text-xs text-gray-500 mt-4 text-center">
+                            ⚠️ Fast-forward and rewind are disabled to ensure optimal learning experience
+                        </p>
                     </div>
                 )}
 
-                {/* Audio Mode */}
+                {/* Audio Mode - P0-5: No fast-forward enforcement */}
                 {mode === 'audio' && (
-                    <div className="p-12 text-center bg-gradient-to-br from-green-50 to-blue-50">
+                    <div className="p-6 md:p-12 text-center bg-gradient-to-br from-green-50 to-blue-50">
                         <div className="max-w-md mx-auto">
-                            <Headphones className="w-24 h-24 mx-auto mb-6 text-green-600" />
-                            <h2 className="text-2xl font-bold text-gray-800 mb-4">{module.title}</h2>
-                            <p className="text-gray-600 mb-8">Audio Lecture - Listen and Learn</p>
+                            <Headphones className="w-16 h-16 md:w-24 md:h-24 mx-auto mb-4 md:mb-6 text-green-600" />
+                            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-2 md:mb-4">{module.title}</h2>
+                            <p className="text-sm md:text-base text-gray-600 mb-6 md:mb-8">Audio Lecture - Listen and Learn</p>
 
-                            <div className="bg-white rounded-xl p-6 shadow-md">
-                                <audio controls className="w-full mb-4" src={content.audioUrl}>
+                            <div className="bg-white rounded-xl p-4 md:p-6 shadow-md">
+                                <audio
+                                    id="audio-player"
+                                    src={content.audioUrl}
+                                    preload="auto"
+                                    className="hidden"
+                                >
                                     Your browser does not support the audio element.
                                 </audio>
+
+                                {/* Custom Audio Controls */}
+                                <div className="flex items-center justify-center gap-3 mb-4">
+                                    <button
+                                        onClick={() => {
+                                            const audio = document.getElementById('audio-player') as HTMLAudioElement;
+                                            if (audio) {
+                                                if (audio.paused) audio.play(); else audio.pause();
+                                            }
+                                        }}
+                                        className="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition flex items-center gap-2"
+                                    >
+                                        <Headphones className="w-4 h-4" />
+                                        Play / Pause
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            const audio = document.getElementById('audio-player') as HTMLAudioElement;
+                                            if (audio) { audio.currentTime = 0; audio.play(); }
+                                        }}
+                                        className="px-4 py-2 bg-gray-600 text-white rounded-lg font-semibold hover:bg-gray-700 transition"
+                                    >
+                                        Restart
+                                    </button>
+                                </div>
+
                                 <p className="text-sm text-gray-500">🎧 Best experienced with headphones</p>
                             </div>
+
+                            {/* P0-5: Same legend as Explainer */}
+                            <p className="text-xs text-gray-500 mt-4">
+                                ⚠️ Fast-forward and rewind are disabled to ensure optimal learning experience
+                            </p>
                         </div>
                     </div>
                 )}

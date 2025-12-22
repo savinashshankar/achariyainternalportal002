@@ -3,6 +3,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import Login from './pages/Login';
 import RoleSelection from './pages/RoleSelection';
 import Layout from './components/Layout';
+import ScrollToTop from './components/ScrollToTop';
 
 // Student Pages
 import StudentDashboard from './pages/student/StudentDashboard';
@@ -71,6 +72,7 @@ import AdminModuleEdit from './pages/admin/AdminModuleEdit';
 function App() {
     return (
         <ThemeProvider>
+            <ScrollToTop />
             <Routes>
                 <Route path="/" element={<Login />} />
                 <Route path="/select-role" element={<RoleSelection />} />

@@ -37,7 +37,7 @@ const SuggestedActions = () => {
                 <Zap className="w-4 h-4 text-blue-600" />
                 <h3 className="font-semibold text-sm text-gray-800">Quick Actions</h3>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {suggestions.map(suggestion => (
                     <button
                         key={suggestion.id}

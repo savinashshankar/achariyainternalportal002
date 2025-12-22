@@ -11,15 +11,15 @@ const TeacherPerformanceBreakdown = () => {
     const courseStats = teacherCourses.map(course => {
         const enrollments = sampleData.enrollments.filter(e => e.course_id === course.id);
         const avgCompletion = enrollments.length > 0
-            ? Math.round(enrollments.reduce((sum, e) => sum + e.progress, 0) / enrollments.length)
+            ? Math.round(enrollments.reduce((sum, e) => sum + Math.round((e.modules_completed / e.total_modules) * 100), 0) / enrollments.length)
             : 0;
 
         return {
             ...course,
-            enrollments: enrollments.length,
+            enrollmentCount: enrollments.length,
             avgCompletion,
-            highPerformers: enrollments.filter(e => e.progress >= 85).length,
-            needsAttention: enrollments.filter(e => e.progress < 70).length
+            highPerformers: enrollments.filter(e => Math.round((e.modules_completed / e.total_modules) * 100) >= 85).length,
+            needsAttention: enrollments.filter(e => Math.round((e.modules_completed / e.total_modules) * 100) < 70).length
         };
     });
 

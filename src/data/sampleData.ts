@@ -265,7 +265,9 @@ export const getStudentsByCourse = (courseId: number) => {
     const enrollments = sampleData.enrollments.filter(e => e.course_id === courseId);
     return enrollments.map(e => {
         const student = sampleData.students.find(s => s.id === e.student_id);
-        return { ...student, ...e };
+        // Calculate progress from completed modules (enforces sequential module completion)
+        const progress = Math.round((e.modules_completed / e.total_modules) * 100);
+        return { ...student, ...e, progress };
     });
 };
 
@@ -274,7 +276,9 @@ export const getStudentDetails = (studentId: number) => {
     const studentEnrollments = sampleData.enrollments.filter(e => e.student_id === studentId);
     const courses = studentEnrollments.map(e => {
         const course = sampleData.courses.find(c => c.id === e.course_id);
-        return { ...course, progress: e.progress };
+        // Calculate progress from completed modules (enforces sequential module completion)
+        const progress = Math.round((e.modules_completed / e.total_modules) * 100);
+        return { ...course, progress, modules_completed: e.modules_completed, total_modules: e.total_modules };
     });
     return { ...student, courses };
 };

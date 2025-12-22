@@ -17,7 +17,7 @@ const TeacherCreditsPage = () => {
         // Estimate credits from completion (simplified)
         const studentEnrollments = enrollments.filter(e => e.student_id === student.id);
         const avgCompletion = studentEnrollments.length > 0
-            ? Math.round(studentEnrollments.reduce((sum, e) => sum + e.progress, 0) / studentEnrollments.length)
+            ? Math.round(studentEnrollments.reduce((sum, e) => sum + Math.round((e.modules_completed / e.total_modules) * 100), 0) / studentEnrollments.length)
             : 0;
         const estimatedCredits = Math.floor(avgCompletion * 1.5) + (student.badges * 20);
 

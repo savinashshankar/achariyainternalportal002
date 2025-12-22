@@ -62,12 +62,12 @@ const PrincipalDashboard = () => {
 
                 <div
                     onClick={() => { navigate('/principal/teachers'); window.scrollTo(0, 0); }}
-                    className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md cursor-pointer transition"
+                    className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md cursor-pointer transition"
                 >
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Total Teachers</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{totalTeachers}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Total Teachers</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{totalTeachers}</p>
                         </div>
                         <div className="bg-green-500 p-3 rounded-lg">
                             <GraduationCap className="w-6 h-6 text-white" />
@@ -77,12 +77,12 @@ const PrincipalDashboard = () => {
 
                 <div
                     onClick={() => { navigate('/principal/courses'); window.scrollTo(0, 0); }}
-                    className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md cursor-pointer transition"
+                    className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md cursor-pointer transition"
                 >
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Total Courses</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{totalCourses}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Total Courses</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{totalCourses}</p>
                         </div>
                         <div className="bg-purple-500 p-3 rounded-lg">
                             <BookOpen className="w-6 h-6 text-white" />
@@ -92,12 +92,12 @@ const PrincipalDashboard = () => {
 
                 <div
                     onClick={() => { navigate('/principal/system-stats'); window.scrollTo(0, 0); }}
-                    className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md cursor-pointer transition"
+                    className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md cursor-pointer transition"
                 >
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">System Stats</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{avgCompletion}%</p>
+                            <p className="text-xs sm:text-sm text-gray-600">System Stats</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{avgCompletion}%</p>
                             <p className="text-xs text-gray-500">Avg Completion</p>
                         </div>
                         <div className="bg-orange-500 p-3 rounded-lg">

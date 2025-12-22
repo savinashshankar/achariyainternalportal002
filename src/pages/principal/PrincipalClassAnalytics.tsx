@@ -35,10 +35,10 @@ const PrincipalClassAnalytics = () => {
                 Back to Dashboard
             </Link>
 
-            <h1 className="text-3xl font-bold text-gray-800 mb-4">Class Analytics - Completion by Grade</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4">Class Analytics</h1>
 
             {/* Overall School Performance - Moved to Top (FIX FOR ISSUE #12) */}
-            <div className="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-6">
+            <div className="mb-4 sm:mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6">
                 <h3 className="font-bold text-gray-800 mb-2">Overall School Performance</h3>
                 <p className="text-gray-600 text-sm">
                     Average completion across all grades: <span className="font-bold text-blue-600 text-lg">
@@ -49,11 +49,11 @@ const PrincipalClassAnalytics = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
                 {classByGrade.map(grade => (
-                    <div key={grade.grade} className="bg-white rounded-xl shadow-sm p-6 border">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-2xl font-bold text-gray-800">{grade.grade}</h3>
+                    <div key={grade.grade} className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
+                        <div className="flex items-center justify-between mb-3 sm:mb-4">
+                            <h3 className="text-lg sm:text-2xl font-bold text-gray-800">{grade.grade}</h3>
                             <div className="text-right">
-                                <p className="text-4xl font-bold text-blue-600">{grade.completion || 0}%</p>
+                                <p className="text-2xl sm:text-4xl font-bold text-blue-600">{grade.completion || 0}%</p>
                                 <p className="text-xs text-gray-500">Completion Rate</p>
                             </div>
                         </div>

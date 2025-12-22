@@ -13,6 +13,11 @@ const StudentCourseDetail = () => {
     const modules = sampleData.modules.filter(m => m.course_id === Number(courseId));
     const enrollment = sampleData.enrollments.find(e => e.student_id === student.id && e.course_id === Number(courseId));
 
+    // CRITICAL: Calculate progress from completed modules (enforces sequential module completion)
+    const calculatedProgress = enrollment
+        ? Math.round((enrollment.modules_completed / enrollment.total_modules) * 100)
+        : 0;
+
     if (!course) {
         return (
             <div>
@@ -42,7 +47,7 @@ const StudentCourseDetail = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                     <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
                         <p className="text-sm opacity-90">Your Progress</p>
-                        <p className="text-3xl font-bold">{enrollment?.progress || 0}%</p>
+                        <p className="text-3xl font-bold">{calculatedProgress}%</p>
                     </div>
                     <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
                         <p className="text-sm opacity-90">Modules Completed</p>
@@ -60,13 +65,13 @@ const StudentCourseDetail = () => {
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-bold text-gray-800">Course Progress</h2>
                     <span className="text-2xl font-bold text-blue-600">
-                        {enrollment?.modules_completed === modules.length ? 100 : (enrollment?.progress || 0)}%
+                        {calculatedProgress}%
                     </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-4">
                     <div
                         className="bg-blue-600 h-4 rounded-full transition-all duration-300"
-                        style={{ width: `${enrollment?.modules_completed === modules.length ? 100 : (enrollment?.progress || 0)}%` }}
+                        style={{ width: `${calculatedProgress}%` }}
                     />
                 </div>
             </div>
@@ -96,9 +101,9 @@ const StudentCourseDetail = () => {
                                             : 'bg-gray-50 border-gray-200 opacity-60'
                                         }`}
                                 >
-                                    <div className="flex items-center justify-between">
+                                    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                         <div className="flex items-center flex-1">
-                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 ${isCompleted
+                                            <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-4 flex-shrink-0 ${isCompleted
                                                 ? 'bg-green-500'
                                                 : isUnlocked
                                                     ? 'bg-blue-500'
@@ -112,43 +117,43 @@ const StudentCourseDetail = () => {
                                             </div>
 
                                             <div className="flex-1">
-                                                <h3 className="font-semibold text-gray-800 mb-1">{module.title}</h3>
-                                                <div className="flex items-center text-sm text-gray-600">
+                                                <h3 className="font-semibold text-gray-800 mb-1 text-sm md:text-base">{module.title}</h3>
+                                                <div className="flex items-center text-xs md:text-sm text-gray-600">
                                                     <Clock className="w-4 h-4 mr-1" />
                                                     <span>
                                                         {isCompleted
                                                             ? 'Completed'
                                                             : isUnlocked
                                                                 ? 'Available Now'
-                                                                : 'Locked - Complete previous module'}
+                                                                : 'Locked - Complete previous'}
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="text-right">
-                                            <div className="flex items-center text-sm text-gray-600 mb-2">
+                                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 md:text-right">
+                                            <div className="flex items-center text-xs text-gray-600">
                                                 <Award className="w-4 h-4 mr-1 text-yellow-500" />
-                                                <span>Class Average: {module.completion_rate}%</span>
+                                                <span>Avg: {module.completion_rate}%</span>
                                             </div>
                                             {isUnlocked && !isCompleted && (
-                                                <div className="space-y-2">
+                                                <div className="flex gap-2">
                                                     <button
                                                         onClick={() => navigate(`/student/module/${module.id}`)}
-                                                        className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition"
+                                                        className="flex-1 sm:flex-none px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition"
                                                     >
                                                         Start Learning
                                                     </button>
                                                     <button
                                                         onClick={() => navigate(`/student/quiz/${module.id}`)}
-                                                        className="w-full px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700 transition"
+                                                        className="flex-1 sm:flex-none px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700 transition"
                                                     >
                                                         Take Quiz
                                                     </button>
                                                 </div>
                                             )}
                                             {isCompleted && (
-                                                <span className="mt-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-semibold border border-green-300 inline-block">
+                                                <span className="px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm font-semibold border border-green-300 inline-block">
                                                     ✓ Completed
                                                 </span>
                                             )}
@@ -199,11 +204,11 @@ const StudentCourseDetail = () => {
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-600">Completion Rate:</span>
-                            <span className={`font-semibold ${(enrollment?.progress || 0) >= 85 ? 'text-green-600' :
-                                (enrollment?.progress || 0) >= 70 ? 'text-yellow-600' :
+                            <span className={`font-semibold ${calculatedProgress >= 85 ? 'text-green-600' :
+                                calculatedProgress >= 70 ? 'text-yellow-600' :
                                     'text-red-600'
                                 }`}>
-                                {enrollment?.progress || 0}%
+                                {calculatedProgress}%
                             </span>
                         </div>
                         <div className="flex justify-between">
@@ -214,9 +219,9 @@ const StudentCourseDetail = () => {
                         </div>
                         <div className="flex justify-between">
                             <span className="text-gray-600">Status:</span>
-                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${(enrollment?.progress || 0) >= 70 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${calculatedProgress >= 70 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
                                 }`}>
-                                {(enrollment?.progress || 0) >= 70 ? 'On Track' : 'Needs Attention'}
+                                {calculatedProgress >= 70 ? 'On Track' : 'Needs Attention'}
                             </span>
                         </div>
                     </div>

@@ -20,14 +20,14 @@ const PrincipalAllCourses = () => {
                 Back to Dashboard
             </Link>
 
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">All Courses</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">All Courses</h1>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {courses.map((course) => (
                     <Link
                         key={course.id}
                         to={`/principal/course/${course.id}`}
-                        className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition"
+                        className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md transition"
                     >
                         <div className="flex justify-between items-start mb-3">
                             <h3 className="text-lg font-bold text-gray-800">{course.title}</h3>

@@ -51,19 +51,109 @@
 /* Colorful theme - BOLD, VIBRANT, ENERGETIC */
 [data-theme="colorful"] {
   /* Bright, saturated backgrounds - CLEARLY DIFFERENT */
-  --bg-primary: #ffe4f9;      /* Bright pink tint */
-  --bg-secondary: #ccf2ff;    /* Vibrant sky blue */
-  --bg-tertiary: #fff0db;     /* Bright peach */
-  
+  --bg-primary: #ffe4f9;
+  /* Bright pink tint */
+  --bg-secondary: #ccf2ff;
+  /* Vibrant sky blue */
+  --bg-tertiary: #fff0db;
+  /* Bright peach */
+
   /* High contrast, vivid text */
-  --text-primary: #9333ea;    /* Vibrant purple */
-  --text-secondary: #ec4899;  /* Bright pink */
-  --text-tertiary: #f97316;   /* Bold orange */
-  
+  --text-primary: #9333ea;
+  /* Vibrant purple */
+  --text-secondary: #ec4899;
+  /* Bright pink */
+  --text-tertiary: #f97316;
+  /* Bold orange */
+
   /* Eye-catching borders and accents */
-  --border-color: #f0abfc;    /* Bright fuchsia */
-  --border-hover: #818cf8;    /* Vibrant indigo */
+  --border-color: #f0abfc;
+  /* Bright fuchsia */
+  --border-hover: #818cf8;
+  /* Vibrant indigo */
   --shadow: rgba(236, 72, 153, 0.3);
+}
+
+/* ============================================ */
+/* MOBILE-FIRST RESPONSIVE TYPOGRAPHY */
+/* ============================================ */
+
+/* Base font sizes - smaller on mobile */
+html {
+  font-size: 14px;
+  /* Mobile base */
+}
+
+@media (min-width: 640px) {
+  html {
+    font-size: 15px;
+    /* Tablet */
+  }
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+    /* Desktop */
+  }
+}
+
+/* Headings - responsive scaling */
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1.25rem;
+}
+
+h3 {
+  font-size: 1.125rem;
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Body text - comfortable reading */
+p,
+span,
+label,
+li {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 768px) {
+
+  p,
+  span,
+  label,
+  li {
+    font-size: 1rem;
+  }
+}
+
+/* Form inputs - prevent iOS zoom */
+input,
+select,
+textarea {
+  font-size: 16px !important;
+}
+
+/* Safe area for notched phones */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 /* Apply theme variables to common elements */

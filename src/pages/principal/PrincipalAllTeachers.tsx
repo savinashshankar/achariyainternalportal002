@@ -14,12 +14,12 @@ const PrincipalAllTeachers = () => {
                 Back to Dashboard
             </Link>
 
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">All Teachers</h1>
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">All Teachers</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {teachers.map((teacher) => (
-                    <div key={teacher.id} className="bg-white rounded-xl shadow-sm p-6 border">
-                        <h3 className="text-xl font-bold text-gray-800 mb-2">{teacher.name}</h3>
+                    <div key={teacher.id} className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border">
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">{teacher.name}</h3>
                         <p className="text-sm text-gray-600 mb-4">{teacher.email}</p>
                         <p className="text-sm text-gray-700 mb-4"><strong>Department:</strong> {teacher.department}</p>
 

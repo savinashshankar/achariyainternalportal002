@@ -26,11 +26,11 @@ const AdminDashboard = () => {
                     </div>
                 </Link>
 
-                <Link to="/admin/courses" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition">
+                <Link to="/admin/courses" className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Total Courses</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{totalCourses}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Total Courses</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{totalCourses}</p>
                         </div>
                         <div className="bg-green-500 p-3 rounded-lg">
                             <BookOpen className="w-6 h-6 text-white" />
@@ -38,11 +38,11 @@ const AdminDashboard = () => {
                     </div>
                 </Link>
 
-                <Link to="/admin/courses" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition">
+                <Link to="/admin/courses" className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Total Modules</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{totalModules}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Total Modules</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{totalModules}</p>
                         </div>
                         <div className="bg-purple-500 p-3 rounded-lg">
                             <BookOpen className="w-6 h-6 text-white" />
@@ -50,11 +50,11 @@ const AdminDashboard = () => {
                     </div>
                 </Link>
 
-                <Link to="/admin/question-bank" className="bg-white rounded-xl shadow-sm p-6 border hover:shadow-md transition">
+                <Link to="/admin/question-bank" className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border hover:shadow-md transition">
                     <div className="flex items-center justify-between">
                         <div>
-                            <p className="text-sm text-gray-600">Quiz Questions</p>
-                            <p className="text-3xl font-bold text-gray-800 mt-2">{totalQuestions}</p>
+                            <p className="text-xs sm:text-sm text-gray-600">Quiz Questions</p>
+                            <p className="text-2xl sm:text-3xl font-bold text-gray-800 mt-1 sm:mt-2">{totalQuestions}</p>
                         </div>
                         <div className="bg-orange-500 p-3 rounded-lg">
                             <FileQuestion className="w-6 h-6 text-white" />
@@ -64,26 +64,26 @@ const AdminDashboard = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <Link to="/admin/users" className="bg-blue-50 border border-blue-200 rounded-xl p-6 hover:shadow-md cursor-pointer transition">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                <Link to="/admin/users" className="bg-blue-50 border border-blue-200 rounded-xl p-4 sm:p-6 hover:shadow-md cursor-pointer transition">
                     <Users className="w-8 h-8 text-blue-600 mb-3" />
                     <h3 className="font-bold text-gray-800 mb-1">Manage Users</h3>
                     <p className="text-sm text-gray-600">Add, edit, or remove users</p>
                 </Link>
 
-                <Link to="/admin/courses" className="bg-green-50 border border-green-200 rounded-xl p-6 hover:shadow-md cursor-pointer transition">
+                <Link to="/admin/courses" className="bg-green-50 border border-green-200 rounded-xl p-4 sm:p-6 hover:shadow-md cursor-pointer transition">
                     <BookOpen className="w-8 h-8 text-green-600 mb-3" />
                     <h3 className="font-bold text-gray-800 mb-1">Manage Courses</h3>
                     <p className="text-sm text-gray-600">Create and edit courses</p>
                 </Link>
 
-                <Link to="/admin/question-bank" className="bg-purple-50 border border-purple-200 rounded-xl p-6 hover:shadow-md cursor-pointer transition">
+                <Link to="/admin/question-bank" className="bg-purple-50 border border-purple-200 rounded-xl p-4 sm:p-6 hover:shadow-md cursor-pointer transition">
                     <FileQuestion className="w-8 h-8 text-purple-600 mb-3" />
                     <h3 className="font-bold text-gray-800 mb-1">Question Bank</h3>
                     <p className="text-sm text-gray-600">Manage quiz questions</p>
                 </Link>
 
-                <Link to="/admin/config" className="bg-orange-50 border border-orange-200 rounded-xl p-6 hover:shadow-md cursor-pointer transition">
+                <Link to="/admin/config" className="bg-orange-50 border border-orange-200 rounded-xl p-4 sm:p-6 hover:shadow-md cursor-pointer transition">
                     <Settings className="w-8 h-8 text-orange-600 mb-3" />
                     <h3 className="font-bold text-gray-800 mb-1">System Config</h3>
                     <p className="text-sm text-gray-600">Configure system settings</p>
@@ -91,7 +91,7 @@ const AdminDashboard = () => {
             </div>
 
             {/* All Schools */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border mb-8">
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 border mb-6 sm:mb-8">
                 <h2 className="text-xl font-bold text-gray-800 mb-4">Schools Overview</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {sampleData.schools.map((school) => {

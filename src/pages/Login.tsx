@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock } from 'lucide-react';
+import { User, Lock, ChevronDown, ChevronUp } from 'lucide-react';
 
 const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showDemoHint, setShowDemoHint] = useState(false);
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
@@ -41,24 +42,24 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col items-center justify-center p-4">
-            {/* Large Centered Logo */}
-            <div className="mb-8 text-center">
-                <div className="w-40 h-40 mx-auto mb-4 flex items-center justify-center">
+        <div className="min-h-[100dvh] bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col items-center justify-center p-4">
+            {/* Responsive Logo */}
+            <div className="mb-4 md:mb-8 text-center">
+                <div className="w-20 h-20 md:w-40 md:h-40 mx-auto mb-2 md:mb-4 flex items-center justify-center">
                     <img src="/achariya-logo.jpg" alt="Achariya Logo" className="w-full h-full object-contain" />
                 </div>
-                <h1 className="text-3xl font-bold text-gray-800">Achariya Learning Portal</h1>
-                <p className="text-gray-600 mt-2">Unified Learning Management System</p>
+                <h1 className="text-xl md:text-3xl font-bold text-gray-800">Achariya Learning Portal</h1>
+                <p className="text-sm md:text-base text-gray-600 mt-1 md:mt-2">Unified Learning Management System</p>
             </div>
 
             {/* Login Card */}
-            <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">Sign In</h2>
+            <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 w-full max-w-md">
+                <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 md:mb-6">Sign In</h2>
 
-                <form onSubmit={handleLogin} className="space-y-6">
+                <form onSubmit={handleLogin} className="space-y-4 md:space-y-6">
                     {/* Email */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">
                             Email
                         </label>
                         <div className="relative">
@@ -67,7 +68,7 @@ const Login = () => {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                                 placeholder="your.email@achariya.org"
                                 required
                             />
@@ -76,7 +77,7 @@ const Login = () => {
 
                     {/* Password */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-1 md:mb-2">
                             Password
                         </label>
                         <div className="relative">
@@ -85,7 +86,7 @@ const Login = () => {
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base"
                                 placeholder="Enter your password"
                                 required
                             />
@@ -101,22 +102,28 @@ const Login = () => {
                     </button>
                 </form>
 
-                {/* Demo Hint */}
-                <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                    <p className="text-xs text-blue-800 mb-2">
-                        <strong>Demo Mode - Any email/password works!</strong>
-                    </p>
-                    <ul className="text-xs text-blue-700 space-y-1">
-                        <li>• Try: student@achariya.org</li>
-                        <li>• Try: teacher@achariya.org</li>
-                        <li>• Try: principal@achariya.org</li>
-                        <li>• Try: admin@achariya.org</li>
-                    </ul>
+                {/* Collapsible Demo Hint - P0-1 Fix */}
+                <div className="mt-4 md:mt-6">
+                    <button
+                        onClick={() => setShowDemoHint(!showDemoHint)}
+                        className="w-full flex items-center justify-between p-3 bg-blue-50 rounded-lg text-sm text-blue-800 hover:bg-blue-100 transition"
+                    >
+                        <span className="font-semibold">Demo Mode - Any email/password works!</span>
+                        {showDemoHint ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </button>
+                    {showDemoHint && (
+                        <ul className="mt-2 text-xs text-blue-700 space-y-1 px-3">
+                            <li>• student@achariya.org</li>
+                            <li>• teacher@achariya.org</li>
+                            <li>• principal@achariya.org</li>
+                            <li>• admin@achariya.org</li>
+                        </ul>
+                    )}
                 </div>
             </div>
 
             {/* Footer */}
-            <div className="mt-8 text-center text-gray-500 text-sm">
+            <div className="mt-4 md:mt-8 text-center text-gray-500 text-xs md:text-sm">
                 <p>© 2025 Achariya Group of Institutions</p>
             </div>
         </div>
@@ -124,3 +131,4 @@ const Login = () => {
 };
 
 export default Login;
+
