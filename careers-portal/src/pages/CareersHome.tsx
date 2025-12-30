@@ -40,7 +40,7 @@ export default function CareersHome() {
                         <Building2 className="w-10 h-10 mb-2 relative z-10" />
                         <h3 className="text-xl font-bold mb-1 relative z-10">School</h3>
                         <p className="text-blue-100 text-xs mb-2 relative z-10">
-                            Teachers, coordinators,  staff roles
+                            Teachers, coordinators, and school staff
                         </p>
                         <div className="flex items-center justify-between relative z-10">
                             <span className="text-lg font-bold">{getCategoryCount('School')} Openings</span>
