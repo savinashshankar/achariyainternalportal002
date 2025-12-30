@@ -18,7 +18,7 @@ interface ApplicationData {
 }
 
 // REPLACE THIS with your actual Apps Script Web App URL after deployment
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZ56fcubrmwDZsRKqRlq7yOd6gEjM2CLrWw9ps7fEeRlD2Dj6OEZH6RN11PlO5l0JS/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbybhOPIWBEXLqUJiowh2UE6bsw02iuWPmme4RtBV8VTM_tmNKx2I9DdMBSduFUEJIVY/exec';
 
 export async function submitApplication(data: ApplicationData): Promise<string> {
     // Generate reference ID
