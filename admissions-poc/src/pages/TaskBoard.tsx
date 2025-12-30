@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Phone, Calendar, Mail } from 'lucide-react';
+import { ArrowLeft, Phone } from 'lucide-react';
 
 const tasks = [
     {
