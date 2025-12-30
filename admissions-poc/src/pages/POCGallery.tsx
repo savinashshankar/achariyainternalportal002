@@ -100,58 +100,58 @@ export default function POCGallery() {
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
             <header className="bg-white border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                    <div className="flex items-center gap-4">
-                        <img src="/logo.png" alt="Achariya" className="h-16 w-16" />
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+                    <div className="flex items-center gap-3">
+                        <img src="/logo.png" alt="Achariya" className="h-10 w-10" />
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-900">Admissions POC Suite</h1>
-                            <p className="text-gray-600 mt-1">10 Technical Demonstrations - Achariya Intelligence</p>
+                            <h1 className="text-xl font-bold text-gray-900">Admissions POC Suite</h1>
+                            <p className="text-xs text-gray-600">10 Technical Demonstrations - Achariya Intelligence</p>
                         </div>
                     </div>
                 </div>
             </header>
 
             {/* Main Content */}
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
                 {/* Introduction */}
-                <div className="card mb-12">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Welcome to the Admissions POC Gallery</h2>
-                    <p className="text-gray-600 mb-4">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 mb-4">
+                    <h2 className="text-base font-bold text-gray-900 mb-2">Welcome to the Admissions POC Gallery</h2>
+                    <p className="text-xs text-gray-600 mb-2">
                         This suite contains 10 standalone proof-of-concept applications demonstrating how technology
                         can enable and enhance the admissions process. Each POC is independent and can be evaluated separately.
                     </p>
-                    <p className="text-gray-600">
+                    <p className="text-xs text-gray-600">
                         <strong>Click any card below to explore.</strong> Each POC has its own shareable URL for easy demonstration.
                     </p>
                 </div>
 
                 {/* POC Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
                     {POCs.map((poc) => {
                         const Icon = poc.icon;
                         return (
                             <Link
                                 key={poc.id}
                                 to={poc.route}
-                                className="card hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
+                                className="bg-white rounded-lg shadow-sm border border-gray-100 p-3 hover:shadow-md transition-all duration-300 hover:-translate-y-1 cursor-pointer group"
                             >
-                                <div className="flex items-start gap-4">
-                                    <div className={`${poc.color} p-3 rounded-lg text-white group-hover:scale-110 transition-transform`}>
-                                        <Icon className="w-6 h-6" />
+                                <div className="flex flex-col items-center text-center gap-2">
+                                    <div className={`${poc.color} p-2 rounded-lg text-white group-hover:scale-110 transition-transform`}>
+                                        <Icon className="w-5 h-5" />
                                     </div>
-                                    <div className="flex-1">
-                                        <h3 className="font-bold text-gray-900 text-lg mb-2 group-hover:text-teal-600 transition-colors">
+                                    <div>
+                                        <h3 className="font-bold text-gray-900 text-xs mb-1 group-hover:text-teal-600 transition-colors">
                                             {poc.title}
                                         </h3>
-                                        <p className="text-gray-600 text-sm">
+                                        <p className="text-gray-600 text-[10px] leading-tight">
                                             {poc.description}
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="mt-4 flex items-center text-teal-600 font-medium text-sm">
-                                    <span>Explore POC</span>
-                                    <svg className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <div className="mt-2 flex items-center justify-center text-teal-600 font-medium text-[10px]">
+                                    <span>Explore</span>
+                                    <svg className="w-3 h-3 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                     </svg>
                                 </div>
@@ -161,11 +161,11 @@ export default function POCGallery() {
                 </div>
 
                 {/* Footer Note */}
-                <div className="mt-12 text-center">
-                    <p className="text-gray-500 text-sm">
+                <div className="mt-4 text-center">
+                    <p className="text-gray-500 text-[10px]">
                         Built with React + TypeScript | All POCs use mock data for demonstration
                     </p>
-                    <p className="text-gray-400 text-xs mt-2">
+                    <p className="text-gray-400 text-[9px] mt-1">
                         Shareable URLs: Each POC accessible via individual route
                     </p>
                 </div>
