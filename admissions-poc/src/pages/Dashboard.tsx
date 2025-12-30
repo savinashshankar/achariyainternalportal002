@@ -54,31 +54,31 @@ export default function Dashboard() {
         <div className="min-h-screen bg-gray-50">
             {/* Header */}
             <header className="bg-white border-b border-gray-200">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
                     <div className="flex justify-between items-center">
-                        <div className="flex items-center gap-4">
-                            <img src="/logo.png" alt="Achariya" className="h-12 w-12" />
+                        <div className="flex items-center gap-2">
+                            <img src="/logo.png" alt="Achariya" className="h-8 w-8" />
                             <div>
-                                <h1 className="text-2xl font-bold text-gray-900">Admissions Dashboard</h1>
-                                <p className="text-sm text-gray-600 mt-1">Achariya Admissions POC</p>
+                                <h1 className="text-base font-bold text-gray-900">Admissions Dashboard</h1>
+                                <p className="text-xs text-gray-600">Achariya Admissions POC</p>
                             </div>
                         </div>
                         <Link to="/intake" className="btn-primary">
-                            <UserPlus className="w-4 h-4 inline mr-2" />
+                            <UserPlus className="w-3 h-3 inline mr-1" />
                             New Lead
                         </Link>
                     </div>
                 </div>
             </header>
 
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
                 {/* KPI Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
                     <div className="card">
                         <div className="flex items-center justify-between">
                             <div>
-                                <p className="text-sm text-gray-600">Total Leads</p>
-                                <p className="text-3xl font-bold text-gray-900 mt-1">{mockLeads.length}</p>
+                                <p className="text-xs text-gray-600">Total Leads</p>
+                                <p className="text-xl font-bold text-gray-900">{mockLeads.length}</p>
                             </div>
                             <Users className="w-12 h-12 text-teal-600 opacity-20" />
                         </div>
@@ -116,7 +116,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* Filters */}
-                <div className="card mb-6">
+                <div className="card mb-3">
                     <div className="flex flex-col md:flex-row gap-4">
                         <div className="flex-1">
                             <div className="relative">
@@ -156,7 +156,7 @@ export default function Dashboard() {
                         <table className="min-w-full divide-y divide-gray-200">
                             <thead className="bg-gray-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lead ID</th>
+                                    <th className="px-3 py-2 text-left text-[10px] font-medium text-gray-500 uppercase">Lead ID</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Student</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Grade</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Parent</th>
@@ -169,7 +169,7 @@ export default function Dashboard() {
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {filteredLeads.map((lead) => (
                                     <tr key={lead.lead_id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{lead.lead_id}</td>
+                                        <td className="px-3 py-2 whitespace-nowrap text-xs font-medium text-gray-900">{lead.lead_id}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.student_name}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{lead.grade_applying_for}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{lead.parent_name}</td>

@@ -17,7 +17,6 @@ export default function ParentPortal() {
         e.preventDefault();
         setSubmitted(true);
 
-        // Reset form after showing success
         setTimeout(() => {
             setFormData({
                 student_name: '',
@@ -34,12 +33,12 @@ export default function ParentPortal() {
         return (
             <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 flex items-center justify-center p-4">
                 <div className="card max-w-md text-center">
-                    <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">Enquiry Submitted!</h2>
-                    <p className="text-gray-600 mb-4">
+                    <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-3" />
+                    <h2 className="text-lg font-bold text-gray-900 mb-2">Enquiry Submitted!</h2>
+                    <p className="text-sm text-gray-600 mb-3">
                         Thank you for your interest in Achariya. Our team will contact you within 24 hours.
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500">
                         You will receive a confirmation SMS shortly.
                     </p>
                 </div>
@@ -48,22 +47,22 @@ export default function ParentPortal() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 py-12 px-4">
+        <div className="min-h-screen bg-gradient-to-br from-teal-50 to-blue-50 py-4 px-4">
             <div className="max-w-2xl mx-auto">
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <img src="/logo.png" alt="Achariya" className="h-20 w-20 mx-auto mb-4" />
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">Achariya Admissions Enquiry</h1>
-                    <p className="text-gray-600">Submit your details and we'll get back to you</p>
+                <div className="text-center mb-4">
+                    <img src="/logo.png" alt="Achariya" className="h-12 w-12 mx-auto mb-2" />
+                    <h1 className="text-xl font-bold text-gray-900 mb-1">Achariya Admissions Enquiry</h1>
+                    <p className="text-xs text-gray-600">Submit your details and we'll get back to you</p>
                 </div>
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="card">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Parent Enquiry Form</h2>
+                    <h2 className="text-base font-bold text-gray-900 mb-3">Parent Enquiry Form</h2>
 
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
                                 Student Name <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -77,7 +76,7 @@ export default function ParentPortal() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
                                 Grade Applying For <span className="text-red-500">*</span>
                             </label>
                             <select
@@ -92,7 +91,7 @@ export default function ParentPortal() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
                                 Parent Name <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -106,7 +105,7 @@ export default function ParentPortal() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
                                 Mobile Number <span className="text-red-500">*</span>
                             </label>
                             <input
@@ -122,7 +121,7 @@ export default function ParentPortal() {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
                                 Email (Optional)
                             </label>
                             <input
@@ -135,17 +134,17 @@ export default function ParentPortal() {
                         </div>
                     </div>
 
-                    <button type="submit" className="w-full btn-primary mt-6">
-                        <Send className="w-4 h-4 inline mr-2" />
+                    <button type="submit" className="w-full btn-primary mt-4">
+                        <Send className="w-3 h-3 inline mr-2" />
                         Submit Enquiry
                     </button>
 
-                    <p className="text-xs text-gray-500 text-center mt-4">
+                    <p className="text-[10px] text-gray-500 text-center mt-3">
                         By submitting, you agree to be contacted by Achariya admissions team
                     </p>
                 </form>
 
-                <p className="text-center text-sm text-gray-500 mt-8">
+                <p className="text-center text-[10px] text-gray-500 mt-4">
                     POC Demo - Parent-facing self-service enquiry form
                 </p>
             </div>
