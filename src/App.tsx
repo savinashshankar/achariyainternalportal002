@@ -24,6 +24,9 @@ import StudentQuizPage from './pages/student/StudentQuizPage';
 import StudentLiveQuizTaking from './pages/student/StudentLiveQuizTaking';
 import StudentLiveQuizResults from './pages/student/StudentLiveQuizResults';
 import StudentChatbot from './pages/student/StudentChatbot';
+import KinestheticLab from './pages/student/KinestheticLab';
+import ExplainerVideos from './pages/student/ExplainerVideos';
+import InteractiveSimulators from './pages/student/InteractiveSimulators';
 
 // Teacher Pages
 import TeacherDashboard from './pages/teacher/TeacherDashboard';
@@ -99,6 +102,9 @@ function App() {
                     <Route path="/student/chat" element={<StudentChatbot />} />
                     <Route path="/student/chat/:courseId" element={<StudentChatbot />} />
                     <Route path="/student/chat/:courseId/:moduleId" element={<StudentChatbot />} />
+                    <Route path="/student/kinesthetic-lab" element={<KinestheticLab />} />
+                    <Route path="/student/explainer-videos" element={<ExplainerVideos />} />
+                    <Route path="/student/interactive-simulators" element={<InteractiveSimulators />} />
 
                     {/* Teacher Routes */}
                     <Route path="/teacher/dashboard" element={<TeacherDashboard />} />

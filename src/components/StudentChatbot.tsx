@@ -1,7 +1,7 @@
 // Upgraded Student Chatbot with Gemini AI and Guardrails
-// P0-3: Mobile-first fullscreen chatbot
-import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Sparkles } from 'lucide-react';
+// P0-3: Mobile-first fullscreen chatbot with Text-to-Speech and Voice Input
+import { useState, useRef, useEffect, useCallback } from 'react';
+import { MessageCircle, X, Send, Sparkles, Volume2, VolumeX, Mic, MicOff } from 'lucide-react';
 import { sendMessage } from '../services/chatbotService';
 import { sampleData } from '../data/sampleData';
 
@@ -44,6 +44,180 @@ const useIsMobile = () => {
     return isMobile;
 };
 
+// Speech Recognition hook using OpenAI Whisper for high-quality transcription
+const useSpeechRecognition = (onResult: (text: string) => void) => {
+    const [isListening, setIsListening] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [isSupported, setIsSupported] = useState(true);
+    const recorderRef = useRef<any>(null);
+
+    useEffect(() => {
+        // Check for microphone support
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            setIsSupported(false);
+            return;
+        }
+
+        // Dynamically import the STT service
+        import('../services/openaiSTT').then(({ AudioRecorder, isOpenAISTTAvailable }) => {
+            if (!isOpenAISTTAvailable()) {
+                console.warn('OpenAI STT not available, falling back to Web Speech API');
+                // Keep isSupported true - we'll fall back to Web Speech API
+            }
+            recorderRef.current = new AudioRecorder();
+        });
+    }, []);
+
+    const startListening = useCallback(async () => {
+        if (isListening || isProcessing) return;
+
+        try {
+            if (recorderRef.current) {
+                const started = await recorderRef.current.start();
+                if (started) {
+                    setIsListening(true);
+                    onResult(''); // Clear previous text
+                }
+            }
+        } catch (error) {
+            console.error('Failed to start recording:', error);
+        }
+    }, [isListening, isProcessing, onResult]);
+
+    const stopListening = useCallback(async () => {
+        if (!isListening || !recorderRef.current) return;
+
+        setIsListening(false);
+        setIsProcessing(true);
+
+        try {
+            const audioBlob = await recorderRef.current.stop();
+
+            // Transcribe using OpenAI Whisper
+            const { transcribeAudio } = await import('../services/openaiSTT');
+            const result = await transcribeAudio(audioBlob);
+
+            if (result && result.text) {
+                onResult(result.text);
+            } else {
+                // Fallback: notify user transcription failed
+                console.warn('Transcription returned empty, audio may have been too short');
+            }
+        } catch (error) {
+            console.error('Transcription failed:', error);
+        } finally {
+            setIsProcessing(false);
+        }
+    }, [isListening, onResult]);
+
+    return { isListening, isSupported, startListening, stopListening, isProcessing };
+};
+
+
+// Text-to-Speech hook using Google Cloud TTS (supports English & Tamil)
+const useSpeech = () => {
+    const [speaking, setSpeaking] = useState<number | null>(null);
+    const [loading, setLoading] = useState(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    useEffect(() => {
+        // Check if TTS API key is available
+        const apiKey = import.meta.env.VITE_GOOGLE_TTS_API_KEY;
+        if (!apiKey || apiKey.length < 10) {
+            console.warn('Google TTS API key not configured, using browser fallback');
+        }
+    }, []);
+
+    const speak = async (text: string, messageIndex: number) => {
+        if (loading) return;
+
+        // Stop any current audio
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current = null;
+        }
+
+        setLoading(true);
+        setSpeaking(messageIndex);
+
+        try {
+            // Import the TTS service dynamically
+            const { synthesizeSpeech } = await import('../services/googleTTS');
+            const audioUrl = await synthesizeSpeech(text);
+
+            if (audioUrl) {
+                const audio = new Audio(audioUrl);
+                audioRef.current = audio;
+
+                audio.onended = () => {
+                    setSpeaking(null);
+                    setLoading(false);
+                    audioRef.current = null;
+                };
+
+                audio.onerror = () => {
+                    console.error('Audio playback error');
+                    setSpeaking(null);
+                    setLoading(false);
+                    audioRef.current = null;
+                };
+
+                await audio.play();
+            } else {
+                // Fallback to browser TTS if Google TTS fails
+                console.log('Falling back to browser TTS');
+                fallbackBrowserTTS(text, messageIndex);
+            }
+        } catch (error) {
+            console.error('TTS error:', error);
+            // Fallback to browser TTS
+            fallbackBrowserTTS(text, messageIndex);
+        }
+    };
+
+    const fallbackBrowserTTS = (text: string, _messageIndex: number) => {
+        if (!('speechSynthesis' in window)) {
+            setSpeaking(null);
+            setLoading(false);
+            return;
+        }
+
+        const cleanText = text
+            .replace(/\*\*(.*?)\*\*/g, '$1')
+            .replace(/[\u{1F300}-\u{1F9FF}]/gu, '')
+            .replace(/[\u{2600}-\u{26FF}]/gu, '')
+            .replace(/•/g, '')
+            // Fix AI pronunciation - use Achariya branding
+            .replace(/\bAI\b/g, 'Achariya Intelligence')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = 'en-IN';
+        utterance.rate = 0.85;
+        utterance.pitch = 1.1;
+
+        utterance.onend = () => {
+            setSpeaking(null);
+            setLoading(false);
+        };
+
+        speechSynthesis.speak(utterance);
+    };
+
+    const stop = () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current = null;
+        }
+        speechSynthesis.cancel();
+        setSpeaking(null);
+        setLoading(false);
+    };
+
+    return { speak, stop, speaking, supported: true, loading };
+};
+
 const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
@@ -58,8 +232,16 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+    const chatWindowRef = useRef<HTMLDivElement>(null);
     const isMobile = useIsMobile();
+    const { speak, stop, speaking, supported } = useSpeech();
+
+    // Speech recognition for voice input (OpenAI Whisper)
+    const handleVoiceResult = useCallback((text: string) => {
+        setInput(text);
+    }, []);
+    const { isListening, isSupported: speechSupported, startListening, stopListening, isProcessing } = useSpeechRecognition(handleVoiceResult);
 
     // Get student's enrolled courses for context
     const enrollments = sampleData.enrollments.filter(e => e.student_id === studentId);
@@ -88,6 +270,22 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
             document.body.style.overflow = '';
         };
     }, [isOpen, isMobile]);
+
+    // Stop TTS audio when chat is closed
+    useEffect(() => {
+        if (!isOpen) {
+            stop();
+        }
+    }, [isOpen, stop]);
+
+    // Auto-resize textarea when input changes (for transcription)
+    useEffect(() => {
+        if (inputRef.current) {
+            const textarea = inputRef.current as HTMLTextAreaElement;
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
+        }
+    }, [input]);
 
     const handleSend = async () => {
         if (!input.trim() || isTyping) return;
@@ -158,6 +356,23 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
         setIsOpen(false);
     };
 
+    // Close chatbot when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (isOpen && chatWindowRef.current && !chatWindowRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
+
     // P0-3: Mobile fullscreen vs desktop floating modal
     const chatWindowClasses = isMobile
         ? 'fixed inset-0 bg-white flex flex-col z-50' // Fullscreen on mobile
@@ -180,9 +395,13 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
 
             {/* Chat Window */}
             {isOpen && (
-                <div className={chatWindowClasses}>
-                    {/* Header */}
-                    <div className={`bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between ${isMobile ? '' : 'rounded-t-2xl'}`}>
+                <div ref={chatWindowRef} className={chatWindowClasses}>
+                    {/* Header - Click to minimize */}
+                    <div
+                        onClick={() => setIsOpen(false)}
+                        className={`bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 flex items-center justify-between ${isMobile ? '' : 'rounded-t-2xl'} cursor-pointer hover:opacity-95 transition`}
+                        title="Click to minimize"
+                    >
                         <div className="flex items-center">
                             <Sparkles className="w-5 h-5 mr-2" />
                             <div>
@@ -191,7 +410,10 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
                             </div>
                         </div>
                         <button
-                            onClick={handleClose}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleClose();
+                            }}
                             className="hover:bg-white/20 p-2 rounded transition"
                         >
                             <X className="w-6 h-6" />
@@ -217,9 +439,27 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
                                         className="text-sm"
                                         dangerouslySetInnerHTML={{ __html: formatMessage(msg.content) }}
                                     />
-                                    {msg.source && (
-                                        <p className="text-xs mt-2 opacity-70 italic">{msg.source}</p>
-                                    )}
+                                    <div className="flex items-center justify-between mt-2">
+                                        {msg.source && (
+                                            <p className="text-xs opacity-70 italic">{msg.source}</p>
+                                        )}
+                                        {msg.role === 'assistant' && supported && (
+                                            <button
+                                                onClick={() => speaking === idx ? stop() : speak(msg.content, idx)}
+                                                className={`p-1.5 rounded-full transition-colors ${speaking === idx
+                                                    ? 'bg-blue-100 text-blue-600'
+                                                    : 'hover:bg-gray-200 text-gray-500'
+                                                    }`}
+                                                title={speaking === idx ? 'Stop' : 'Listen'}
+                                            >
+                                                {speaking === idx ? (
+                                                    <VolumeX className="w-4 h-4" />
+                                                ) : (
+                                                    <Volume2 className="w-4 h-4" />
+                                                )}
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ))}
@@ -259,18 +499,77 @@ const StudentChatbot = ({ studentId, studentName }: StudentChatbotProps) => {
 
                     {/* Input - P0-3: Pinned at bottom, works with mobile keyboard */}
                     <div className={`p-4 border-t bg-white ${isMobile ? 'pb-safe' : ''}`}>
-                        <div className="flex items-center space-x-2">
-                            <input
+                        {/* Voice Wave Animation when recording or processing */}
+                        {(isListening || isProcessing) && (
+                            <div className="flex items-center justify-center mb-3 py-2">
+                                <div className="flex items-center space-x-1">
+                                    {[...Array(5)].map((_, i) => (
+                                        <div
+                                            key={i}
+                                            className={`w-1 rounded-full animate-pulse ${isProcessing ? 'bg-blue-500' : 'bg-red-500'}`}
+                                            style={{
+                                                height: isProcessing ? '15px' : `${Math.random() * 20 + 10}px`,
+                                                animationDelay: `${i * 0.1}s`,
+                                                animationDuration: '0.5s',
+                                            }}
+                                        />
+                                    ))}
+                                    {/* Show text only when listening, not when processing */}
+                                    {isListening && !isProcessing && (
+                                        <span className="text-sm ml-2 text-red-500 animate-pulse">
+                                            Recording...
+                                        </span>
+                                    )}
+                                    {[...Array(5)].map((_, i) => (
+                                        <div
+                                            key={i + 5}
+                                            className={`w-1 rounded-full animate-pulse ${isProcessing ? 'bg-blue-500' : 'bg-red-500'}`}
+                                            style={{
+                                                height: isProcessing ? '15px' : `${Math.random() * 20 + 10}px`,
+                                                animationDelay: `${i * 0.1}s`,
+                                                animationDuration: '0.5s',
+                                            }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                        <div className="flex items-start space-x-2">
+                            <textarea
                                 ref={inputRef}
-                                type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                                placeholder="Ask me anything..."
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        handleSend();
+                                    }
+                                }}
+                                placeholder={isListening ? "Recording..." : "Ask me anything..."}
                                 autoFocus
-                                className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-base"
-                                disabled={isTyping}
+                                rows={1}
+                                className={`flex-1 px-4 py-3 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-base resize-none overflow-hidden ${isListening ? 'border-red-400 bg-red-50' : isProcessing ? 'border-blue-400 bg-blue-50' : 'border-gray-300'
+                                    }`}
+                                style={{ minHeight: '48px', maxHeight: '100px' }}
+                                disabled={isTyping || isProcessing}
                             />
+                            {/* Mic Button */}
+                            {speechSupported && (
+                                <button
+                                    onClick={isListening ? stopListening : startListening}
+                                    disabled={isTyping || isProcessing}
+                                    className={`p-3 rounded-full transition ${isProcessing
+                                        ? 'bg-blue-500 text-white cursor-wait'
+                                        : isListening
+                                            ? 'bg-red-500 text-white hover:bg-red-600 animate-pulse'
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                        } disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    title={isProcessing ? 'Transcribing...' : isListening ? 'Stop recording' : 'Voice input'}
+                                >
+                                    {isListening ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                                </button>
+                            )}
+                            {/* Send Button */}
                             <button
                                 onClick={handleSend}
                                 disabled={!input.trim() || isTyping}

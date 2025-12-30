@@ -87,8 +87,8 @@ export const generateChatbotResponse = (
     const normalizedQuery = query.toLowerCase();
 
     // PRIORITY 0: Personal Information (NEW - Highest Priority)
-    // Handle all variations of self-related questions
-    const personalInfoPattern = /\b(my name|who am i|who i am|who do you think i am|about me|more about me|tell me about|myself|what grade|which grade|which class|what class|my information|my details|my profile|do you know me|what do you know about me|information about me)\b/;
+    // Handle all variations of self-related questions - must be specific to student info
+    const personalInfoPattern = /\b(my name|who am i|who i am|who do you think i am|about me|more about me|tell me about myself|tell me about me|myself|what grade am i|which grade am i|which class am i|what class am i|my information|my details|my profile|do you know me|what do you know about me|information about me)\b/;
 
     if (normalizedQuery.match(personalInfoPattern)) {
         const firstName = studentName?.split(' ')[0] || 'Student';

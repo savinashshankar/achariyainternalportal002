@@ -1,6 +1,70 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Lock, ChevronDown, ChevronUp } from 'lucide-react';
+import { User, Lock, ChevronDown, ChevronUp, BookOpen, Atom, Calculator, PenTool, Lightbulb, GraduationCap, Globe, Music, Microscope, Palette, Code, Brain, Compass, FlaskConical } from 'lucide-react';
+
+// Floating Educational Icons Component (hidden for now - uncomment usage in JSX to enable)
+// @ts-ignore - Component kept for future use, currently disabled
+const FloatingEducationIcons = () => {
+    const icons = [
+        // Left edge (0-15%)
+        { Icon: BookOpen, left: '3%', top: '8%', delay: '0s', size: 30 },
+        { Icon: Atom, left: '10%', top: '28%', delay: '2s', size: 26 },
+        { Icon: Calculator, left: '5%', top: '50%', delay: '4s', size: 24 },
+        { Icon: Microscope, left: '11%', top: '72%', delay: '3s', size: 28 },
+        { Icon: Palette, left: '6%', top: '92%', delay: '5s', size: 24 },
+
+        // Left middle zone (20-32%)
+        { Icon: PenTool, left: '22%', top: '18%', delay: '1s', size: 22 },
+        { Icon: Compass, left: '28%', top: '42%', delay: '2.5s', size: 20 },
+        { Icon: FlaskConical, left: '24%', top: '68%', delay: '4s', size: 22 },
+
+        // Right middle zone (68-80%)
+        { Icon: Brain, left: '72%', top: '20%', delay: '3s', size: 22 },
+        { Icon: Code, left: '76%', top: '48%', delay: '1.5s', size: 20 },
+        { Icon: Music, left: '70%', top: '75%', delay: '3.5s', size: 22 },
+
+        // Right edge (85-95%)
+        { Icon: Lightbulb, left: '90%', top: '10%', delay: '1.5s', size: 28 },
+        { Icon: GraduationCap, left: '86%', top: '32%', delay: '0.5s', size: 32 },
+        { Icon: Globe, left: '92%', top: '55%', delay: '2.5s', size: 26 },
+        { Icon: Calculator, left: '88%', top: '78%', delay: '4.5s', size: 24 },
+        { Icon: BookOpen, left: '93%', top: '94%', delay: '1s', size: 26 },
+    ];
+
+    return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none hidden md:block">
+            {icons.map((item, index) => (
+                <div
+                    key={index}
+                    className="absolute animate-float"
+                    style={{
+                        left: item.left,
+                        top: item.top,
+                        animationDelay: item.delay,
+                        animationDuration: '12s',
+                    }}
+                >
+                    <item.Icon
+                        size={item.size}
+                        className="text-blue-400 opacity-50"
+                        strokeWidth={1.5}
+                    />
+                </div>
+            ))}
+            <style>{`
+                @keyframes float {
+                    0%, 100% { transform: translateY(0px) rotate(0deg); }
+                    25% { transform: translateY(-15px) rotate(5deg); }
+                    50% { transform: translateY(-8px) rotate(-3deg); }
+                    75% { transform: translateY(-20px) rotate(3deg); }
+                }
+                .animate-float {
+                    animation: float 12s ease-in-out infinite;
+                }
+            `}</style>
+        </div>
+    );
+};
 
 const Login = () => {
     const navigate = useNavigate();
@@ -42,9 +106,12 @@ const Login = () => {
     };
 
     return (
-        <div className="min-h-[100dvh] bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col items-center justify-center p-4">
+        <div className="min-h-[100dvh] bg-gradient-to-br from-blue-50 to-gray-100 flex flex-col items-center justify-center p-4 relative">
+            {/* Floating Educational Icons - Hidden for now, uncomment to enable */}
+            {/* <FloatingEducationIcons /> */}
+
             {/* Responsive Logo */}
-            <div className="mb-4 md:mb-8 text-center">
+            <div className="mb-4 md:mb-8 text-center relative z-10">
                 <div className="w-20 h-20 md:w-40 md:h-40 mx-auto mb-2 md:mb-4 flex items-center justify-center">
                     <img src="/achariya-logo.jpg" alt="Achariya Logo" className="w-full h-full object-contain" />
                 </div>

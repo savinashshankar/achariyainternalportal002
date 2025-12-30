@@ -1,7 +1,19 @@
 import GlobalQuizListener from './GlobalQuizListener';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { LogOut, Home, BookOpen, Wallet, Award, Users, FileText, Settings, HelpCircle, Menu, X, ShoppingCart, Target, TrendingUp, Swords, Zap, Heart } from 'lucide-react';
+import { LogOut, Home, BookOpen, Wallet, Award, Users, FileText, Settings, HelpCircle, Menu, X, ShoppingCart, Target, TrendingUp, Swords, Zap, Heart, FlaskConical, Video, Sparkles, ChevronDown, ChevronRight, GraduationCap, Trophy } from 'lucide-react';
 import { useState, useEffect } from 'react';
+
+interface NavCategory {
+    label: string;
+    icon: any;
+    items: NavItem[];
+}
+
+interface NavItem {
+    to: string;
+    icon: any;
+    label: string;
+}
 
 const Layout = () => {
     const navigate = useNavigate();
@@ -9,6 +21,7 @@ const Layout = () => {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const role = user.selectedRole || user.role;
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [expandedCategories, setExpandedCategories] = useState<string[]>(['Learning']); // Learning expanded by default
 
     const handleLogout = () => {
         // Reset theme to light mode on logout
@@ -26,22 +39,57 @@ const Layout = () => {
         setSidebarOpen(false); // Close sidebar on route change
     }, [location.pathname]);
 
-    const getNavItems = () => {
+    const toggleCategory = (label: string) => {
+        setExpandedCategories(prev =>
+            prev.includes(label)
+                ? [] // Close if already open
+                : [label] // Open only this one, close others
+        );
+    };
+
+    const getNavItems = (): NavItem[] | NavCategory[] => {
         switch (role) {
             case 'Student':
                 return [
-                    { to: '/student/dashboard', icon: Home, label: 'Dashboard' },
-                    { to: '/student/courses', icon: BookOpen, label: 'Courses' },
-                    { to: '/student/leaderboard', icon: Award, label: 'Leaderboard' },
-                    { to: '/student/challenges', icon: Target, label: 'Challenges' },
-                    { to: '/student/rivals', icon: Swords, label: 'Rivals' },
-                    { to: '/student/social', icon: Heart, label: 'Social' },
-                    { to: '/student/powerups', icon: Zap, label: 'Power-Ups' },
-                    { to: '/student/progress', icon: TrendingUp, label: 'Progress' },
-                    { to: '/student/marketplace', icon: ShoppingCart, label: 'Marketplace' },
-                    { to: '/student/badges', icon: Award, label: 'Badges' },
-                    { to: '/student/wallet', icon: Wallet, label: 'Wallet' },
-                    { to: '/student/faq', icon: HelpCircle, label: 'FAQ' }
+                    {
+                        label: 'Learning',
+                        icon: GraduationCap,
+                        items: [
+                            { to: '/student/dashboard', icon: Home, label: 'Dashboard' },
+                            { to: '/student/courses', icon: BookOpen, label: 'Courses' },
+                            { to: '/student/explainer-videos', icon: Video, label: 'Videos' },
+                            { to: '/student/kinesthetic-lab', icon: FlaskConical, label: 'Lab' },
+                            { to: '/student/interactive-simulators', icon: Sparkles, label: 'Simulators' }
+                        ]
+                    },
+                    {
+                        label: 'Engagement',
+                        icon: Target,
+                        items: [
+                            { to: '/student/challenges', icon: Target, label: 'Challenges' },
+                            { to: '/student/leaderboard', icon: Award, label: 'Leaderboard' },
+                            { to: '/student/rivals', icon: Swords, label: 'Rivals' },
+                            { to: '/student/social', icon: Heart, label: 'Social' }
+                        ]
+                    },
+                    {
+                        label: 'Rewards',
+                        icon: Trophy,
+                        items: [
+                            { to: '/student/progress', icon: TrendingUp, label: 'Progress' },
+                            { to: '/student/badges', icon: Award, label: 'Badges' },
+                            { to: '/student/powerups', icon: Zap, label: 'Power-Ups' },
+                            { to: '/student/marketplace', icon: ShoppingCart, label: 'Marketplace' },
+                            { to: '/student/wallet', icon: Wallet, label: 'Wallet' }
+                        ]
+                    },
+                    {
+                        label: 'Help',
+                        icon: HelpCircle,
+                        items: [
+                            { to: '/student/faq', icon: HelpCircle, label: 'FAQ' }
+                        ]
+                    }
                 ];
             case 'Teacher':
                 return [
@@ -71,6 +119,7 @@ const Layout = () => {
     };
 
     const navItems = getNavItems();
+    const isStudent = role === 'Student';
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -120,16 +169,56 @@ const Layout = () => {
                 {/* Desktop Sidebar - MADE STICKY/FIXED */}
                 <aside className="hidden lg:block w-64 bg-white border-r fixed left-0 top-16 bottom-0 overflow-y-auto z-20">
                     <nav className="p-4 space-y-1">
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.to}
-                                to={item.to}
-                                className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition"
-                            >
-                                <item.icon className="w-5 h-5 mr-3" />
-                                <span>{item.label}</span>
-                            </Link>
-                        ))}
+                        {isStudent ? (
+                            // Student: Collapsible categories
+                            (navItems as NavCategory[]).map((category) => (
+                                <div key={category.label} className="mb-2">
+                                    <button
+                                        onClick={() => toggleCategory(category.label)}
+                                        className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition font-medium"
+                                    >
+                                        <div className="flex items-center">
+                                            <category.icon className="w-5 h-5 mr-3" />
+                                            <span>{category.label}</span>
+                                        </div>
+                                        {expandedCategories.includes(category.label) ? (
+                                            <ChevronDown className="w-4 h-4" />
+                                        ) : (
+                                            <ChevronRight className="w-4 h-4" />
+                                        )}
+                                    </button>
+                                    {expandedCategories.includes(category.label) && (
+                                        <div className="ml-4 mt-1 space-y-1">
+                                            {category.items.map((item) => (
+                                                <Link
+                                                    key={item.to}
+                                                    to={item.to}
+                                                    className={`flex items-center px-4 py-2 text-sm rounded-lg transition ${location.pathname === item.to
+                                                        ? 'bg-blue-50 text-blue-600'
+                                                        : 'text-gray-600 hover:bg-gray-50'
+                                                        }`}
+                                                >
+                                                    <item.icon className="w-4 h-4 mr-3" />
+                                                    <span>{item.label}</span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ))
+                        ) : (
+                            // Other roles: Flat navigation
+                            (navItems as NavItem[]).map((item) => (
+                                <Link
+                                    key={item.to}
+                                    to={item.to}
+                                    className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition"
+                                >
+                                    <item.icon className="w-5 h-5 mr-3" />
+                                    <span>{item.label}</span>
+                                </Link>
+                            ))
+                        )}
                     </nav>
                 </aside>
 
@@ -144,17 +233,58 @@ const Layout = () => {
                                 </button>
                             </div>
                             <nav className="px-4 space-y-1">
-                                {navItems.map((item) => (
-                                    <Link
-                                        key={item.to}
-                                        to={item.to}
-                                        onClick={() => setSidebarOpen(false)}
-                                        className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition"
-                                    >
-                                        <item.icon className="w-5 h-5 mr-3" />
-                                        <span>{item.label}</span>
-                                    </Link>
-                                ))}
+                                {isStudent ? (
+                                    // Student: Collapsible categories
+                                    (navItems as NavCategory[]).map((category) => (
+                                        <div key={category.label} className="mb-2">
+                                            <button
+                                                onClick={() => toggleCategory(category.label)}
+                                                className="w-full flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition font-medium"
+                                            >
+                                                <div className="flex items-center">
+                                                    <category.icon className="w-5 h-5 mr-3" />
+                                                    <span>{category.label}</span>
+                                                </div>
+                                                {expandedCategories.includes(category.label) ? (
+                                                    <ChevronDown className="w-4 h-4" />
+                                                ) : (
+                                                    <ChevronRight className="w-4 h-4" />
+                                                )}
+                                            </button>
+                                            {expandedCategories.includes(category.label) && (
+                                                <div className="ml-4 mt-1 space-y-1">
+                                                    {category.items.map((item) => (
+                                                        <Link
+                                                            key={item.to}
+                                                            to={item.to}
+                                                            onClick={() => setSidebarOpen(false)}
+                                                            className={`flex items-center px-4 py-2 text-sm rounded-lg transition ${location.pathname === item.to
+                                                                ? 'bg-blue-50 text-blue-600'
+                                                                : 'text-gray-600 hover:bg-gray-50'
+                                                                }`}
+                                                        >
+                                                            <item.icon className="w-4 h-4 mr-3" />
+                                                            <span>{item.label}</span>
+                                                        </Link>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))
+                                ) : (
+                                    // Other roles: Flat navigation
+                                    (navItems as NavItem[]).map((item) => (
+                                        <Link
+                                            key={item.to}
+                                            to={item.to}
+                                            onClick={() => setSidebarOpen(false)}
+                                            className="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition"
+                                        >
+                                            <item.icon className="w-5 h-5 mr-3" />
+                                            <span>{item.label}</span>
+                                        </Link>
+                                    ))
+                                )}
                             </nav>
                         </aside>
                     </div>
