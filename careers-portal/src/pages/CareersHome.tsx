@@ -53,16 +53,16 @@ export default function CareersHome() {
                     {/* College Card */}
                     <Link
                         to="/college"
-                        className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-500 to-purple-700 p-8 text-white hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                        className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-500 to-purple-700 p-4 text-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                     >
-                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-all"></div>
-                        <GraduationCap className="w-16 h-16 mb-4 relative z-10" />
-                        <h3 className="text-3xl font-bold mb-2 relative z-10">College</h3>
-                        <p className="text-purple-100 mb-4 relative z-10">
-                            Faculty, research, and academic support positions
+                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-20 h-20 bg-white/10 rounded-full blur-xl group-hover:bg-white/20 transition-all"></div>
+                        <GraduationCap className="w-10 h-10 mb-2 relative z-10" />
+                        <h3 className="text-xl font-bold mb-1 relative z-10">College</h3>
+                        <p className="text-purple-100 text-xs mb-2 relative z-10">
+                            Faculty, research, and academic support
                         </p>
                         <div className="flex items-center justify-between relative z-10">
-                            <span className="text-2xl font-bold">{getCategoryCount('College')} Openings</span>
+                            <span className="text-lg font-bold">{getCategoryCount('College')} Openings</span>
                             <svg className="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>
@@ -72,16 +72,16 @@ export default function CareersHome() {
                     {/* Corporate Card */}
                     <Link
                         to="/corporate"
-                        className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-teal-500 to-teal-700 p-8 text-white hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                        className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-teal-500 to-teal-700 p-4 text-white hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                     >
-                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:bg-white/20 transition-all"></div>
-                        <Briefcase className="w-16 h-16 mb-4 relative z-10" />
-                        <h3 className="text-3xl font-bold mb-2 relative z-10">Corporate</h3>
-                        <p className="text-teal-100 mb-4 relative z-10">
-                            HR, Finance, IT, Marketing, and Operations roles
+                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-20 h-20 bg-white/10 rounded-full blur-xl group-hover:bg-white/20 transition-all"></div>
+                        <Briefcase className="w-10 h-10 mb-2 relative z-10" />
+                        <h3 className="text-xl font-bold mb-1 relative z-10">Corporate</h3>
+                        <p className="text-teal-100 text-xs mb-2 relative z-10">
+                            HR, Finance, IT, Marketing, and Operations
                         </p>
                         <div className="flex items-center justify-between relative z-10">
-                            <span className="text-2xl font-bold">{getCategoryCount('Corporate')} Openings</span>
+                            <span className="text-lg font-bold">{getCategoryCount('Corporate')} Openings</span>
                             <svg className="w-6 h-6 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>
