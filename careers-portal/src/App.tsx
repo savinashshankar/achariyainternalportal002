@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CareersHome from './pages/CareersHome';
 import CategoryOpenings from './pages/CategoryOpenings';
 import ThankYou from './pages/ThankYou';
+import AdminPanel from './pages/AdminPanel';
 import './index.css';
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Route path="/school" element={<CategoryOpenings category="School" />} />
         <Route path="/college" element={<CategoryOpenings category="College" />} />
         <Route path="/corporate" element={<CategoryOpenings category="Corporate" />} />
+        <Route path="/admin" element={<AdminPanel />} />
         <Route path="/thank-you" element={<ThankYou />} />
       </Routes>
     </BrowserRouter>
