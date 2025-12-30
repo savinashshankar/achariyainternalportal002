@@ -87,9 +87,9 @@ export default function ApplyModal({ opening, onClose }: Props) {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
-            <div className="bg-white rounded-lg max-w-3xl w-full my-8 relative">
-                <div className="sticky top-0 bg-white border-b border-gray-200 p-6 rounded-t-lg">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] flex flex-col relative">
+                <div className="flex-shrink-0 bg-white border-b border-gray-200 p-6 rounded-t-lg">
                     <button
                         onClick={onClose}
                         className="absolute top-6 right-6 text-gray-400 hover:text-gray-600"
@@ -102,7 +102,7 @@ export default function ApplyModal({ opening, onClose }: Props) {
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-6">
                     {/* Personal Info */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
