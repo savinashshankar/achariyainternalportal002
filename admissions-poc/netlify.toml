@@ -1,0 +1,17 @@
+# Netlify Configuration for Admissions POC
+# This file tells Netlify how to build this specific folder
+
+[build]
+  base = "admissions-poc"
+  command = "npm install && npm run build"
+  publish = "dist"
+
+# Environment variables (if needed in future)
+[build.environment]
+  NODE_VERSION = "18"
+
+# Redirect all routes to index.html (for React Router)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

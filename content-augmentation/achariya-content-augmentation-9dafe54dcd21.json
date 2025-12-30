@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "achariya-content-augmentation",
+  "private_key_id": "9dafe54dcd210fb3834705734e6cfc267456452b",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuQIBADANBgkqhkiG9w0BAQEFAASCBKMwggSfAgEAAoIBAQCjjUu9MlJG1uSq\nsW0WeWpR8cNtQ2yxEe+AjjS25jMO8GPZY9nNfISDd8jyy8o/X1YtPWDfyq0k1dva\ndWGMSy9fsSdM7KsR6WzTKoptd4JGRAne0aeuNmBYavN4TlG69mZBQ6JhrJWK8pBG\nyNuUDQfFHtR64pBggtWT4QndZtyhnym6U9yeaDQ4F05XwGxKLifScsgF2uWXuZIK\niPpn3LfIg+a4zuB5GR+U0cL2ALxzuEkG6DLTTJfBFiRpBy72zkoSbBkza5qvTKMl\nlvzkyYWzEJvxTmKjKHiv+ZXV1OasXhmwLKk4WAFlP5UXAhEhqma6Z3mufV9xQpeC\nbzcpG6i5AgMBAAECgf9pC+qDww/8dij4ZtGBjkIvITuZQEfj1xTCLyojI7GU8CkM\nQqJgaLW6UPo6Fy2UbZGeJZkJwGt7Uxj+yi2bxdpf3YUF/4X58ddObGtwTf3eoJZM\nORHB6Uo9KJntdoXJsjRMa/WkmubPmXL+vzWah2ZaGXAOzrTTxQ9vFG+V5ycM/kkT\nRmdDbUmUVeo5V+m2BYj0GPwlOtBe+1RP32uJ4h/jQYYMDsjdQ+KWE69BcAL6ob/O\nkxxsSYIz74Fhfh6259I8Fl8rnGUdtlsKalDRk5SBOfic1Ij2sEWM81HZuv/RUiVp\no3co5I8bTn5vhDG1C6MPxYC6QLu9y3XyBXgFNEECgYEA0gDjRh6mmfkGPh+Xm/Hx\nOUoP46EUkNR0NyyLlJ4GRnqW8Nopr6w0ZnLmAVzCIWJ94yUzqh6oLDa33vxlFO0f\n5RxxK4k5ouzcV6RGPG5I2hZBYL8OzWbkYb+u2Zo0LOCwKB6B3c0SH0g+XjO+A14/\nb9qn83jVsRV37RqwEztCXbECgYEAx1/SkwpllsfnQ1WML9IkBIoPQYGzAj2n1OnA\nOKlpEi0JWdajl4bZatpmSydI+WQcO7F3yjHsnqZT8NudUNWPfDD2eLjcbNcGM9B3\ntWi3EtADtd/LOrki5RsCH16UmWLUQi82tXFI3YnMxJu+yq0nI5egaxkK2nlZMHB9\nUEFoFYkCf38mCnVqGXUgUadLeX/x/Ruyu+wWm10VRUgisGBLTYFeuAUcEiFLIm7l\nIl2wy9lqyM2+uIlIBoq+lpVsO8dvyt/tWJgDfeInh0GJNP1hyLpCv1LUWyICKkUE\nydj2hKCnagDgd8DTaSWHmDtxGJrxdXdD7Gx9vOR7GyF0ByeduZECgYAdAD5EL0X5\nudhU/hOnPR0KH/76G2CrmcZY/St90n67KxvqGoOvXekwVtZ8ZhmCVWKZ+EWhfsOZ\njD43kep/QKFfgkvH4bQGjPyU+uT+2V2P+fwgL46DWzzNMLGNWJeq/Co9+lot6G2d\n9BZ6HuGQ38EKt1qZWYovn2ku154S14DJaQKBgQCwDgYCc54yPfQ6F/g8HDuO98wH\nImbQqyUJvy92WzHaAo4fIK2tkoWGmLVtrpAM//nn8ln7VhpDqkOEukLLpB1FxE9D\ntGnS8Ukd8qcnPPqhXHvihh69Ii/MP+vUc0PFumzpWb7U+nVdNG2DLAtoLvtPYvo5\nFFA4Jjt50+hadXd/uQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "content-augmentation-service@achariya-content-augmentation.iam.gserviceaccount.com",
+  "client_id": "116318163789122390950",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/content-augmentation-service%40achariya-content-augmentation.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
