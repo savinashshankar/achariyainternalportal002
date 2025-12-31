@@ -48,10 +48,15 @@ export default function AdminPanel() {
         }
     };
 
-    const loadOpenings = () => {
+    const loadOpenings = async () => {
         const stored = localStorage.getItem('job_openings');
         if (stored) {
             setOpenings(JSON.parse(stored));
+        } else {
+            // First time - initialize with mock data
+            const { mockOpenings } = await import('../data/openings');
+            localStorage.setItem('job_openings', JSON.stringify(mockOpenings));
+            setOpenings(mockOpenings);
         }
     };
 
