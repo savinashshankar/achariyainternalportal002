@@ -381,30 +381,30 @@ export const getCategoryCount = (category: 'School' | 'College' | 'Corporate') =
     // Try localStorage first (admin-managed)
     const stored = localStorage.getItem('job_openings');
     if (stored) {
-        const openings = JSON.parse(stored);
-        return openings.filter((o: Opening) => o.category === category).length;
+        const openings: Opening[] = JSON.parse(stored);
+        return openings.filter(o => o.category === category).length;
     }
     // Fallback to mock data
     return mockOpenings.filter(o => o.category === category).length;
 };
 
-export const getOpeningsByCategory = (category: 'School' | 'College' | 'Corporate') => {
+export const getOpeningsByCategory = (category: 'School' | 'College' | 'Corporate'): Opening[] => {
     // Try localStorage first (admin-managed)
     const stored = localStorage.getItem('job_openings');
     if (stored) {
-        const openings = JSON.parse(stored);
-        return openings.filter((o: Opening) => o.category === category);
+        const openings: Opening[] = JSON.parse(stored);
+        return openings.filter(o => o.category === category);
     }
     // Fallback to mock data
     return mockOpenings.filter(o => o.category === category);
 };
 
-export const getOpeningById = (id: string) => {
+export const getOpeningById = (id: string): Opening | undefined => {
     // Try localStorage first (admin-managed)
     const stored = localStorage.getItem('job_openings');
     if (stored) {
-        const openings = JSON.parse(stored);
-        return openings.find((o: Opening) => o.id === id);
+        const openings: Opening[] = JSON.parse(stored);
+        return openings.find(o => o.id === id);
     }
     // Fallback to mock data
     return mockOpenings.find(o => o.id === id);
